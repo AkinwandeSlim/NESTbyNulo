@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Reveal from "@/components/Reveal";
+import MobilePropertyCard from "@/components/MobilePropertyCard";
 
 const PROPERTY_IMAGES = [
   { src: "/abjpic1.jpg", alt: "NEST Pool #001 — Maitama exterior" },
@@ -166,6 +167,11 @@ export default function Hero() {
                 <span className="text-nulo-text-muted"> · this week: +184</span>
               </p>
             </Reveal>
+
+            {/* Mobile property card — visible only below md breakpoint */}
+            <div className="mt-8">
+              <MobilePropertyCard />
+            </div>
           </div>
 
           {/* Right column — card extends beyond column to the right */}
