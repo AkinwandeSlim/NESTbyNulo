@@ -1,0 +1,443 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --nulo-primary: #FF6600;
+  --nulo-primary-dark: #C2410C;
+  --nulo-primary-mid: #EA580C;
+  --nulo-accent: #F59E0B;
+  --nulo-soft-orange: #FFF7ED;
+  --nulo-text: #0F172A;
+  --nulo-muted-text: #475569;
+  --nulo-background: #FFFFFF;
+  --nulo-card: #FFFFFF;
+  --nulo-border: #E2E8F0;
+
+  --background: oklch(0.98 0.01 75);
+  --foreground: oklch(0.15 0.01 60);
+  --primary: oklch(0.65 0.08 75);
+  --primary-foreground: oklch(0.98 0.005 75);
+  --border: oklch(0.9 0.005 75);
+  --ring: oklch(0.3 0.06 195);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--nulo-text);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+@keyframes tile-assemble {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-tile {
+  animation: tile-assemble 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 40s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 40s linear infinite;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
+}
+
+/* ============================================
+   PREMIUM MOTION SYSTEM
+   - IntersectionObserver-driven reveals
+   - GPU-accelerated (transform + opacity only)
+   - Respects prefers-reduced-motion
+   ============================================ */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Reveal utility classes */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.reveal-blur {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translate3d(0, 12px, 0);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-blur.is-visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger delays */
+.stagger-1 { transition-delay: 0.08s; }
+.stagger-2 { transition-delay: 0.16s; }
+.stagger-3 { transition-delay: 0.24s; }
+.stagger-4 { transition-delay: 0.32s; }
+.stagger-5 { transition-delay: 0.40s; }
+.stagger-6 { transition-delay: 0.48s; }
+
+/* Floating accent for premium feel */
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 5s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+/* Pulsing live indicator */
+.live-pulse {
+  position: relative;
+}
+
+.live-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Gradient text with animation */
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+/* Premium noise texture (very subtle film grain) */
+.noise-texture {
+  position: relative;
+}
+
+.noise-texture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Respect motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-blur,
+  .reveal-scale {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .animate-float,
+  .animate-float-delayed {
+    animation: none;
+  }
+
+  .live-pulse::after {
+    animation: none;
+  }
+
+  .animate-marquee-left,
+  .animate-marquee-right {
+    animation-duration: 120s;
+  }
+}
+
+/* Improved focus visibility for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--nulo-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   HERO BACKGROUND ANIMATIONS
+   - Slow, organic, premium feel
+   - GPU-accelerated (transform + opacity only)
+   ============================================ */
+
+@keyframes blob-drift-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  25% {
+    transform: translate3d(80px, -60px, 0) scale(1.15);
+  }
+  50% {
+    transform: translate3d(120px, 40px, 0) scale(0.92);
+  }
+  75% {
+    transform: translate3d(-60px, 80px, 0) scale(1.08);
+  }
+}
+
+@keyframes blob-drift-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(-100px, -80px, 0) scale(1.18);
+  }
+  66% {
+    transform: translate3d(60px, -40px, 0) scale(0.88);
+  }
+}
+
+@keyframes ring-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ring-rotate-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes dot-grid-pan {
+  from {
+    background-position: 0px 0px;
+  }
+  to {
+    background-position: 40px 40px;
+  }
+}
+
+@keyframes grid-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.06;
+  }
+}
+
+@keyframes shimmer-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes orbit-particle {
+  0% {
+    transform: rotate(0deg) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(40px) rotate(-360deg);
+  }
+}
+
+.animate-blob-1 {
+  animation: blob-drift-1 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-blob-2 {
+  animation: blob-drift-2 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-ring-slow {
+  animation: ring-rotate 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-ring-reverse {
+  animation: ring-rotate-reverse 20s linear infinite;
+  will-change: transform;
+}
+
+.animate-ring-fast {
+  animation: ring-rotate 15s linear infinite;
+  will-change: transform;
+}
+
+.animate-dot-pan {
+  animation: dot-grid-pan 12s linear infinite;
+  will-change: background-position;
+}
+
+.animate-shimmer-pulse {
+  animation: shimmer-pulse 4s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.animate-orbit {
+  animation: orbit-particle 12s linear infinite;
+  will-change: transform;
+}
+
+/* Honor reduced motion for hero animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob-1,
+  .animate-blob-2,
+  .animate-ring-slow,
+  .animate-ring-reverse,
+  .animate-ring-fast,
+  .animate-dot-pan,
+  .animate-shimmer-pulse,
+  .animate-orbit {
+    animation: none;
+  }
+}
