@@ -1,4 +1,4 @@
-import Reveal from "@/components/reveal";
+import Reveal from "@/components/Reveal";
 
 const testimonials = [
   { name: "Amara O.", role: "Software Engineer", city: "Lagos", quote: "I never thought I could own property in Abuja on my salary. NEST makes this real." },

@@ -10,7 +10,7 @@ import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
 import WaitlistForm from "@/components/WaitlistForm";
 import Footer from "@/components/Footer";
-import Reveal from "@/components/reveal";
+import Reveal from "@/components/Reveal";
 
 export default function Home() {
   return (

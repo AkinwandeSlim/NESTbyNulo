@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import Reveal from "@/components/reveal";
+import Reveal from "@/components/Reveal";
 
 const PROPERTY_IMAGES = [
   { src: "/abjpic1.jpg", alt: "NEST Pool #001 — Maitama exterior" },

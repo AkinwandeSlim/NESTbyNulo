@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Reveal from "@/components/reveal";
+import Reveal from "@/components/Reveal";
 
 export default function Returns() {
   const [investment, setInvestment] = useState(500000);
