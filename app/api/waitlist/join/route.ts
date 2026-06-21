@@ -1,5 +1,51 @@
-import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 import * as brevo from "@getbrevo/brevo";
+import { appendRealtimeSignup } from "@/lib/google-sheets";
+import { createServerClient } from "@/lib/supabase";
+
+export async function GET() {
+  // Debug test endpoint for Google Sheets integration
+  const results: any = {
+    timestamp: new Date().toISOString(),
+    env: {
+      hasGoogleSheetsId: !!process.env.GOOGLE_SHEETS_ID,
+      hasServiceAccountEmail: !!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      hasPrivateKey: !!process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+      hasSpreadsheetId: !!process.env.GOOGLE_SPREADSHEET_ID,
+      hasAppUrl: !!process.env.NEXT_PUBLIC_BASE_URL,
+    },
+  };
+
+  if (!process.env.GOOGLE_SHEETS_ID) {
+    results.error = "GOOGLE_SHEETS_ID not set in environment";
+    return NextResponse.json(results, { status: 400 });
+  }
+
+  try {
+    const testReferralCode = `TEST-${Date.now()}`;
+    await appendRealtimeSignup({
+      timestamp: new Date().toISOString(),
+      full_name: "Debug Test User",
+      email: `test-${Date.now()}@debug.local`,
+      phone: "+10000000000",
+      city: "Debug City",
+      investor_type: "debug",
+      referred_by: null,
+      referral_code: testReferralCode,
+      waitlist_position: 0,
+      source: "test-endpoint",
+    });
+    results.success = true;
+    results.message = "Test signup successfully logged to Google Sheets";
+    results.testReferralCode = testReferralCode;
+    return NextResponse.json(results);
+  } catch (e: any) {
+    results.success = false;
+    results.error = e?.message || String(e);
+    results.stack = e?.stack;
+    return NextResponse.json(results, { status: 500 });
+  }
+}
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -18,10 +64,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const supabase = createServerClient();
 
   // Duplicate check
   const { data: existing } = await supabase
@@ -51,6 +94,25 @@ export async function POST(request: Request) {
   if (error) {
     console.error(error);
     return Response.json({ error: "Failed to join waitlist" }, { status: 500 });
+  }
+
+  if (process.env.GOOGLE_SHEETS_ID) {
+    try {
+      await appendRealtimeSignup({
+        timestamp: new Date().toISOString(),
+        full_name,
+        email,
+        phone,
+        city,
+        investor_type,
+        referred_by: referred_by || null,
+        referral_code: data.referral_code,
+        waitlist_position: data.waitlist_position,
+        source: "web",
+      });
+    } catch (e) {
+      console.error("[google-sheets] Failed to log signup (non-fatal):", e);
+    }
   }
 
   // Confirmation email via Brevo (best-effort)

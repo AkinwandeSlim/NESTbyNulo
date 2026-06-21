@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 interface FormState {
   full_name: string;
@@ -22,7 +23,7 @@ export default function WaitlistForm() {
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState<{ position: number; referral_code: string } | null>(null);
+  const [success, setSuccess] = useState<{ full_name: string; email: string; position: number; referral_code: string } | null>(null);
   const [referredBy, setReferredBy] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function WaitlistForm() {
       const raw = window.localStorage.getItem("nest_waitlist_success");
       if (!raw) return;
       const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed.position === "number" && typeof parsed.referral_code === "string") {
+      if (parsed && typeof parsed.position === "number" && typeof parsed.referral_code === "string" && parsed.full_name && parsed.email) {
         setSuccess(parsed);
       }
     } catch {}
@@ -81,14 +82,25 @@ export default function WaitlistForm() {
         throw new Error(data.error || "Failed to join waitlist");
       }
 
-      setSuccess({ position: data.position, referral_code: data.referral_code });
+      setSuccess({
+        full_name: formData.full_name,
+        email: formData.email,
+        position: data.position,
+        referral_code: data.referral_code,
+      });
       try {
         window.localStorage.setItem(
           "nest_waitlist_success",
-          JSON.stringify({ position: data.position, referral_code: data.referral_code })
+          JSON.stringify({
+            full_name: formData.full_name,
+            email: formData.email,
+            position: data.position,
+            referral_code: data.referral_code,
+          })
         );
       } catch {}
-      toast.success("You're on the list! Check your email for your waitlist position and referral link.", {
+      const firstName = formData.full_name.trim().split(" ")[0];
+      toast.success(`Welcome ${firstName}! You're #${data.position} on the NEST waitlist 🎉`, {
         duration: 5000,
       });
     } catch (err) {
@@ -103,21 +115,66 @@ export default function WaitlistForm() {
   };
 
   const referralLink = success ? `${typeof window !== "undefined" ? window.location.origin : ""}?ref=${success.referral_code}` : "";
+  const firstName = success ? success.full_name.trim().split(" ")[0] : "";
+  const initials = success
+    ? success.full_name
+        .trim()
+        .split(" ")
+        .map((n) => n[0])
+        .filter(Boolean)
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
+    : "";
 
   if (success) {
     return (
-      <div className="bg-white rounded-2xl border border-nulo-border p-8 text-center shadow-sm max-w-xl mx-auto">
-        <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">✅</div>
-        <h3 className="font-display text-2xl font-bold text-nulo-text mb-2">You&apos;re on the list!</h3>
-        <p className="text-nulo-text-muted mb-1">You are</p>
-        <p className="text-5xl font-display font-black text-nulo-primary mb-1">#{success.position}</p>
-        <p className="text-nulo-text-muted mb-6">on the NEST waitlist</p>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="bg-white rounded-2xl border border-nulo-border p-8 text-center shadow-sm max-w-xl mx-auto"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2, type: "spring", stiffness: 200 }}
+          className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"
+        >
+          ✅
+        </motion.div>
+        <h3 className="font-display text-2xl font-bold text-nulo-text mb-2">
+          You&apos;re on the list, {firstName}!
+        </h3>
+        <p className="text-nulo-text-muted mb-6">Welcome to the NEST community 🎉</p>
 
+        {/* User info card */}
+        <div className="bg-nulo-soft-orange rounded-xl p-4 mb-6 flex items-center gap-3 text-left">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-nulo-primary to-nulo-primary-dark flex items-center justify-center text-white font-bold text-sm shadow-md flex-shrink-0">
+            {initials}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-bold text-nulo-text truncate">{success.full_name}</p>
+            <p className="text-sm text-nulo-text-muted truncate">{success.email}</p>
+          </div>
+        </div>
+
+        {/* Position display */}
+        <div className="mb-6">
+          <p className="text-nulo-text-muted mb-1 text-sm">Your position</p>
+          <p className="text-5xl font-display font-black text-nulo-primary">#{success.position}</p>
+          <p className="text-nulo-text-muted text-sm mt-1">on the NEST waitlist</p>
+        </div>
+
+        {/* Referral link */}
         <div className="bg-nulo-soft-orange rounded-xl p-4 mb-6">
           <p className="text-sm text-nulo-text-secondary mb-2 font-semibold">Your referral link</p>
           <p className="text-sm text-nulo-primary font-mono break-all mb-3">{referralLink}</p>
           <button
-            onClick={() => navigator.clipboard.writeText(referralLink)}
+            onClick={() => {
+              navigator.clipboard.writeText(referralLink);
+              toast.success("Referral link copied! Share it with friends 🎉", { duration: 3000 });
+            }}
             className="bg-nulo-primary text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-nulo-primary-mid transition-colors"
           >
             Copy Link
@@ -127,7 +184,7 @@ export default function WaitlistForm() {
         <p className="text-sm text-nulo-text-muted">
           🚀 Refer <strong>5 friends</strong> → Get <strong>priority access</strong> before public launch
         </p>
-      </div>
+      </motion.div>
     );
   }
 
