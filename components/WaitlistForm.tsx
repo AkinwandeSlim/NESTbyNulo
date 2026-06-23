@@ -120,7 +120,19 @@ export default function WaitlistForm() {
         setErrors((prev) => ({ ...prev, [field]: message } as Partial<FormState>));
       }
 
-      toast.error(message, { duration: 5000 });
+      // Toast = brief heads-up. The persistent banner below holds the full
+      // message. Tailor the toast text to the category for faster scanning.
+      const toastTitle =
+        category === "network" ? "📡 network issue pls wait"
+        : category === "validation" ? "✏️ Please review the form"
+        : category === "conflict" ? "✉️ Already on the waitlist"
+        : category === "server" ? "⚠️ Server hiccup"
+        : "Something went wrong";
+
+      toast.error(toastTitle, {
+        description: message,
+        duration: category === "network" ? 6000 : 4000,
+      });
     } finally {
       setLoading(false);
     }
@@ -212,9 +224,39 @@ export default function WaitlistForm() {
         <div
           role="alert"
           aria-live="polite"
-          className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm"
+          className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4"
         >
-          {serverError.message}
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-base font-bold">
+              {serverError.category === "network" ? "📡" : serverError.category === "validation" ? "✏️" : serverError.category === "conflict" ? "✉️" : "⚠️"}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-red-800">
+                {serverError.category === "network" && "Connection hiccup"}
+                {serverError.category === "validation" && "Please check your details"}
+                {serverError.category === "conflict" && "You're already on the list"}
+                {serverError.category === "server" && "Something went wrong on our end"}
+                {serverError.category === "unknown" && "Something unexpected happened"}
+                {serverError.category === "rate_limit" && "Slow down a moment"}
+                {serverError.category === "authentication" && "Session check needed"}
+                {serverError.category === "authorization" && "Action not allowed"}
+                {serverError.category === "not_found" && "Not found"}
+              </p>
+              <p className="text-sm text-red-700 mt-0.5">{serverError.message}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setServerError(null);
+                if (typeof window !== "undefined") {
+                  document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
+              className="shrink-0 text-xs font-semibold text-red-700 hover:text-red-900 underline underline-offset-2"
+            >
+              Dismiss
+            </button>
+          </div>
         </div>
       )}
 
@@ -304,8 +346,12 @@ export default function WaitlistForm() {
           {loading ? (
             <>
               <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-              Joining...
+              Reserving your spot...
             </>
+          ) : serverError && serverError.category === "network" ? (
+            <>📡 Retry — network issue pls wait</>
+          ) : serverError ? (
+            <>Try again</>
           ) : (
             "Join Waitlist"
           )}

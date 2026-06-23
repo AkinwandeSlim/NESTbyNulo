@@ -109,6 +109,30 @@ export async function POST(request: Request) {
     return apiError("server", { message: "Our database is temporarily unavailable. Please try again shortly." });
   }
 
+  // Resolve referred_by: if the code doesn't exist, silently drop it
+  // instead of letting the FK constraint blow up the insert. This means
+  // a stale or mistyped ?ref= link is harmless rather than fatal.
+  let validReferredBy: string | null = null;
+  if (referred_by && typeof referred_by === "string" && referred_by.trim()) {
+    const cleanedRef = referred_by.trim().slice(0, 16);
+    try {
+      const { data: refRow, error: refErr } = await supabase
+        .from("waitlist")
+        .select("referral_code")
+        .eq("referral_code", cleanedRef)
+        .maybeSingle();
+      if (refErr) {
+        console.warn("[waitlist/join] referred_by lookup failed (non-fatal):", refErr);
+      } else if (refRow) {
+        validReferredBy = refRow.referral_code;
+      } else {
+        console.log(`[waitlist/join] referred_by '${cleanedRef}' not found — joining without referral credit`);
+      }
+    } catch (e) {
+      console.warn("[waitlist/join] referred_by lookup threw (non-fatal):", e);
+    }
+  }
+
   let existing;
   try {
     const result = await supabase
@@ -145,7 +169,7 @@ export async function POST(request: Request) {
         phone,
         city,
         investor_type,
-        referred_by: referred_by || null,
+        referred_by: validReferredBy,
       })
       .select("waitlist_position, referral_code")
       .single();
@@ -170,7 +194,7 @@ export async function POST(request: Request) {
         phone,
         city,
         investor_type,
-        referred_by: referred_by || null,
+        referred_by: validReferredBy,
         referral_code: data.referral_code,
         waitlist_position: data.waitlist_position,
         source: "web",
