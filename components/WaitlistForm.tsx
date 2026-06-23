@@ -151,6 +151,22 @@ export default function WaitlistForm() {
         .toUpperCase()
     : "";
 
+  const resetForm = () => {
+    try {
+      window.localStorage.removeItem("nest_waitlist_success");
+    } catch {}
+    setSuccess(null);
+    setFormData({
+      full_name: "",
+      email: "",
+      phone: "",
+      city: "",
+      investor_type: "",
+    });
+    setErrors({});
+    setServerError(null);
+  };
+
   if (success) {
     return (
       <motion.div
@@ -205,9 +221,16 @@ export default function WaitlistForm() {
           </button>
         </div>
 
-        <p className="text-sm text-nulo-text-muted">
+        <p className="text-sm text-nulo-text-muted mb-6">
           🚀 Refer <strong>5 friends</strong> → Get <strong>priority access</strong> before public launch
         </p>
+
+        <button
+          onClick={resetForm}
+          className="w-full bg-white border border-nulo-border text-nulo-text py-3 rounded-xl font-semibold hover:bg-nulo-soft-orange transition-colors"
+        >
+          Submit another entry
+        </button>
       </motion.div>
     );
   }
