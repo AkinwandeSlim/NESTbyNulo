@@ -31,3 +31,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Never commit JSON credential files (Google, AWS, etc.)
+*.json
+!tsconfig.json
+!package.json
+!package-lock.json
+
+# Additional security - stricter credential protection
+*.key
+*.crt
+*.p12
+*.keystore
+.env
+.env.*.local
+secrets/

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import * as brevo from "@getbrevo/brevo";
 import { appendRealtimeSignup } from "@/lib/google-sheets";
 import { createServerClient } from "@/lib/supabase";
+import { apiError } from "@/lib/errors";
 
 export async function GET() {
   // Debug test endpoint for Google Sheets integration
@@ -48,13 +49,48 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const { full_name, email, phone, city, investor_type, referred_by } = body;
-
-  if (!full_name || !email || !phone || !city || !investor_type) {
-    return Response.json({ error: "Missing required fields" }, { status: 400 });
+  // ---- 1. Parse body ---------------------------------------------------
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return apiError("validation", { message: "Invalid request body — expected JSON." });
   }
 
+  const { full_name, email, phone, city, investor_type, referred_by } = body || {};
+
+  // ---- 2. Field-level validation --------------------------------------
+  const missing: string[] = [];
+  if (!full_name || typeof full_name !== "string") missing.push("full_name");
+  if (!email || typeof email !== "string") missing.push("email");
+  if (!phone || typeof phone !== "string") missing.push("phone");
+  if (!city || typeof city !== "string") missing.push("city");
+  if (!investor_type || typeof investor_type !== "string") missing.push("investor_type");
+
+  if (missing.length) {
+    return apiError("validation", {
+      message: `Missing required field${missing.length > 1 ? "s" : ""}: ${missing.join(", ")}.`,
+      field: missing[0],
+    });
+  }
+
+  const emailRegex = /^\S+@\S+\.\S+$/;
+  if (!emailRegex.test(email)) {
+    return apiError("validation", { message: "Please enter a valid email address.", field: "email" });
+  }
+  const phoneRegex = /^(\+234|0)[0-9]{10}$/;
+  if (!phoneRegex.test(phone)) {
+    return apiError("validation", {
+      message: "Please enter a valid Nigerian phone number (e.g. 08012345678 or +2348012345678).",
+      field: "phone",
+    });
+  }
+  const allowedInvestorTypes = ["first_time", "existing_landlord", "diaspora"];
+  if (!allowedInvestorTypes.includes(investor_type)) {
+    return apiError("validation", { field: "investor_type" });
+  }
+
+  // ---- 3. Public-mode short-circuit -----------------------------------
   if (String(process.env.WAITLIST_LIVE ?? "").toLowerCase() === "false") {
     const fakeCode = Math.random().toString(36).slice(2, 10);
     return Response.json({
@@ -64,38 +100,67 @@ export async function POST(request: Request) {
     });
   }
 
-  const supabase = createServerClient();
+  // ---- 4. Supabase operations -----------------------------------------
+  let supabase;
+  try {
+    supabase = createServerClient();
+  } catch (e) {
+    console.error("[waitlist/join] Failed to create Supabase client:", e);
+    return apiError("server", { message: "Our database is temporarily unavailable. Please try again shortly." });
+  }
 
-  // Duplicate check
-  const { data: existing } = await supabase
-    .from("waitlist")
-    .select("id")
-    .eq("email", email)
-    .single();
+  let existing;
+  try {
+    const result = await supabase
+      .from("waitlist")
+      .select("id")
+      .eq("email", email)
+      .single();
+    existing = result.data;
+    if (result.error && result.error.code !== "PGRST116") {
+      throw result.error;
+    }
+  } catch (e: any) {
+    console.error("[waitlist/join] Duplicate check failed:", e);
+    return apiError("server", {
+      message: "We couldn't verify your email right now. Please try again in a moment.",
+      details: e?.message,
+    });
+  }
 
   if (existing) {
-    return Response.json({ error: "Email already registered" }, { status: 409 });
+    return apiError("conflict", {
+      message: "This email is already on the waitlist. Thanks for your enthusiasm!",
+      field: "email",
+    });
   }
 
-  // Insert
-  const { data, error } = await supabase
-    .from("waitlist")
-    .insert({
-      full_name,
-      email,
-      phone,
-      city,
-      investor_type,
-      referred_by: referred_by || null,
-    })
-    .select("waitlist_position, referral_code")
-    .single();
+  let data;
+  try {
+    const result = await supabase
+      .from("waitlist")
+      .insert({
+        full_name,
+        email,
+        phone,
+        city,
+        investor_type,
+        referred_by: referred_by || null,
+      })
+      .select("waitlist_position, referral_code")
+      .single();
 
-  if (error) {
-    console.error(error);
-    return Response.json({ error: "Failed to join waitlist" }, { status: 500 });
+    if (result.error) throw result.error;
+    data = result.data;
+  } catch (e: any) {
+    console.error("[waitlist/join] Insert failed:", e);
+    return apiError("server", {
+      message: "We couldn't save your spot just now. Please try again shortly.",
+      details: e?.message,
+    });
   }
 
+  // ---- 5. Google Sheets (non-fatal) -----------------------------------
   if (process.env.GOOGLE_SHEETS_ID) {
     try {
       await appendRealtimeSignup({
@@ -115,7 +180,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // Confirmation email via Brevo (best-effort)
+  // ---- 6. Confirmation email via Brevo (best-effort) ------------------
   if (process.env.BREVO_API_KEY) {
     try {
       const apiInstance = new brevo.TransactionalEmailsApi();
@@ -154,7 +219,7 @@ export async function POST(request: Request) {
         `,
       });
     } catch (e) {
-      console.error("Brevo email failed:", e);
+      console.error("Brevo email failed (non-fatal):", e);
     }
   }
 

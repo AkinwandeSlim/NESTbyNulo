@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { ApiCallError, ERROR_MESSAGES, apiFetch, type ErrorCategory } from "@/lib/errors";
 
 interface FormState {
   full_name: string;
@@ -21,7 +22,7 @@ export default function WaitlistForm() {
     investor_type: "",
   });
   const [errors, setErrors] = useState<Partial<FormState>>({});
-  const [serverError, setServerError] = useState("");
+  const [serverError, setServerError] = useState<{ category: ErrorCategory; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<{ full_name: string; email: string; position: number; referral_code: string } | null>(null);
   const [referredBy, setReferredBy] = useState<string | null>(null);
@@ -57,30 +58,25 @@ export default function WaitlistForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name as keyof FormState]) {
+      setErrors({ ...errors, [e.target.name]: undefined });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setServerError("");
+    setServerError(null);
     if (!validate()) return;
 
     setLoading(true);
     try {
-      const res = await fetch("/api/waitlist/join", {
+      const res = await apiFetch("/api/waitlist/join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, referred_by: referredBy }),
       });
 
       const data = await res.json();
-
-      if (res.status === 409) {
-        setServerError("This email is already on the waitlist.");
-        return;
-      }
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to join waitlist");
-      }
 
       setSuccess({
         full_name: formData.full_name,
@@ -104,11 +100,27 @@ export default function WaitlistForm() {
         duration: 5000,
       });
     } catch (err) {
-      const errorMessage = serverError || "Failed to join waitlist. Please try again.";
-      setServerError(errorMessage);
-      toast.error(errorMessage, {
-        duration: 5000,
-      });
+      // Categorize the error and surface the right user-facing message
+      let category: ErrorCategory = "unknown";
+      let message = ERROR_MESSAGES.unknown;
+      let field: string | undefined;
+
+      if (err instanceof ApiCallError) {
+        category = err.body.category;
+        message = err.body.error;
+        field = err.body.field;
+      } else if (err instanceof Error) {
+        message = err.message || ERROR_MESSAGES.unknown;
+      }
+
+      setServerError({ category, message });
+
+      // Highlight the offending field if the API told us which one
+      if (field && (field in formData)) {
+        setErrors((prev) => ({ ...prev, [field]: message } as Partial<FormState>));
+      }
+
+      toast.error(message, { duration: 5000 });
     } finally {
       setLoading(false);
     }
@@ -197,8 +209,12 @@ export default function WaitlistForm() {
       )}
 
       {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm">
-          {serverError}
+        <div
+          role="alert"
+          aria-live="polite"
+          className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm"
+        >
+          {serverError.message}
         </div>
       )}
 
