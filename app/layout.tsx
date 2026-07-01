@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body className="bg-nulo-background text-nulo-text antialiased">
         {children}
         <Toaster position="top-right" />
+        <Analytics />
       </body>
     </html>
   );
