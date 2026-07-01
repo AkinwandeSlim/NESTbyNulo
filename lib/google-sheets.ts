@@ -104,7 +104,7 @@ export async function appendRealtimeSignup(row: WaitlistRow): Promise<{ action: 
         row.investor_type,
         row.referred_by || "",
         row.referral_code,
-        String(row.waitlist_position),
+        row.waitlist_position,
         row.source || "web",
       ],
     ];
@@ -113,7 +113,7 @@ export async function appendRealtimeSignup(row: WaitlistRow): Promise<{ action: 
       sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
         range: `${REALTIME_TAB}!A:J`,
-        valueInputOption: "RAW",
+        valueInputOption: "USER_ENTERED",
         insertDataOption: "INSERT_ROWS",
         requestBody: { values },
       })
@@ -168,14 +168,14 @@ export async function writeDailySync(agg: DailyAggregates): Promise<void> {
   const values = [
     [
       agg.sync_date,
-      String(agg.total_signups),
-      String(agg.signups_today),
-      String(agg.first_time_investors),
-      String(agg.existing_landlords),
-      String(agg.diaspora),
+      agg.total_signups,
+      agg.signups_today,
+      agg.first_time_investors,
+      agg.existing_landlords,
+      agg.diaspora,
       agg.top_city,
-      String(agg.total_referrals),
-      String(agg.avg_position),
+      agg.total_referrals,
+      agg.avg_position,
     ],
   ];
 
@@ -184,7 +184,7 @@ export async function writeDailySync(agg: DailyAggregates): Promise<void> {
       sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
         range: `${DAILY_TAB}!A${targetRow}:I${targetRow}`,
-        valueInputOption: "RAW",
+        valueInputOption: "USER_ENTERED",
         requestBody: { values },
       })
     );
@@ -194,7 +194,7 @@ export async function writeDailySync(agg: DailyAggregates): Promise<void> {
       sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
         range: `${DAILY_TAB}!A:I`,
-        valueInputOption: "RAW",
+        valueInputOption: "USER_ENTERED",
         insertDataOption: "INSERT_ROWS",
         requestBody: { values },
       })
