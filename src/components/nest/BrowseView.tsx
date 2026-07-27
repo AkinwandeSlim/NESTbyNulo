@@ -132,8 +132,10 @@ export default function BrowseView() {
     <div className="min-h-screen">
       {/* ─── HERO SECTION ─── */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 nest-gradient opacity-90" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_oklch(0.55_0.14_155/0.3),_transparent_60%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a00] via-[#2d1200] to-[#0c0a09]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,102,0,0.25),_transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.15),_transparent_50%)]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-36 sm:pb-20">
           <motion.div
             variants={stagger}
@@ -142,7 +144,7 @@ export default function BrowseView() {
             className="flex flex-col items-center text-center gap-6"
           >
             <motion.div variants={fadeInUp}>
-              <Badge className="bg-nest-accent/20 text-nest-accent border-nest-accent/30 px-3 py-1 text-xs font-medium">
+              <Badge className="bg-white/10 text-white/90 border-white/20 backdrop-blur-sm px-3 py-1 text-xs font-medium">
                 <span className="mr-1">🇳🇬</span> Trusted by 2,500+ investors across Africa
               </Badge>
             </motion.div>
@@ -152,7 +154,7 @@ export default function BrowseView() {
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-3xl"
             >
               Become a{' '}
-              <span className="text-nest-accent">Landlord</span>
+              <span className="bg-gradient-to-r from-nest-accent to-orange-300 bg-clip-text text-transparent">Landlord</span>
               {' '}Today
             </motion.h1>
 
@@ -171,7 +173,7 @@ export default function BrowseView() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search properties, cities, or developers..."
-                  className="pl-10 h-12 bg-white/10 backdrop-blur-md border-white/20 text-white placeholder:text-white/50 focus-visible:ring-nest-accent/50 rounded-xl"
+                  className="pl-10 h-12 bg-white/10 backdrop-blur-md border-white/15 text-white placeholder:text-white/40 focus-visible:ring-nest-accent/50 focus-visible:border-nest-accent/50 rounded-xl"
                 />
               </div>
             </motion.div>
@@ -188,7 +190,7 @@ export default function BrowseView() {
                 { icon: <Building2 className="size-4" />, value: '12', label: 'Properties' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="flex items-center justify-center gap-1.5 text-white/60 text-xs mb-1">
+                  <div className="flex items-center justify-center gap-1.5 text-white/50 text-xs mb-1">
                     {stat.icon}
                     {stat.label}
                   </div>

@@ -105,7 +105,7 @@ export default function WalletView() {
         transition={{ delay: 0.1 }}
         className="mb-6"
       >
-        <Card className="p-6 gap-0 nest-gradient text-white border-0">
+        <Card className="p-6 gap-0 bg-gradient-to-br from-[#1a0a00] via-[#2d1200] to-nest-primary-dark text-white border-0">
           <div className="flex items-center gap-2 mb-1">
             <WalletIcon className="size-4 text-white/70" />
             <p className="text-sm text-white/70">Available Balance</p>

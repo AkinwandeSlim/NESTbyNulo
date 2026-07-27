@@ -76,7 +76,7 @@ export default function InvestorHeader() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled
-          ? 'bg-background/80 backdrop-blur-xl border-b border-border shadow-sm'
+          ? 'bg-white/90 backdrop-blur-xl border-b border-border shadow-sm'
           : 'bg-transparent'
       )}
     >
@@ -95,8 +95,11 @@ export default function InvestorHeader() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nest-primary">
                 <Home className="size-4 text-white" />
               </div>
-              <span className="text-lg font-bold tracking-tight">
-                <span className="text-nest-primary">NEST</span>
+              <span className={cn(
+                'text-lg font-bold tracking-tight',
+                scrolled ? 'text-nest-primary' : 'text-white'
+              )}>
+                NEST
               </span>
             </motion.div>
           </button>
@@ -112,8 +115,8 @@ export default function InvestorHeader() {
                 className={cn(
                   'relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                   currentView === item.view
-                    ? 'text-nest-primary'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? scrolled ? 'text-nest-primary' : 'text-white'
+                    : scrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
                 )}
               >
                 {item.icon}
@@ -121,7 +124,10 @@ export default function InvestorHeader() {
                 {currentView === item.view && (
                   <motion.div
                     layoutId="nav-indicator"
-                    className="absolute inset-0 rounded-lg bg-nest-primary/10"
+                    className={cn(
+                      'absolute inset-0 rounded-lg',
+                      scrolled ? 'bg-nest-primary/10' : 'bg-white/15'
+                    )}
                     transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -139,8 +145,8 @@ export default function InvestorHeader() {
               className={cn(
                 'hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                 currentView === 'admin' || currentView.startsWith('admin-')
-                  ? 'text-nest-primary'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? scrolled ? 'text-nest-primary' : 'text-white'
+                  : scrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
               )}
             >
               <LayoutDashboard className="size-4" />
@@ -152,7 +158,12 @@ export default function InvestorHeader() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground hover:text-foreground transition-colors"
+              className={cn(
+                'flex h-9 w-9 items-center justify-center rounded-lg border transition-colors',
+                scrolled
+                  ? 'border-border bg-background text-muted-foreground hover:text-foreground'
+                  : 'border-white/20 bg-white/10 text-white/80 hover:text-white hover:bg-white/20'
+              )}
             >
               <AnimatePresence mode="wait">
                 {theme === 'dark' ? (
@@ -233,8 +244,8 @@ export default function InvestorHeader() {
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nest-primary">
                       <Home className="size-4 text-white" />
                     </div>
-                    <span className="text-lg font-bold">
-                      <span className="text-nest-primary">NEST</span>
+                    <span className="text-lg font-bold text-nest-primary">
+                      NEST
                     </span>
                   </SheetTitle>
                 </SheetHeader>

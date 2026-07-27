@@ -61,3 +61,26 @@ Stage Summary:
 - Brand-consistent design tokens registered in Tailwind theme for future use
 - Dark mode uses warm stone palette instead of cool grays
 - Database reseeded with 8 properties, all API endpoints functional
+
+---
+Task ID: 3
+Agent: Super Z (Main)
+Task: Fix contrast issues on landing page — logo, nav links, hero gradient
+
+Work Log:
+- Fixed InvestorHeader: logo text now switches between white (over hero) and nest-primary (scrolled), solving orange-on-orange washout
+- Fixed nav links: inactive links use white/80 → white when over the hero, muted-foreground when scrolled on white bg
+- Fixed nav active indicator: bg-white/15 over hero, bg-nest-primary/10 when scrolled
+- Fixed theme toggle button: white glass effect over hero, standard border style when scrolled
+- Replaced flat orange hero gradient with deep premium dark gradient: from-[#1a0a00] via-[#2d1200] to-[#0c0a09] with subtle orange radial glows
+- Hero "Landlord" text now uses gradient-to-r from-nest-accent to-orange-300 with bg-clip-text for premium shimmer
+- Hero badge changed from amber-on-orange to white glass (bg-white/10 border-white/20)
+- Search input placeholder improved to white/40 for better contrast
+- WalletView balance card upgraded to dark gradient matching the hero premium feel
+- Build: zero errors, zero ESLint warnings
+
+Stage Summary:
+- Landing page hero now has a deep, rich dark gradient with subtle warm orange glows — much more premium
+- Header is fully responsive: white text/glass when over hero, standard UI when scrolled down
+- All contrast issues resolved — no more orange-on-orange or dull grey on dark backgrounds
+- Zero build errors
