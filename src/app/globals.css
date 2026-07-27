@@ -41,93 +41,149 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-nest-gold: var(--nest-gold);
-  --color-nest-emerald: var(--nest-emerald);
+
+  /* NEST Brand Colors — aligned with Nulo Africa design system */
+  --color-nest-primary: var(--nest-primary);
+  --color-nest-primary-dark: var(--nest-primary-dark);
+  --color-nest-primary-mid: var(--nest-primary-mid);
+  --color-nest-accent: var(--nest-accent);
+  --color-nest-text: var(--nest-text);
+  --color-nest-text-secondary: var(--nest-text-secondary);
+  --color-nest-text-muted: var(--nest-text-muted);
+  --color-nest-ivory: var(--nest-ivory);
+  --color-nest-soft-orange: var(--nest-soft-orange);
+  --color-nest-border: var(--nest-border);
   --color-nest-charcoal: var(--nest-charcoal);
-  --color-nest-cream: var(--nest-cream);
   --color-nest-success: var(--nest-success);
   --color-nest-warning: var(--nest-warning);
 }
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.985 0.002 90);
-  --foreground: oklch(0.15 0.02 40);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 40);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 40);
-  --primary: oklch(0.35 0.12 155);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.96 0.005 90);
-  --secondary-foreground: oklch(0.25 0.02 40);
-  --muted: oklch(0.96 0.005 90);
-  --muted-foreground: oklch(0.50 0.02 40);
-  --accent: oklch(0.96 0.02 85);
-  --accent-foreground: oklch(0.25 0.02 40);
+
+  /* Warm ivory background (matches nuloafrica.com) */
+  --background: #ffffff;
+  --foreground: #0f172a;
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* Primary — Nulo Orange (#ff6600) */
+  --primary: #ff6600;
+  --primary-foreground: #ffffff;
+
+  --secondary: #fff7ed;
+  --secondary-foreground: #9a3412;
+
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+
+  /* Accent — Amber (#f59e0b) */
+  --accent: #fff7ed;
+  --accent-foreground: #9a3412;
+
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.91 0.005 90);
-  --input: oklch(0.91 0.005 90);
-  --ring: oklch(0.35 0.12 155);
-  --chart-1: oklch(0.35 0.12 155);
-  --chart-2: oklch(0.75 0.15 85);
-  --chart-3: oklch(0.55 0.10 250);
-  --chart-4: oklch(0.65 0.18 30);
-  --chart-5: oklch(0.60 0.20 350);
-  --sidebar: oklch(0.15 0.02 40);
-  --sidebar-foreground: oklch(0.95 0.005 90);
-  --sidebar-primary: oklch(0.55 0.12 155);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.22 0.02 40);
-  --sidebar-accent-foreground: oklch(0.95 0.005 90);
-  --sidebar-border: oklch(0.25 0.02 40);
-  --sidebar-ring: oklch(0.35 0.12 155);
-  --nest-gold: oklch(0.75 0.15 85);
-  --nest-emerald: oklch(0.45 0.12 155);
-  --nest-charcoal: oklch(0.18 0.02 40);
-  --nest-cream: oklch(0.96 0.01 90);
-  --nest-success: oklch(0.55 0.14 155);
-  --nest-warning: oklch(0.75 0.15 65);
+  --destructive-foreground: #ffffff;
+
+  /* Borders — Slate 200 (matches nuloafrica.com) */
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #ff6600;
+
+  --chart-1: #ff6600;
+  --chart-2: #f59e0b;
+  --chart-3: #0ea5e9;
+  --chart-4: #8b5cf6;
+  --chart-5: #ec4899;
+
+  /* Sidebar — Dark charcoal */
+  --sidebar: #0f172a;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #ff6600;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #334155;
+  --sidebar-ring: #ff6600;
+
+  /* NEST Brand Tokens */
+  --nest-primary: #ff6600;
+  --nest-primary-dark: #c2410c;
+  --nest-primary-mid: #ea580c;
+  --nest-accent: #f59e0b;
+  --nest-text: #0f172a;
+  --nest-text-secondary: #334155;
+  --nest-text-muted: #64748b;
+  --nest-ivory: oklch(0.98 0.01 75);
+  --nest-soft-orange: #fff7ed;
+  --nest-border: #e2e8f0;
+  --nest-charcoal: #0f172a;
+  --nest-success: #16a34a;
+  --nest-warning: #f59e0b;
 }
 
 .dark {
-  --background: oklch(0.14 0.01 40);
-  --foreground: oklch(0.95 0.005 90);
-  --card: oklch(0.18 0.015 40);
-  --card-foreground: oklch(0.95 0.005 90);
-  --popover: oklch(0.18 0.015 40);
-  --popover-foreground: oklch(0.95 0.005 90);
-  --primary: oklch(0.55 0.14 155);
-  --primary-foreground: oklch(0.12 0.01 40);
-  --secondary: oklch(0.24 0.015 40);
-  --secondary-foreground: oklch(0.95 0.005 90);
-  --muted: oklch(0.24 0.015 40);
-  --muted-foreground: oklch(0.65 0.015 90);
-  --accent: oklch(0.24 0.02 85);
-  --accent-foreground: oklch(0.95 0.005 90);
+  --background: #0c0a09;
+  --foreground: #fafaf9;
+
+  --card: #1c1917;
+  --card-foreground: #fafaf9;
+
+  --popover: #1c1917;
+  --popover-foreground: #fafaf9;
+
+  /* Primary — Nulo Orange, slightly brighter for dark mode */
+  --primary: #fb923c;
+  --primary-foreground: #0c0a09;
+
+  --secondary: #292524;
+  --secondary-foreground: #fafaf9;
+
+  --muted: #292524;
+  --muted-foreground: #a8a29e;
+
+  --accent: #292524;
+  --accent-foreground: #fafaf9;
+
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.28 0.015 40);
-  --input: oklch(0.28 0.015 40);
-  --ring: oklch(0.55 0.14 155);
-  --chart-1: oklch(0.55 0.14 155);
-  --chart-2: oklch(0.75 0.15 85);
-  --chart-3: oklch(0.60 0.10 250);
-  --chart-4: oklch(0.65 0.18 30);
-  --chart-5: oklch(0.60 0.20 350);
-  --sidebar: oklch(0.12 0.01 40);
-  --sidebar-foreground: oklch(0.95 0.005 90);
-  --sidebar-primary: oklch(0.55 0.14 155);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.20 0.02 40);
-  --sidebar-accent-foreground: oklch(0.95 0.005 90);
-  --sidebar-border: oklch(0.25 0.01 40);
-  --sidebar-ring: oklch(0.55 0.14 155);
-  --nest-gold: oklch(0.78 0.15 85);
-  --nest-emerald: oklch(0.55 0.14 155);
-  --nest-charcoal: oklch(0.14 0.01 40);
-  --nest-cream: oklch(0.20 0.01 40);
-  --nest-success: oklch(0.60 0.14 155);
-  --nest-warning: oklch(0.78 0.15 65);
+  --destructive-foreground: #fafaf9;
+
+  --border: #44403c;
+  --input: #44403c;
+  --ring: #fb923c;
+
+  --chart-1: #fb923c;
+  --chart-2: #fbbf24;
+  --chart-3: #38bdf8;
+  --chart-4: #a78bfa;
+  --chart-5: #f472b6;
+
+  --sidebar: #0c0a09;
+  --sidebar-foreground: #fafaf9;
+  --sidebar-primary: #fb923c;
+  --sidebar-primary-foreground: #0c0a09;
+  --sidebar-accent: #1c1917;
+  --sidebar-accent-foreground: #fafaf9;
+  --sidebar-border: #292524;
+  --sidebar-ring: #fb923c;
+
+  /* NEST Brand Tokens — Dark Mode */
+  --nest-primary: #fb923c;
+  --nest-primary-dark: #c2410c;
+  --nest-primary-mid: #ea580c;
+  --nest-accent: #fbbf24;
+  --nest-text: #fafaf9;
+  --nest-text-secondary: #d6d3d1;
+  --nest-text-muted: #a8a29e;
+  --nest-ivory: #1c1917;
+  --nest-soft-orange: #292524;
+  --nest-border: #44403c;
+  --nest-charcoal: #0c0a09;
+  --nest-success: #22c55e;
+  --nest-warning: #fbbf24;
 }
 
 @layer base {
@@ -142,13 +198,13 @@
   }
 }
 
-/* NEST Custom Utilities */
+/* NEST Custom Utilities — Nulo-aligned gradients */
 .nest-gradient {
-  background: linear-gradient(135deg, oklch(0.35 0.12 155), oklch(0.45 0.10 180));
+  background: linear-gradient(135deg, #ff6600, #ea580c);
 }
 
 .nest-gradient-gold {
-  background: linear-gradient(135deg, oklch(0.75 0.15 85), oklch(0.70 0.12 70));
+  background: linear-gradient(135deg, #f59e0b, #f97316);
 }
 
 .nest-card-hover {
@@ -157,7 +213,7 @@
 
 .nest-card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px -12px oklch(0 0 0 / 0.15);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
 .nest-shine {
@@ -174,9 +230,9 @@
   height: 200%;
   background: linear-gradient(
     to bottom right,
-    oklch(1 0 0 / 0) 40%,
-    oklch(1 0 0 / 0.05) 50%,
-    oklch(1 0 0 / 0) 60%
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 60%
   );
   transform: rotate(30deg);
   transition: transform 0.6s;
@@ -196,12 +252,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: oklch(0.7 0 0 / 0.3);
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.6 0 0 / 0.5);
+  background: rgba(100, 116, 139, 0.5);
 }
 
 /* Progress bar animation */
@@ -238,4 +294,40 @@
 
 .nest-count-up {
   animation: count-up 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Hide scrollbar utility (matching nuloafrica.com) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Luxury hover effects (matching nuloafrica.com) */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(255, 102, 0, 0.3);
+}
+
+/* Gradient text */
+.bg-gradient-text {
+  background: linear-gradient(90deg, #d4af37, #f5c47b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

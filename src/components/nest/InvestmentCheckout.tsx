@@ -154,9 +154,9 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', bounce: 0.5, delay: 0.2 }}
-            className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-nest-emerald/10"
+            className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-nest-primary/10"
           >
-            <PartyPopper className="size-12 text-nest-emerald" />
+            <PartyPopper className="size-12 text-nest-primary" />
           </motion.div>
 
           <motion.div
@@ -176,13 +176,13 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Card className="p-6 text-left border-nest-gold/30 bg-gradient-to-br from-nest-gold/5 to-transparent mb-6">
+            <Card className="p-6 text-left border-nest-accent/30 bg-gradient-to-br from-nest-accent/5 to-transparent mb-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Trophy className="size-5 text-nest-gold" />
-                  <span className="text-sm font-semibold text-nest-gold">Digital Certificate</span>
+                  <Trophy className="size-5 text-nest-accent" />
+                  <span className="text-sm font-semibold text-nest-accent">Digital Certificate</span>
                 </div>
-                <BadgeCheck className="size-5 text-nest-emerald" />
+                <BadgeCheck className="size-5 text-nest-primary" />
               </div>
               <Separator className="mb-4" />
               <div className="space-y-2">
@@ -196,7 +196,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Amount</span>
-                  <span className="font-bold text-nest-emerald">{formatNairaFull(amount)}</span>
+                  <span className="font-bold text-nest-primary">{formatNairaFull(amount)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Units</span>
@@ -228,7 +228,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
               Invest Again
             </Button>
             <Button
-              className="flex-1 bg-nest-emerald hover:bg-nest-emerald/90 text-white"
+              className="flex-1 bg-nest-primary hover:bg-nest-primary/90 text-white"
               onClick={() => setView('portfolio')}
             >
               View Portfolio
@@ -264,8 +264,8 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
           <div key={s.number} className="flex items-center gap-2">
             <div className={cn(
               'flex items-center justify-center h-8 w-8 rounded-full text-sm font-semibold transition-all',
-              step > s.number ? 'bg-nest-emerald text-white' :
-              step === s.number ? 'bg-nest-emerald/10 text-nest-emerald border-2 border-nest-emerald' :
+              step > s.number ? 'bg-nest-primary text-white' :
+              step === s.number ? 'bg-nest-primary/10 text-nest-primary border-2 border-nest-primary' :
               'bg-muted text-muted-foreground'
             )}>
               {step > s.number ? <Check className="size-4" /> : s.number}
@@ -277,7 +277,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
               {s.label}
             </span>
             {i < steps.length - 1 && (
-              <div className={cn('w-8 sm:w-16 h-0.5 rounded-full', step > s.number ? 'bg-nest-emerald' : 'bg-border')} />
+              <div className={cn('w-8 sm:w-16 h-0.5 rounded-full', step > s.number ? 'bg-nest-primary' : 'bg-border')} />
             )}
           </div>
         ))}
@@ -297,7 +297,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                 <p className="text-sm font-semibold truncate">{property.title}</p>
                 <p className="text-xs text-muted-foreground">{property.city}, {property.state}</p>
                 <div className="flex gap-3 mt-1">
-                  <span className="text-xs font-medium text-nest-emerald">
+                  <span className="text-xs font-medium text-nest-primary">
                     {property.rentalYield != null ? formatPercent(property.rentalYield) : ''} yield
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -339,8 +339,8 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                       className={cn(
                         'py-2.5 px-3 rounded-lg text-sm font-medium border-2 transition-all',
                         amount === preset
-                          ? 'border-nest-emerald bg-nest-emerald/10 text-nest-emerald'
-                          : 'border-border hover:border-nest-emerald/50 text-foreground'
+                          ? 'border-nest-primary bg-nest-primary/10 text-nest-primary'
+                          : 'border-border hover:border-nest-primary/50 text-foreground'
                       )}
                     >
                       {formatNaira(preset)}
@@ -354,7 +354,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium">Custom Amount</label>
-                    <span className="text-lg font-bold text-nest-emerald">{formatNairaFull(amount)}</span>
+                    <span className="text-lg font-bold text-nest-primary">{formatNairaFull(amount)}</span>
                   </div>
                   <Slider
                     value={[amount]}
@@ -375,7 +375,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
 
               <Button
                 onClick={() => goToStep(2)}
-                className="w-full bg-nest-emerald hover:bg-nest-emerald/90 text-white h-12"
+                className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white h-12"
               >
                 Continue to Payment
                 <ArrowRight className="size-4 ml-1" />
@@ -397,14 +397,14 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                       className={cn(
                         'w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left',
                         paymentMethod === method.id
-                          ? 'border-nest-emerald bg-nest-emerald/5'
-                          : 'border-border hover:border-nest-emerald/30'
+                          ? 'border-nest-primary bg-nest-primary/5'
+                          : 'border-border hover:border-nest-primary/30'
                       )}
                     >
                       <div className={cn(
                         'flex h-10 w-10 items-center justify-center rounded-lg',
                         paymentMethod === method.id
-                          ? 'bg-nest-emerald/10 text-nest-emerald'
+                          ? 'bg-nest-primary/10 text-nest-primary'
                           : 'bg-muted text-muted-foreground'
                       )}>
                         {method.icon}
@@ -414,14 +414,14 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                         <p className="text-xs text-muted-foreground">{method.desc}</p>
                       </div>
                       {method.balance && (
-                        <span className="text-xs font-medium text-nest-emerald">{method.balance}</span>
+                        <span className="text-xs font-medium text-nest-primary">{method.balance}</span>
                       )}
                       <div className={cn(
                         'h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all',
-                        paymentMethod === method.id ? 'border-nest-emerald' : 'border-border'
+                        paymentMethod === method.id ? 'border-nest-primary' : 'border-border'
                       )}>
                         {paymentMethod === method.id && (
-                          <div className="h-2.5 w-2.5 rounded-full bg-nest-emerald" />
+                          <div className="h-2.5 w-2.5 rounded-full bg-nest-primary" />
                         )}
                       </div>
                     </button>
@@ -436,7 +436,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                 </Button>
                 <Button
                   onClick={() => goToStep(3)}
-                  className="flex-1 bg-nest-emerald hover:bg-nest-emerald/90 text-white"
+                  className="flex-1 bg-nest-primary hover:bg-nest-primary/90 text-white"
                 >
                   Review
                   <ArrowRight className="size-4 ml-1" />
@@ -458,7 +458,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Investment Amount</span>
-                    <span className="font-bold text-nest-emerald">{formatNairaFull(amount)}</span>
+                    <span className="font-bold text-nest-primary">{formatNairaFull(amount)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Payment Method</span>
@@ -525,7 +525,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                 <Button
                   onClick={handleConfirm}
                   disabled={!termsAccepted}
-                  className="flex-1 bg-nest-emerald hover:bg-nest-emerald/90 text-white disabled:opacity-50"
+                  className="flex-1 bg-nest-primary hover:bg-nest-primary/90 text-white disabled:opacity-50"
                 >
                   <Shield className="size-4 mr-1" />
                   Confirm Investment

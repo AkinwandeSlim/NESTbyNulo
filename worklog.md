@@ -30,3 +30,34 @@ Stage Summary:
 - 8 seeded properties with realistic Nigerian real estate data (₦2.1B total value)
 - All views render correctly with framer-motion animations, responsive design, dark mode
 - API endpoints returning correct data from SQLite database
+
+---
+Task ID: 2
+Agent: Super Z (Main)
+Task: Align NEST UI with Nulo Africa parent brand design system
+
+Work Log:
+- Scraped and analyzed nuloafrica.com homepage CSS and HTML structure
+- Scraped and analyzed nest-by-nulo.vercel.app waitlist page CSS and design tokens
+- Extracted compiled nulo-* Tailwind color classes from the waitlist CSS chunk (49 class definitions)
+- Identified the Nulo Africa brand color system: nulo-primary (#ff6600 orange), nulo-accent (#f59e0b amber), nulo-ivory (oklch warm ivory), nulo-soft-orange (#fff7ed), nulo-text (#0f172a dark slate)
+- Rewrote globals.css:root color values to match Nulo Africa brand (orange primary replacing emerald green, warm ivory backgrounds, amber accents)
+- Rewrote globals.css .dark color values with stone/warm dark mode palette
+- Added comprehensive nulo-aligned nest-* brand tokens: nest-primary, nest-primary-dark, nest-primary-mid, nest-accent, nest-text, nest-text-secondary, nest-text-muted, nest-ivory, nest-soft-orange, nest-border
+- Updated nest-gradient utility to use orange-to-red gradient instead of emerald
+- Updated nest-gradient-gold utility to use amber-to-orange gradient
+- Added matching utility classes: scrollbar-hide, hover-lift, hover-glow, bg-gradient-text
+- Batch-replaced nest-emerald → nest-primary across all 9 components (130+ references)
+- Batch-replaced nest-gold → nest-accent across all 9 components
+- Batch-replaced nest-cream → nest-soft-orange across all 9 components
+- Updated nest-utils.ts getStatusColor to use orange-100/800 instead of emerald-100/800 for funding/published statuses
+- Fixed truncated image URLs (images.n/ → images.unsplash.com/) across PropertyCard, PropertyDetailView, InvestmentCheckout, AdminDashboard, AcademyView
+- Verified all Unsplash images are real estate property photos
+- Zero ESLint errors, zero build errors
+
+Stage Summary:
+- NEST platform UI fully aligned with Nulo Africa parent brand (orange/amber/warm-ivory palette)
+- All 9 components updated with new brand colors
+- Brand-consistent design tokens registered in Tailwind theme for future use
+- Dark mode uses warm stone palette instead of cool grays
+- Database reseeded with 8 properties, all API endpoints functional

@@ -1,0 +1,1467 @@
+     1→@import "tailwindcss";
+     2→@import "tw-animate-css";
+     3→
+     4→@custom-variant dark (&:is(.dark *));
+     5→
+     6→/* Premium Gradient Animation */
+     7→@keyframes gradientShift {
+     8→  0%, 100% {
+     9→    background-position: 0% 50%;
+    10→  }
+    11→  50% {
+    12→    background-position: 100% 50%;
+    13→  }
+    14→}
+    15→
+    16→:root {
+    17→  /* Luxury African Rental Platform Palette */
+    18→  /* Warm ivory background */
+    19→  --background: oklch(0.98 0.01 75);
+    20→  /* Deep charcoal text */
+    21→  --foreground: oklch(0.15 0.01 60);
+    22→
+    23→  /* Card backgrounds - warm ivory with luxury shadow */
+    24→  --card: oklch(0.99 0.005 75);
+    25→  --card-foreground: oklch(0.15 0.01 60);
+    26→
+    27→  --popover: oklch(0.99 0.005 75);
+    28→  --popover-foreground: oklch(0.15 0.01 60);
+    29→
+    30→  /* Primary - soft gold (#D4A857) */
+    31→  --primary: oklch(0.65 0.08 75);
+    32→  --primary-foreground: oklch(0.98 0.005 75);
+    33→
+    34→  /* Secondary - warm gold (#E7C57B) */
+    35→  --secondary: oklch(0.75 0.06 75);
+    36→  --secondary-foreground: oklch(0.15 0.01 60);
+    37→
+    38→  /* Muted - warm ivory */
+    39→  --muted: oklch(0.95 0.01 75);
+    40→  --muted-foreground: oklch(0.45 0.01 60);
+    41→
+    42→  /* Accent - luxury gold gradient */
+    43→  --accent: oklch(0.7 0.08 75);
+    44→  --accent-foreground: oklch(0.98 0.005 75);
+    45→
+    46→  --destructive: oklch(0.577 0.245 27.325);
+    47→  --destructive-foreground: oklch(0.98 0.005 75);
+    48→
+    49→  /* Borders - subtle gray */
+    50→  --border: oklch(0.9 0.005 75);
+    51→  --input: oklch(0.9 0.005 75);
+    52→  --ring: oklch(0.3 0.06 195);
+    53→
+    54→  --chart-1: oklch(0.35 0.02 250);
+    55→  --chart-2: oklch(0.5 0.15 250);
+    56→  --chart-3: oklch(0.65 0.15 50);
+    57→  --chart-4: oklch(0.45 0.08 200);
+    58→  --chart-5: oklch(0.55 0.12 300);
+    59→
+    60→  --radius: 0.75rem;
+    61→  
+    62→  /* Glass morphism utilities */
+    63→  --glass-bg: oklch(1 0 0 / 0.8);
+    64→  --glass-border: oklch(1 0 0 / 0.2);
+    65→
+    66→  --sidebar: oklch(0.98 0.005 75);
+    67→  --sidebar-foreground: oklch(0.25 0.01 60);
+    68→  --sidebar-primary: oklch(0.3 0.06 195);
+    69→  --sidebar-primary-foreground: oklch(0.98 0.005 75);
+    70→  --sidebar-accent: oklch(0.97 0.005 75);
+    71→  --sidebar-accent-foreground: oklch(0.15 0.01 60);
+    72→  --sidebar-border: oklch(0.9 0.005 75);
+    73→  --sidebar-ring: oklch(0.3 0.06 195);
+    74→}
+    75→
+    76→.dark {
+    77→  --background: oklch(0.2 0.01 60);
+    78→  --foreground: oklch(0.95 0.005 75);
+    79→  --card: oklch(0.25 0.01 60);
+    80→  --card-foreground: oklch(0.95 0.005 75);
+    81→  --popover: oklch(0.25 0.01 60);
+    82→  --popover-foreground: oklch(0.95 0.005 75);
+    83→  --primary: oklch(0.45 0.15 250);
+    84→  --primary-foreground: oklch(0.98 0.005 75);
+    85→  --secondary: oklch(0.42 0.06 195);
+    86→  --secondary-foreground: oklch(0.95 0.005 75);
+    87→  --muted: oklch(0.3 0.015 65);
+    88→  --muted-foreground: oklch(0.7 0.01 75);
+    89→  --accent: oklch(0.7 0.15 75);
+    90→  --accent-foreground: oklch(0.2 0.01 60);
+    91→  --destructive: oklch(0.5 0.2 27);
+    92→  --destructive-foreground: oklch(0.95 0.005 75);
+    93→  --border: oklch(0.35 0.015 65);
+    94→  --input: oklch(0.35 0.015 65);
+    95→  --ring: oklch(0.45 0.15 250);
+    96→  --sidebar: oklch(0.25 0.01 60);
+    97→  --sidebar-foreground: oklch(0.95 0.005 75);
+    98→  --sidebar-primary: oklch(0.7 0.15 75);
+    99→  --sidebar-primary-foreground: oklch(0.2 0.01 60);
+   100→  --sidebar-accent: oklch(0.3 0.015 65);
+   101→  --sidebar-accent-foreground: oklch(0.95 0.005 75);
+   102→  --sidebar-border: oklch(0.35 0.015 65);
+   103→  --sidebar-ring: oklch(0.7 0.15 75);
+   104→}
+   105→
+   106→@theme inline {
+   107→  --font-sans: var(--font-inter);
+   108→  --font-mono: var(--font-geist-mono);
+   109→  --color-background: var(--background);
+   110→  --color-foreground: var(--foreground);
+   111→  --color-card: var(--card);
+   112→  --color-card-foreground: var(--card-foreground);
+   113→  --color-popover: var(--popover);
+   114→  --color-popover-foreground: var(--popover-foreground);
+   115→  --color-primary: var(--primary);
+   116→  --color-primary-foreground: var(--primary-foreground);
+   117→  --color-secondary: var(--secondary);
+   118→  --color-secondary-foreground: var(--secondary-foreground);
+   119→  --color-muted: var(--muted);
+   120→  --color-muted-foreground: var(--muted-foreground);
+   121→  --color-accent: var(--accent);
+   122→  --color-accent-foreground: var(--accent-foreground);
+   123→  --color-destructive: var(--destructive);
+   124→  --color-destructive-foreground: var(--destructive-foreground);
+   125→  --color-border: var(--border);
+   126→  --color-input: var(--input);
+   127→  --color-ring: var(--ring);
+   128→  --color-chart-1: var(--chart-1);
+   129→  --color-chart-2: var(--chart-2);
+   130→  --color-chart-3: var(--chart-3);
+   131→  --color-chart-4: var(--chart-4);
+   132→  --color-chart-5: var(--chart-5);
+   133→  --radius-sm: calc(var(--radius) - 4px);
+   134→  --radius-md: calc(var(--radius) - 2px);
+   135→  --radius-lg: var(--radius);
+   136→  --radius-xl: calc(var(--radius) + 4px);
+   137→  --color-sidebar: var(--sidebar);
+   138→  --color-sidebar-foreground: var(--sidebar-foreground);
+   139→  --color-sidebar-primary: var(--sidebar-primary);
+   140→  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+   141→  --color-sidebar-accent: var(--sidebar-accent);
+   142→  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+   143→  --color-sidebar-border: var(--sidebar-border);
+   144→  --color-sidebar-ring: var(--sidebar-ring);
+   145→}
+   146→
+   147→@layer base {
+   148→  * {
+   149→    @apply border-border outline-ring/50;
+   150→  }
+   151→  body {
+   152→    @apply bg-background text-foreground;
+   153→  }
+   154→}
+   155→
+   156→/* Added custom animations for micro-interactions */
+   157→@keyframes float {
+   158→  0%,
+   159→  100% {
+   160→    transform: translateY(0px);
+   161→  }
+   162→  50% {
+   163→    transform: translateY(-10px);
+   164→  }
+   165→}
+   166→
+   167→@keyframes pulse-subtle {
+   168→  0%,
+   169→  100% {
+   170→    opacity: 1;
+   171→  }
+   172→  50% {
+   173→    opacity: 0.8;
+   174→  }
+   175→}
+   176→
+   177→.animate-float {
+   178→  animation: float 3s ease-in-out infinite;
+   179→}
+   180→
+   181→.animate-pulse-subtle {
+   182→  animation: pulse-subtle 2s ease-in-out infinite;
+   183→}
+   184→
+   185→/* Enhanced Glass Morphism Utilities */
+   186→.glass {
+   187→  background: rgba(255, 255, 255, 0.1);
+   188→  backdrop-filter: blur(20px);
+   189→  border: 1px solid rgba(255, 255, 255, 0.2);
+   190→  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+   191→}
+   192→
+   193→.glass-strong {
+   194→  background: rgba(255, 255, 255, 0.15);
+   195→  backdrop-filter: blur(25px);
+   196→  border: 1px solid rgba(255, 255, 255, 0.3);
+   197→  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+   198→}
+   199→
+   200→.glass-card {
+   201→  background: rgba(255, 255, 255, 0.08);
+   202→  backdrop-filter: blur(16px);
+   203→  border: 1px solid rgba(255, 255, 255, 0.15);
+   204→  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+   205→}
+   206→
+   207→.glass-nav {
+   208→  background: rgba(255, 255, 255, 0.05);
+   209→  backdrop-filter: blur(20px);
+   210→  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+   211→  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.05);
+   212→}
+   213→
+   214→.glass-button {
+   215→  background: rgba(245, 158, 11, 0.1);
+   216→  backdrop-filter: blur(10px);
+   217→  border: 1px solid rgba(245, 158, 11, 0.2);
+   218→  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1);
+   219→}
+   220→
+   221→/* Enhanced animations */
+   222→@keyframes fadeInUp {
+   223→  from {
+   224→    opacity: 0;
+   225→    transform: translateY(30px);
+   226→  }
+   227→  to {
+   228→    opacity: 1;
+   229→    transform: translateY(0);
+   230→  }
+   231→}
+   232→
+   233→@keyframes slide-in-left {
+   234→  from {
+   235→    opacity: 0;
+   236→    transform: translateX(-30px);
+   237→  }
+   238→  to {
+   239→    opacity: 1;
+   240→    transform: translateX(0);
+   241→  }
+   242→}
+   243→
+   244→@keyframes slide-in-right {
+   245→  from {
+   246→    opacity: 0;
+   247→    transform: translateX(30px);
+   248→  }
+   249→  to {
+   250→    opacity: 1;
+   251→    transform: translateX(0);
+   252→  }
+   253→}
+   254→
+   255→@keyframes scale-in {
+   256→  from {
+   257→    opacity: 0;
+   258→    transform: scale(0.9);
+   259→  }
+   260→  to {
+   261→    opacity: 1;
+   262→    transform: scale(1);
+   263→  }
+   264→}
+   265→
+   266→.animate-fade-in-up {
+   267→  animation: fade-in-up 0.6s ease-out forwards;
+   268→}
+   269→
+   270→.animate-slide-in-left {
+   271→  animation: slide-in-left 0.6s ease-out forwards;
+   272→}
+   273→
+   274→.animate-slide-in-right {
+   275→  animation: slide-in-right 0.6s ease-out forwards;
+   276→}
+   277→
+   278→.animate-scale-in {
+   279→  animation: scale-in 0.4s ease-out forwards;
+   280→}
+   281→
+   282→/* Hover effects */
+   283→.hover-lift {
+   284→  transition: transform 0.3s ease, box-shadow 0.3s ease;
+   285→}
+   286→
+   287→.hover-lift:hover {
+   288→  transform: translateY(-4px);
+   289→  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+   290→}
+   291→
+   292→/* Smooth scrolling */
+   293→html {
+   294→  scroll-behavior: smooth;
+   295→}
+   296→
+   297→/* Custom color palette for Nulo Africa */
+   298→@layer base {
+   299→  :root {
+   300→    --sand-50: #fdfcf8;
+   301→    --sand-100: #f9f6f0;
+   302→    --sand-200: #f2ede1;
+   303→    --sand-300: #e8e0d1;
+   304→    --sand-400: #d4c4a8;
+   305→    --sand-500: #c4b299;
+   306→    --sand-600: #b8a085;
+   307→    --sand-700: #a68f6b;
+   308→    --sand-800: #8a7554;
+   309→    --sand-900: #6d5c42;
+   310→    
+   311→    --beige-50: #fefdfb;
+   312→    --beige-100: #fdf9f3;
+   313→    --beige-200: #faf2e6;
+   314→    --beige-300: #f5e6d3;
+   315→    --beige-400: #edd4b8;
+   316→    --beige-500: #e2c19d;
+   317→    --beige-600: #d4a574;
+   318→    --beige-700: #c4904f;
+   319→    --beige-800: #a67c3a;
+   320→    --beige-900: #8a652e;
+   321→  }
+   322→}
+   323→
+   324→/* Hide scrollbar for carousel */
+   325→.scrollbar-hide {
+   326→  -ms-overflow-style: none;
+   327→  scrollbar-width: none;
+   328→}
+   329→
+   330→.scrollbar-hide::-webkit-scrollbar {
+   331→  display: none;
+   332→}
+   333→
+   334→        /* Enhanced animations for landing page */
+   335→        @keyframes fade-in {
+   336→          from {
+   337→            opacity: 0;
+   338→            transform: translateY(20px);
+   339→          }
+   340→          to {
+   341→            opacity: 1;
+   342→            transform: translateY(0);
+   343→          }
+   344→        }
+   345→
+   346→        @keyframes slide-up {
+   347→          from {
+   348→            opacity: 0;
+   349→            transform: translateY(40px);
+   350→          }
+   351→          to {
+   352→            opacity: 1;
+   353→            transform: translateY(0);
+   354→          }
+   355→        }
+   356→
+   357→        @keyframes scale-in-gentle {
+   358→          from {
+   359→            opacity: 0;
+   360→            transform: scale(0.95);
+   361→          }
+   362→          to {
+   363→            opacity: 1;
+   364→            transform: scale(1);
+   365→          }
+   366→        }
+   367→
+   368→        @keyframes fade-in-up {
+   369→          from {
+   370→            opacity: 0;
+   371→            transform: translateY(30px);
+   372→          }
+   373→          to {
+   374→            opacity: 1;
+   375→            transform: translateY(0);
+   376→          }
+   377→        }
+   378→
+   379→        @keyframes float {
+   380→          0%, 100% {
+   381→            transform: translateY(0px);
+   382→          }
+   383→          50% {
+   384→            transform: translateY(-10px);
+   385→          }
+   386→        }
+   387→
+   388→        @keyframes shimmer {
+   389→          0% {
+   390→            background-position: -200% 0;
+   391→          }
+   392→          100% {
+   393→            background-position: 200% 0;
+   394→          }
+   395→        }
+   396→
+   397→        @keyframes glow {
+   398→          0%, 100% {
+   399→            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+   400→          }
+   401→          50% {
+   402→            box-shadow: 0 0 40px rgba(245, 158, 11, 0.6);
+   403→          }
+   404→        }
+   405→
+   406→        .animate-fade-in {
+   407→          animation: fade-in 0.8s ease-out forwards;
+   408→        }
+   409→
+   410→        .animate-slide-up {
+   411→          animation: slide-up 0.8s ease-out forwards;
+   412→        }
+   413→
+   414→        .animate-scale-in-gentle {
+   415→          animation: scale-in-gentle 0.6s ease-out forwards;
+   416→        }
+   417→
+   418→        .animate-fade-in-up {
+   419→          animation: fade-in-up 0.8s ease-out forwards;
+   420→        }
+   421→
+   422→        .animate-scale-in {
+   423→          animation: scale-in-gentle 0.6s ease-out forwards;
+   424→        }
+   425→
+   426→        .animate-float {
+   427→          animation: float 3s ease-in-out infinite;
+   428→        }
+   429→
+   430→        .animate-shimmer {
+   431→          animation: shimmer 3s ease-in-out infinite;
+   432→        }
+   433→
+   434→        .animate-glow {
+   435→          animation: glow 2s ease-in-out infinite;
+   436→        }
+   437→
+   438→/* Enhanced Typography */
+   439→.font-light {
+   440→  font-weight: 300;
+   441→}
+   442→
+   443→.font-medium {
+   444→  font-weight: 500;
+   445→}
+   446→
+   447→.font-semibold {
+   448→  font-weight: 600;
+   449→}
+   450→
+   451→.font-bold {
+   452→  font-weight: 700;
+   453→}
+   454→
+   455→.font-extrabold {
+   456→  font-weight: 800;
+   457→}
+   458→
+   459→.letter-spacing-wide {
+   460→  letter-spacing: 0.025em;
+   461→}
+   462→
+   463→.letter-spacing-wider {
+   464→  letter-spacing: 0.05em;
+   465→}
+   466→
+   467→.letter-spacing-tight {
+   468→  letter-spacing: -0.025em;
+   469→}
+   470→
+   471→.letter-spacing-tighter {
+   472→  letter-spacing: -0.05em;
+   473→}
+   474→
+   475→/* Micro-interaction Animations */
+   476→@keyframes gentle-bounce {
+   477→  0%, 100% {
+   478→    transform: translateY(0);
+   479→  }
+   480→  50% {
+   481→    transform: translateY(-4px);
+   482→  }
+   483→}
+   484→
+   485→@keyframes subtle-scale {
+   486→  0%, 100% {
+   487→    transform: scale(1);
+   488→  }
+   489→  50% {
+   490→    transform: scale(1.02);
+   491→  }
+   492→}
+   493→
+   494→@keyframes shimmer-effect {
+   495→  0% {
+   496→    background-position: -200% 0;
+   497→  }
+   498→  100% {
+   499→    background-position: 200% 0;
+   500→  }
+   501→}
+   502→
+   503→@keyframes glow-pulse {
+   504→  0%, 100% {
+   505→    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+   506→  }
+   507→  50% {
+   508→    box-shadow: 0 0 40px rgba(245, 158, 11, 0.6);
+   509→  }
+   510→}
+   511→
+   512→@keyframes slide-up-gentle {
+   513→  from {
+   514→    opacity: 0;
+   515→    transform: translateY(20px);
+   516→  }
+   517→  to {
+   518→    opacity: 1;
+   519→    transform: translateY(0);
+   520→  }
+   521→}
+   522→
+   523→@keyframes fade-in-scale {
+   524→  from {
+   525→    opacity: 0;
+   526→    transform: scale(0.95);
+   527→  }
+   528→  to {
+   529→    opacity: 1;
+   530→    transform: scale(1);
+   531→  }
+   532→}
+   533→
+   534→/* Animation Classes */
+   535→.animate-gentle-bounce {
+   536→  animation: gentle-bounce 2s ease-in-out infinite;
+   537→}
+   538→
+   539→.animate-subtle-scale {
+   540→  animation: subtle-scale 3s ease-in-out infinite;
+   541→}
+   542→
+   543→.animate-shimmer {
+   544→  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+   545→  background-size: 200% 100%;
+   546→  animation: shimmer-effect 2s infinite;
+   547→}
+   548→
+   549→.animate-glow-pulse {
+   550→  animation: glow-pulse 2s ease-in-out infinite;
+   551→}
+   552→
+   553→.animate-slide-up-gentle {
+   554→  animation: slide-up-gentle 0.6s ease-out forwards;
+   555→}
+   556→
+   557→.animate-fade-in-scale {
+   558→  animation: fade-in-scale 0.5s ease-out forwards;
+   559→}
+   560→
+   561→/* Hover Effects */
+   562→.hover-lift {
+   563→  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   564→}
+   565→
+   566→.hover-lift:hover {
+   567→  transform: translateY(-8px);
+   568→  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+   569→}
+   570→
+   571→.hover-glow {
+   572→  transition: all 0.3s ease;
+   573→}
+   574→
+   575→.hover-glow:hover {
+   576→  box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+   577→}
+   578→
+   579→.hover-scale {
+   580→  transition: transform 0.2s ease;
+   581→}
+   582→
+   583→.hover-scale:hover {
+   584→  transform: scale(1.05);
+   585→}
+   586→
+   587→.hover-scale-sm {
+   588→  transition: transform 0.2s ease;
+   589→}
+   590→
+   591→.hover-scale-sm:hover {
+   592→  transform: scale(1.02);
+   593→}
+   594→
+   595→/* Staggered animations */
+   596→.animate-stagger-1 {
+   597→  animation-delay: 0.1s;
+   598→}
+   599→
+   600→.animate-stagger-2 {
+   601→  animation-delay: 0.2s;
+   602→}
+   603→
+   604→.animate-stagger-3 {
+   605→  animation-delay: 0.3s;
+   606→}
+   607→
+   608→.animate-stagger-4 {
+   609→  animation-delay: 0.4s;
+   610→}
+   611→
+   612→.animate-stagger-5 {
+   613→  animation-delay: 0.5s;
+   614→}
+   615→
+   616→        .animate-stagger-6 {
+   617→          animation-delay: 0.6s;
+   618→        }
+   619→
+   620→        /* Luxury Hero Enhancements */
+   621→        .bg-gradient-text {
+   622→          background: linear-gradient(90deg, #d4af37, #f5c47b);
+   623→          -webkit-background-clip: text;
+   624→          -webkit-text-fill-color: transparent;
+   625→          background-clip: text;
+   626→        }
+   627→
+   628→        .luxury-glass {
+   629→          background: rgba(255, 255, 255, 0.15);
+   630→          backdrop-filter: blur(20px);
+   631→          border: 1px solid rgba(255, 255, 255, 0.4);
+   632→          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+   633→        }
+   634→
+   635→        .luxury-glass-strong {
+   636→          background: rgba(255, 255, 255, 0.2);
+   637→          backdrop-filter: blur(25px);
+   638→          border: 1px solid rgba(255, 255, 255, 0.5);
+   639→          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+   640→        }
+   641→
+   642→        .luxury-gradient-button {
+   643→          background: linear-gradient(135deg, #ea580c, #f97316);
+   644→          box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+   645→          transition: all 0.3s ease;
+   646→        }
+   647→
+   648→        .luxury-gradient-button:hover {
+   649→          transform: translateY(-2px);
+   650→          box-shadow: 0 8px 20px rgba(234, 88, 12, 0.4);
+   651→        }
+   652→
+   653→        .luxury-filter-pill {
+   654→          background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(245, 210, 130, 0.3));
+   655→          backdrop-filter: blur(10px);
+   656→          border: 1px solid rgba(255, 255, 255, 0.3);
+   657→          transition: all 0.3s ease;
+   658→        }
+   659→
+   660→        .luxury-filter-pill:hover {
+   661→          transform: translateY(-1px);
+   662→          box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+   663→          background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(245, 210, 130, 0.4));
+   664→        }
+   665→
+   666→        /* Floating Particles Animation */
+   667→        @keyframes float-particle {
+   668→          0%, 100% {
+   669→            transform: translateY(0px) translateX(0px);
+   670→            opacity: 0.7;
+   671→          }
+   672→          25% {
+   673→            transform: translateY(-10px) translateX(5px);
+   674→            opacity: 1;
+   675→          }
+   676→          50% {
+   677→            transform: translateY(-20px) translateX(-5px);
+   678→            opacity: 0.8;
+   679→          }
+   680→          75% {
+   681→            transform: translateY(-10px) translateX(3px);
+   682→            opacity: 0.9;
+   683→          }
+   684→        }
+   685→
+   686→        .animate-float-particle {
+   687→          animation: float-particle 6s ease-in-out infinite;
+   688→        }
+   689→
+   690→        /* Parallax Effect */
+   691→        .parallax-bg {
+   692→          transform: translateZ(0);
+   693→          will-change: transform;
+   694→        }
+   695→
+   696→        /* Ambient Light Reflection */
+   697→        .ambient-light {
+   698→          position: relative;
+   699→          overflow: hidden;
+   700→        }
+   701→
+   702→        .ambient-light::before {
+   703→          content: '';
+   704→          position: absolute;
+   705→          top: -50%;
+   706→          left: -50%;
+   707→          width: 200%;
+   708→          height: 200%;
+   709→          background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+   710→          animation: ambient-shine 3s ease-in-out infinite;
+   711→        }
+   712→
+   713→        @keyframes ambient-shine {
+   714→          0%, 100% {
+   715→            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+   716→          }
+   717→          50% {
+   718→            transform: translateX(100%) translateY(100%) rotate(45deg);
+   719→          }
+   720→        }
+   721→
+   722→        /* Counting Animation */
+   723→        @keyframes count-up {
+   724→          from {
+   725→            opacity: 0;
+   726→            transform: translateY(20px);
+   727→          }
+   728→          to {
+   729→            opacity: 1;
+   730→            transform: translateY(0);
+   731→          }
+   732→        }
+   733→
+   734→        .animate-count-up {
+   735→          animation: count-up 0.8s ease-out forwards;
+   736→        }
+   737→
+   738→        /* Highlight Bar Animation */
+   739→        @keyframes highlight-slide {
+   740→          from {
+   741→            width: 0;
+   742→            left: 0;
+   743→          }
+   744→          to {
+   745→            width: 100%;
+   746→            left: 0;
+   747→          }
+   748→        }
+   749→
+   750→        .highlight-bar {
+   751→          position: relative;
+   752→          overflow: hidden;
+   753→        }
+   754→
+   755→        .highlight-bar::after {
+   756→          content: '';
+   757→          position: absolute;
+   758→          bottom: 0;
+   759→          left: 0;
+   760→          height: 3px;
+   761→          background: linear-gradient(90deg, #fbbf24, #f59e0b);
+   762→          animation: highlight-slide 1.5s ease-out forwards;
+   763→          animation-delay: 0.5s;
+   764→        }
+   765→
+   766→        /* Luxury Shadow Effects */
+   767→        .luxury-shadow {
+   768→          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.05);
+   769→        }
+   770→
+   771→        .luxury-shadow-lg {
+   772→          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 2px 12px rgba(0, 0, 0, 0.08);
+   773→        }
+   774→
+   775→        /* Warm Ivory Background */
+   776→        .bg-warm-ivory {
+   777→          background-color: #FFF9F1;
+   778→        }
+   779→
+   780→        .bg-warm-ivory-gradient {
+   781→          background: linear-gradient(135deg, #FFF9F1, #FEF7E6);
+   782→        }
+   783→
+   784→        .bg-gradient-radial {
+   785→          background: radial-gradient(circle, var(--tw-gradient-stops));
+   786→        }
+   787→
+   788→        /* Enhanced Micro-interactions */
+   789→        .hover-lift {
+   790→          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   791→        }
+   792→
+   793→        .hover-lift:hover {
+   794→          transform: translateY(-4px);
+   795→          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+   796→        }
+   797→
+   798→        .hover-scale-sm {
+   799→          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+   800→        }
+   801→
+   802→        .hover-scale-sm:hover {
+   803→          transform: scale(1.05);
+   804→        }
+   805→
+   806→        .hover-glow {
+   807→          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   808→        }
+   809→
+   810→        .hover-glow:hover {
+   811→          box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+   812→        }
+   813→
+   814→        /* Mapbox Custom Styles */
+   815→        .mapboxgl-popup {
+   816→          max-width: 400px;
+   817→        }
+   818→
+   819→        .mapboxgl-popup-content {
+   820→          padding: 0;
+   821→          border-radius: 12px;
+   822→          overflow: hidden;
+   823→          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+   824→        }
+   825→
+   826→        .mapboxgl-popup-close-button {
+   827→          font-size: 24px;
+   828→          padding: 8px;
+   829→          color: #64748b;
+   830→          transition: all 0.2s ease;
+   831→        }
+   832→
+   833→        .mapboxgl-popup-close-button:hover {
+   834→          color: #f59e0b;
+   835→          background: rgba(245, 158, 11, 0.1);
+   836→        }
+   837→
+   838→        .mapboxgl-ctrl-group {
+   839→          border-radius: 8px;
+   840→          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   841→        }
+   842→
+   843→        .mapboxgl-ctrl-group button {
+   844→          transition: all 0.2s ease;
+   845→        }
+   846→
+   847→        .mapboxgl-ctrl-group button:hover {
+   848→          background-color: rgba(245, 158, 11, 0.1);
+   849→        }
+   850→
+   851→        /* Custom Marker Styles */
+   852→        .custom-marker {
+   853→          cursor: pointer;
+   854→          transition: all 0.3s ease;
+   855→        }
+   856→
+   857→        .custom-marker:hover {
+   858→          z-index: 1000;
+   859→        }
+   860→
+   861→        /* Luxury Shadow Utilities */
+   862→        .luxury-shadow-sm {
+   863→          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.03);
+   864→        }
+   865→
+   866→        .luxury-shadow-md {
+   867→          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.05);
+   868→        }
+   869→
+   870→        .luxury-shadow-lg {
+   871→          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+   872→        }
+   873→
+   874→        .luxury-shadow-xl {
+   875→          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
+   876→        }
+   877→
+   878→        /* Leaflet Map Styles */
+   879→        .leaflet-container {
+   880→          font-family: inherit;
+   881→        }
+   882→
+   883→        .leaflet-popup-content-wrapper {
+   884→          border-radius: 12px;
+   885→          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+   886→        }
+   887→
+   888→        .leaflet-popup-tip {
+   889→          display: none;
+   890→        }
+   891→
+   892→        .custom-marker {
+   893→          background: transparent;
+   894→          border: none;
+   895→        }
+   896→
+   897→        .custom-marker:hover {
+   898→          z-index: 1000 !important;
+   899→        }
+   900→
+   901→/* Ultra Smooth Bubble Animations */
+   902→@keyframes float {
+   903→  0%, 100% {
+   904→    transform: translate(0, 0) scale(1);
+   905→  }
+   906→  25% {
+   907→    transform: translate(10px, -20px) scale(1.05);
+   908→  }
+   909→  50% {
+   910→    transform: translate(-5px, -40px) scale(1);
+   911→  }
+   912→  75% {
+   913→    transform: translate(-15px, -20px) scale(0.95);
+   914→  }
+   915→}
+   916→
+   917→@keyframes float-delayed {
+   918→  0%, 100% {
+   919→    transform: translate(0, 0) scale(1) rotate(0deg);
+   920→  }
+   921→  33% {
+   922→    transform: translate(-15px, -25px) scale(1.08) rotate(5deg);
+   923→  }
+   924→  66% {
+   925→    transform: translate(10px, -35px) scale(0.92) rotate(-5deg);
+   926→  }
+   927→}
+   928→
+   929→@keyframes pulse-slow {
+   930→  0%, 100% {
+   931→    opacity: 0.6;
+   932→    transform: scale(1);
+   933→  }
+   934→  50% {
+   935→    opacity: 0.8;
+   936→    transform: scale(1.05);
+   937→  }
+   938→}
+   939→
+   940→@keyframes gradient-shift {
+   941→  0%, 100% {
+   942→    background-position: 0% 50%;
+   943→  }
+   944→  50% {
+   945→    background-position: 100% 50%;
+   946→  }
+   947→}
+   948→
+   949→.animate-float {
+   950→  animation: float ease-in-out infinite;
+   951→}
+   952→
+   953→.animate-float-delayed {
+   954→  animation: float-delayed ease-in-out infinite;
+   955→}
+   956→
+   957→.animate-pulse-slow {
+   958→  animation: pulse-slow ease-in-out infinite;
+   959→}
+   960→
+   961→.animate-gradient-shift {
+   962→  background-size: 200% 200%;
+   963→  animation: gradient-shift 15s ease infinite;
+   964→}
+   965→
+   966→@keyframes gradient-x {
+   967→  0%, 100% {
+   968→    background-position: 0% 50%;
+   969→  }
+   970→  50% {
+   971→    background-position: 100% 50%;
+   972→  }
+   973→}
+   974→
+   975→.animate-gradient-x {
+   976→  background-size: 200% auto;
+   977→  animation: gradient-x 3s ease infinite;
+   978→}
+   979→
+   980→@keyframes ken-burns {
+   981→  0% {
+   982→    transform: scale(1.05);
+   983→  }
+   984→  100% {
+   985→    transform: scale(1.15);
+   986→  }
+   987→}
+   988→
+   989→.animate-ken-burns {
+   990→  animation: ken-burns 20s ease-in-out infinite alternate;
+   991→}
+   992→
+   993→/* Lightning and Energy Effects */
+   994→@keyframes lightning-flash {
+   995→  0%, 100% {
+   996→    opacity: 0;
+   997→  }
+   998→  10%, 30%, 50% {
+   999→    opacity: 1;
+  1000→  }
+  1001→  20%, 40%, 60% {
+  1002→    opacity: 0;
+  1003→  }
+  1004→}
+  1005→
+  1006→@keyframes energy-pulse {
+  1007→  0%, 100% {
+  1008→    box-shadow: 0 0 20px rgba(251, 146, 60, 0.4),
+  1009→                0 0 40px rgba(251, 146, 60, 0.2),
+  1010→                inset 0 0 20px rgba(251, 146, 60, 0.1);
+  1011→  }
+  1012→  50% {
+  1013→    box-shadow: 0 0 40px rgba(251, 146, 60, 0.8),
+  1014→                0 0 80px rgba(251, 146, 60, 0.4),
+  1015→                inset 0 0 40px rgba(251, 146, 60, 0.2);
+  1016→  }
+  1017→}
+  1018→
+  1019→@keyframes particle-float {
+  1020→  0% {
+  1021→    transform: translateY(0) translateX(0) scale(0);
+  1022→    opacity: 0;
+  1023→  }
+  1024→  10% {
+  1025→    opacity: 1;
+  1026→  }
+  1027→  90% {
+  1028→    opacity: 1;
+  1029→  }
+  1030→  100% {
+  1031→    transform: translateY(-200px) translateX(50px) scale(1);
+  1032→    opacity: 0;
+  1033→  }
+  1034→}
+  1035→
+  1036→@keyframes shimmer-wave {
+  1037→  0% {
+  1038→    transform: translateX(-100%) skewX(-15deg);
+  1039→  }
+  1040→  100% {
+  1041→    transform: translateX(200%) skewX(-15deg);
+  1042→  }
+  1043→}
+  1044→
+  1045→@keyframes glow-rotate {
+  1046→  0% {
+  1047→    filter: hue-rotate(0deg) brightness(1);
+  1048→  }
+  1049→  50% {
+  1050→    filter: hue-rotate(20deg) brightness(1.2);
+  1051→  }
+  1052→  100% {
+  1053→    filter: hue-rotate(0deg) brightness(1);
+  1054→  }
+  1055→}
+  1056→
+  1057→.animate-lightning-flash {
+  1058→  animation: lightning-flash 4s ease-in-out infinite;
+  1059→}
+  1060→
+  1061→.animate-energy-pulse {
+  1062→  animation: energy-pulse 3s ease-in-out infinite;
+  1063→}
+  1064→
+  1065→.animate-particle-float {
+  1066→  animation: particle-float 5s ease-out infinite;
+  1067→}
+  1068→
+  1069→.animate-shimmer-wave {
+  1070→  animation: shimmer-wave 3s linear infinite;
+  1071→}
+  1072→
+  1073→.animate-glow-rotate {
+  1074→  animation: glow-rotate 4s ease-in-out infinite;
+  1075→}
+  1076→
+  1077→/* Texture Overlays */
+  1078→.texture-noise {
+  1079→  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  1080→}
+  1081→
+  1082→.texture-dots {
+  1083→  background-image: radial-gradient(circle, rgba(251, 146, 60, 0.1) 1px, transparent 1px);
+  1084→  background-size: 20px 20px;
+  1085→}
+  1086→
+  1087→.texture-grid {
+  1088→  background-image: 
+  1089→    linear-gradient(rgba(251, 146, 60, 0.05) 1px, transparent 1px),
+  1090→    linear-gradient(90deg, rgba(251, 146, 60, 0.05) 1px, transparent 1px);
+  1091→  background-size: 50px 50px;
+  1092→}
+  1093→
+  1094→.texture-stripes {
+  1095→  background-image: repeating-linear-gradient(
+  1096→    45deg,
+  1097→    transparent,
+  1098→    transparent 40px,
+  1099→    rgba(251, 146, 60, 0.08) 40px,
+  1100→    rgba(251, 146, 60, 0.08) 42px
+  1101→  );
+  1102→}
+  1103→
+  1104→.texture-stripes-vertical {
+  1105→  background-image: repeating-linear-gradient(
+  1106→    90deg,
+  1107→    transparent,
+  1108→    transparent 60px,
+  1109→    rgba(251, 146, 60, 0.12) 60px,
+  1110→    rgba(251, 146, 60, 0.12) 62px
+  1111→  );
+  1112→}
+  1113→
+  1114→.texture-square-grid {
+  1115→  background-image: 
+  1116→    repeating-linear-gradient(
+  1117→      0deg,
+  1118→      transparent,
+  1119→      transparent 80px,
+  1120→      rgba(251, 146, 60, 0.15) 80px,
+  1121→      rgba(251, 146, 60, 0.15) 82px
+  1122→    ),
+  1123→    repeating-linear-gradient(
+  1124→      90deg,
+  1125→      transparent,
+  1126→      transparent 80px,
+  1127→      rgba(251, 146, 60, 0.15) 80px,
+  1128→      rgba(251, 146, 60, 0.15) 82px
+  1129→    );
+  1130→}
+  1131→
+  1132→.texture-lines-center {
+  1133→  background-image: 
+  1134→    linear-gradient(90deg, transparent 0%, transparent 30%, rgba(251, 146, 60, 0.15) 48%, rgba(251, 146, 60, 0.2) 50%, rgba(251, 146, 60, 0.15) 52%, transparent 70%, transparent 100%),
+  1135→    linear-gradient(0deg, transparent 0%, transparent 30%, rgba(251, 146, 60, 0.12) 48%, rgba(251, 146, 60, 0.18) 50%, rgba(251, 146, 60, 0.12) 52%, transparent 70%, transparent 100%);
+  1136→}
+  1137→
+  1138→/* ============================================
+  1139→   Toast Notifications - Strategic Positioning
+  1140→   ============================================ */
+  1141→
+  1142→/* Toast container positioning */
+  1143→[data-sonner-toaster] {
+  1144→  z-index: 9999 !important;
+  1145→}
+  1146→
+  1147→/* Individual toast styling */
+  1148→[data-sonner-toast] {
+  1149→  backdrop-filter: blur(12px);
+  1150→  border-radius: 12px !important;
+  1151→  box-shadow: 
+  1152→    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  1153→    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+  1154→    0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+  1155→  padding: 16px !important;
+  1156→  min-width: 320px;
+  1157→  max-width: 420px;
+  1158→}
+  1159→
+  1160→/* Toast on mobile - full width, better positioning */
+  1161→@media (max-width: 640px) {
+  1162→  [data-sonner-toast] {
+  1163→    min-width: calc(100vw - 2rem);
+  1164→    max-width: calc(100vw - 2rem);
+  1165→    margin: 0 1rem;
+  1166→  }
+  1167→  
+  1168→  [data-sonner-toaster] {
+  1169→    left: 0 !important;
+  1170→    right: 0 !important;
+  1171→    bottom: 1rem !important;
+  1172→  }
+  1173→}
+  1174→
+  1175→/* Success toast - elegant white with green accent */
+  1176→[data-sonner-toast][data-type="success"] {
+  1177→  background: rgba(255, 255, 255, 0.98) !important;
+  1178→  border: 2px solid rgba(16, 185, 129, 0.3) !important;
+  1179→  color: rgba(21, 21, 21, 0.95) !important;
+  1180→  box-shadow: 
+  1181→    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+  1182→    0 8px 10px -6px rgba(0, 0, 0, 0.1),
+  1183→    inset 0 0 0 1px rgba(16, 185, 129, 0.05) !important;
+  1184→}
+  1185→
+  1186→[data-sonner-toast][data-type="success"]::before {
+  1187→  content: '';
+  1188→  position: absolute;
+  1189→  left: 0;
+  1190→  top: 0;
+  1191→  bottom: 0;
+  1192→  width: 4px;
+  1193→  background: linear-gradient(180deg, rgba(16, 185, 129, 1) 0%, rgba(5, 150, 105, 1) 100%);
+  1194→  border-radius: 12px 0 0 12px;
+  1195→}
+  1196→
+  1197→/* Error toast - elegant white with orange accent */
+  1198→[data-sonner-toast][data-type="error"] {
+  1199→  background: rgba(255, 255, 255, 0.98) !important;
+  1200→  border: 2px solid rgba(251, 146, 60, 0.3) !important;
+  1201→  color: rgba(21, 21, 21, 0.95) !important;
+  1202→  box-shadow: 
+  1203→    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+  1204→    0 8px 10px -6px rgba(0, 0, 0, 0.1),
+  1205→    inset 0 0 0 1px rgba(251, 146, 60, 0.05) !important;
+  1206→}
+  1207→
+  1208→[data-sonner-toast][data-type="error"]::before {
+  1209→  content: '';
+  1210→  position: absolute;
+  1211→  left: 0;
+  1212→  top: 0;
+  1213→  bottom: 0;
+  1214→  width: 4px;
+  1215→  background: linear-gradient(180deg, rgba(251, 146, 60, 1) 0%, rgba(249, 115, 22, 1) 100%);
+  1216→  border-radius: 12px 0 0 12px;
+  1217→}
+  1218→
+  1219→/* Info toast - elegant white with slate accent */
+  1220→[data-sonner-toast][data-type="info"] {
+  1221→  background: rgba(255, 255, 255, 0.98) !important;
+  1222→  border: 2px solid rgba(71, 85, 105, 0.3) !important;
+  1223→  color: rgba(21, 21, 21, 0.95) !important;
+  1224→  box-shadow: 
+  1225→    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+  1226→    0 8px 10px -6px rgba(0, 0, 0, 0.1),
+  1227→    inset 0 0 0 1px rgba(71, 85, 105, 0.05) !important;
+  1228→}
+  1229→
+  1230→[data-sonner-toast][data-type="info"]::before {
+  1231→  content: '';
+  1232→  position: absolute;
+  1233→  left: 0;
+  1234→  top: 0;
+  1235→  bottom: 0;
+  1236→  width: 4px;
+  1237→  background: linear-gradient(180deg, rgba(71, 85, 105, 1) 0%, rgba(51, 65, 85, 1) 100%);
+  1238→  border-radius: 12px 0 0 12px;
+  1239→}
+  1240→
+  1241→/* Warning toast - elegant white with gold accent */
+  1242→[data-sonner-toast][data-type="warning"] {
+  1243→  background: rgba(255, 255, 255, 0.98) !important;
+  1244→  border: 2px solid rgba(212, 168, 87, 0.3) !important;
+  1245→  color: rgba(21, 21, 21, 0.95) !important;
+  1246→  box-shadow: 
+  1247→    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+  1248→    0 8px 10px -6px rgba(0, 0, 0, 0.1),
+  1249→    inset 0 0 0 1px rgba(212, 168, 87, 0.05) !important;
+  1250→}
+  1251→
+  1252→[data-sonner-toast][data-type="warning"]::before {
+  1253→  content: '';
+  1254→  position: absolute;
+  1255→  left: 0;
+  1256→  top: 0;
+  1257→  bottom: 0;
+  1258→  width: 4px;
+  1259→  background: linear-gradient(180deg, rgba(212, 168, 87, 1) 0%, rgba(231, 197, 123, 1) 100%);
+  1260→  border-radius: 12px 0 0 12px;
+  1261→}
+  1262→
+  1263→/* Toast action button styling - elegant dark button on white background */
+  1264→[data-sonner-toast] button[data-button] {
+  1265→  background: rgba(21, 21, 21, 0.95) !important;
+  1266→  border: 2px solid rgba(21, 21, 21, 1) !important;
+  1267→  color: white !important;
+  1268→  font-weight: 600 !important;
+  1269→  padding: 8px 20px !important;
+  1270→  border-radius: 8px !important;
+  1271→  transition: all 0.2s ease !important;
+  1272→  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  1273→}
+  1274→
+  1275→[data-sonner-toast] button[data-button]:hover {
+  1276→  background: rgba(21, 21, 21, 1) !important;
+  1277→  transform: translateY(-2px);
+  1278→  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  1279→}
+  1280→
+  1281→/* Success button - green accent */
+  1282→[data-sonner-toast][data-type="success"] button[data-button] {
+  1283→  background: rgba(16, 185, 129, 0.95) !important;
+  1284→  border: 2px solid rgba(16, 185, 129, 1) !important;
+  1285→}
+  1286→
+  1287→[data-sonner-toast][data-type="success"] button[data-button]:hover {
+  1288→  background: rgba(16, 185, 129, 1) !important;
+  1289→}
+  1290→
+  1291→/* Error button - orange accent */
+  1292→[data-sonner-toast][data-type="error"] button[data-button] {
+  1293→  background: rgba(251, 146, 60, 0.95) !important;
+  1294→  border: 2px solid rgba(251, 146, 60, 1) !important;
+  1295→}
+  1296→
+  1297→[data-sonner-toast][data-type="error"] button[data-button]:hover {
+  1298→  background: rgba(251, 146, 60, 1) !important;
+  1299→}
+  1300→
+  1301→/* Warning button - gold accent */
+  1302→[data-sonner-toast][data-type="warning"] button[data-button] {
+  1303→  background: rgba(212, 168, 87, 0.95) !important;
+  1304→  border: 2px solid rgba(212, 168, 87, 1) !important;
+  1305→  color: rgba(21, 21, 21, 0.95) !important;
+  1306→}
+  1307→
+  1308→[data-sonner-toast][data-type="warning"] button[data-button]:hover {
+  1309→  background: rgba(212, 168, 87, 1) !important;
+  1310→}
+  1311→
+  1312→/* Close button styling - minimal and elegant */
+  1313→[data-sonner-toast] button[data-close-button] {
+  1314→  background: rgba(0, 0, 0, 0.05) !important;
+  1315→  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  1316→  color: rgba(21, 21, 21, 0.6) !important;
+  1317→  border-radius: 6px !important;
+  1318→  width: 24px !important;
+  1319→  height: 24px !important;
+  1320→  display: flex !important;
+  1321→  align-items: center !important;
+  1322→  justify-content: center !important;
+  1323→  transition: all 0.2s ease !important;
+  1324→}
+  1325→
+  1326→[data-sonner-toast] button[data-close-button]:hover {
+  1327→  background: rgba(0, 0, 0, 0.1) !important;
+  1328→  color: rgba(21, 21, 21, 0.9) !important;
+  1329→  transform: scale(1.1);
+  1330→}
+  1331→
+  1332→/* Toast animation improvements */
+  1333→[data-sonner-toast] {
+  1334→  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  1335→}
+  1336→
+  1337→@keyframes slideIn {
+  1338→  from {
+  1339→    transform: translateX(100%);
+  1340→    opacity: 0;
+  1341→  }
+  1342→  to {
+  1343→    transform: translateX(0);
+  1344→    opacity: 1;
+  1345→  }
+  1346→}
+  1347→
+  1348→/* Prevent toast from covering important UI elements */
+  1349→@media (min-width: 1024px) {
+  1350→  /* On desktop, ensure toasts don't cover property cards or map */
+  1351→  [data-sonner-toaster] {
+  1352→    bottom: 2rem !important;
+  1353→    right: 2rem !important;
+  1354→  }
+  1355→}
+  1356→
+  1357→/* Stack multiple toasts nicely */
+  1358→[data-sonner-toast]:not(:first-child) {
+  1359→  margin-top: 0.75rem;
+  1360→}
+  1361→
+  1362→/* Reduce opacity for toasts that are stacked behind */
+  1363→[data-sonner-toast]:nth-child(2) {
+  1364→  opacity: 0.9;
+  1365→  transform: scale(0.98) translateY(-4px);
+  1366→}
+  1367→
+  1368→[data-sonner-toast]:nth-child(3) {
+  1369→  opacity: 0.8;
+  1370→  transform: scale(0.96) translateY(-8px);
+  1371→}
+  1372→
+  1373→/* ============================================
+  1374→   Custom Scrollbar - Modern & Sleek
+  1375→   ============================================ */
+  1376→
+  1377→/* Custom scrollbar for profile gate modal */
+  1378→.custom-scrollbar {
+  1379→  scrollbar-width: thin;
+  1380→  scrollbar-color: rgba(251, 146, 60, 0.3) transparent;
+  1381→}
+  1382→
+  1383→.custom-scrollbar::-webkit-scrollbar {
+  1384→  width: 8px;
+  1385→}
+  1386→
+  1387→.custom-scrollbar::-webkit-scrollbar-track {
+  1388→  background: transparent;
+  1389→  margin: 8px 0;
+  1390→}
+  1391→
+  1392→.custom-scrollbar::-webkit-scrollbar-thumb {
+  1393→  background: linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(249, 115, 22, 0.6));
+  1394→  border-radius: 10px;
+  1395→  border: 2px solid transparent;
+  1396→  background-clip: padding-box;
+  1397→  transition: all 0.3s ease;
+  1398→}
+  1399→
+  1400→.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  1401→  background: linear-gradient(180deg, rgba(251, 146, 60, 0.7), rgba(249, 115, 22, 0.9));
+  1402→  border-radius: 10px;
+  1403→  border: 2px solid transparent;
+  1404→  background-clip: padding-box;
+  1405→}
+  1406→
+  1407→.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  1408→  background: linear-gradient(180deg, rgba(251, 146, 60, 0.9), rgba(249, 115, 22, 1));
+  1409→}
+  1410→
+  1411→/* Shimmer animation for progress bar */
+  1412→@keyframes shimmer {
+  1413→  0% {
+  1414→    transform: translateX(-100%);
+  1415→  }
+  1416→  100% {
+  1417→    transform: translateX(100%);
+  1418→  }
+  1419→}
+  1420→
+  1421→.animate-shimmer {
+  1422→  animation: shimmer 2s infinite;
+  1423→}
+  1424→
+  1425→/* ============================================
+  1426→   Navbar Spacing Control - Easy Adjustment
+  1427→   ============================================ */
+  1428→
+  1429→/* Adjust this value to control navbar spacing */
+  1430→:root {
+  1431→  --navbar-height: 0rem; /* Set to 0 - sticky header doesn't need body padding */
+  1432→}
+  1433→
+  1434→/* Apply spacing to main content areas */
+  1435→.navbar-spacing {
+  1436→  padding-top: var(--navbar-height);
+  1437→}
+  1438→
+  1439→/* For pages that need navbar spacing */
+  1440→body.has-navbar {
+  1441→  padding-top: var(--navbar-height);
+  1442→}
+  1443→
+  1444→/* More aggressive - remove all margins from direct children */
+  1445→body.has-navbar > div {
+  1446→  margin-top: 0 !important;
+  1447→  padding-top: 0 !important;
+  1448→}
+  1449→
+  1450→/* Also target main content areas */
+  1451→body.has-navbar main,
+  1452→body.has-navbar .main-content,
+  1453→body.has-navbar > div > div:first-child {
+  1454→  margin-top: 0 !important;
+  1455→  padding-top: 0 !important;
+  1456→}
+  1457→
+  1458→/* Hide native number input spinner for better UX with currency values */
+  1459→.hide-spinner::-webkit-outer-spin-button,
+  1460→.hide-spinner::-webkit-inner-spin-button {
+  1461→  -webkit-appearance: none;
+  1462→  margin: 0;
+  1463→}
+  1464→
+  1465→.hide-spinner {
+  1466→  -moz-appearance: textfield;
+  1467→}

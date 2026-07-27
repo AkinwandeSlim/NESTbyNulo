@@ -142,7 +142,7 @@ export default function BrowseView() {
             className="flex flex-col items-center text-center gap-6"
           >
             <motion.div variants={fadeInUp}>
-              <Badge className="bg-nest-gold/20 text-nest-gold border-nest-gold/30 px-3 py-1 text-xs font-medium">
+              <Badge className="bg-nest-accent/20 text-nest-accent border-nest-accent/30 px-3 py-1 text-xs font-medium">
                 <span className="mr-1">🇳🇬</span> Trusted by 2,500+ investors across Africa
               </Badge>
             </motion.div>
@@ -152,7 +152,7 @@ export default function BrowseView() {
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-3xl"
             >
               Become a{' '}
-              <span className="text-nest-gold">Landlord</span>
+              <span className="text-nest-accent">Landlord</span>
               {' '}Today
             </motion.h1>
 
@@ -171,7 +171,7 @@ export default function BrowseView() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search properties, cities, or developers..."
-                  className="pl-10 h-12 bg-white/10 backdrop-blur-md border-white/20 text-white placeholder:text-white/50 focus-visible:ring-nest-gold/50 rounded-xl"
+                  className="pl-10 h-12 bg-white/10 backdrop-blur-md border-white/20 text-white placeholder:text-white/50 focus-visible:ring-nest-accent/50 rounded-xl"
                 />
               </div>
             </motion.div>
@@ -215,7 +215,7 @@ export default function BrowseView() {
                 className={cn(
                   'flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap',
                   activeCategory === cat.value
-                    ? 'bg-nest-emerald text-white shadow-md shadow-nest-emerald/25'
+                    ? 'bg-nest-primary text-white shadow-md shadow-nest-primary/25'
                     : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80'
                 )}
               >
@@ -268,7 +268,7 @@ export default function BrowseView() {
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
                   Trending Now
-                  <TrendingUp className="size-5 text-nest-emerald" />
+                  <TrendingUp className="size-5 text-nest-primary" />
                 </h2>
                 <p className="text-sm text-muted-foreground mt-0.5">Most popular investments this week</p>
               </div>

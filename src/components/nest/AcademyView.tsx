@@ -219,12 +219,12 @@ export default function AcademyView() {
           animate="animate"
           className="mb-10"
         >
-          <motion.div variants={fadeInUp} className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-nest-charcoal to-nest-emerald/80 p-8 sm:p-12 text-white">
+          <motion.div variants={fadeInUp} className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-nest-charcoal to-nest-primary/80 p-8 sm:p-12 text-white">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_oklch(0.75_0.15_85/0.15),_transparent_60%)]" />
             <div className="relative">
               <div className="flex items-center gap-2 mb-3">
-                <GraduationCap className="size-6 text-nest-gold" />
-                <Badge className="bg-nest-gold/20 text-nest-gold border-nest-gold/30 px-3 py-1 text-xs font-medium">
+                <GraduationCap className="size-6 text-nest-accent" />
+                <Badge className="bg-nest-accent/20 text-nest-accent border-nest-accent/30 px-3 py-1 text-xs font-medium">
                   <Sparkles className="size-3 mr-1" />
                   Free Learning Resources
                 </Badge>
@@ -268,7 +268,7 @@ export default function AcademyView() {
               placeholder="Search articles, topics, tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-10 px-4 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-nest-emerald/30 focus:border-nest-emerald/50"
+              className="w-full h-10 px-4 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-nest-primary/30 focus:border-nest-primary/50"
             />
           </div>
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
@@ -281,7 +281,7 @@ export default function AcademyView() {
                   className={cn(
                     'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
                     activeCategory === cat
-                      ? 'bg-nest-emerald text-white shadow-sm shadow-nest-emerald/25'
+                      ? 'bg-nest-primary text-white shadow-sm shadow-nest-primary/25'
                       : 'bg-muted text-muted-foreground hover:text-foreground'
                   )}
                 >
@@ -304,7 +304,7 @@ export default function AcademyView() {
               whileHover={{ y: -4 }}
             >
               <button className="group w-full text-left">
-                <Card className="overflow-hidden p-0 gap-0 nest-card-hover border-border/50 hover:border-nest-emerald/20 h-full">
+                <Card className="overflow-hidden p-0 gap-0 nest-card-hover border-border/50 hover:border-nest-primary/20 h-full">
                   {/* Image */}
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img
@@ -316,7 +316,7 @@ export default function AcademyView() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     {/* Type badge */}
                     <div className="absolute top-2.5 left-2.5">
-                      <Badge className="bg-nest-emerald/90 text-white border-0 text-[10px] gap-1">
+                      <Badge className="bg-nest-primary/90 text-white border-0 text-[10px] gap-1">
                         {categoryConfig[item.category].icon}
                         {categoryConfig[item.category].label}
                       </Badge>
@@ -341,7 +341,7 @@ export default function AcademyView() {
                   {/* Content */}
                   <CardContent className="p-4 space-y-3">
                     <div>
-                      <h3 className="text-sm font-bold leading-tight mb-1 line-clamp-2 group-hover:text-nest-emerald transition-colors">
+                      <h3 className="text-sm font-bold leading-tight mb-1 line-clamp-2 group-hover:text-nest-primary transition-colors">
                         {item.title}
                       </h3>
                       <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>

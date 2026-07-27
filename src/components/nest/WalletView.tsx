@@ -66,12 +66,12 @@ const statusConfig: Record<string, { color: string; icon: React.ReactNode }> = {
 };
 
 const typeIcons: Record<string, { icon: React.ReactNode; color: string }> = {
-  credit: { icon: <ArrowDownToLine className="size-4" />, color: 'bg-nest-emerald/10 text-nest-emerald' },
+  credit: { icon: <ArrowDownToLine className="size-4" />, color: 'bg-nest-primary/10 text-nest-primary' },
   debit: { icon: <ArrowUpFromLine className="size-4" />, color: 'bg-red-100 text-red-600 dark:bg-red-950 dark:text-red-400' },
-  dividend: { icon: <DollarSign className="size-4" />, color: 'bg-nest-gold/10 text-nest-gold' },
+  dividend: { icon: <DollarSign className="size-4" />, color: 'bg-nest-accent/10 text-nest-accent' },
   withdrawal: { icon: <ArrowUpRight className="size-4" />, color: 'bg-red-100 text-red-600 dark:bg-red-950 dark:text-red-400' },
   transfer: { icon: <Send className="size-4" />, color: 'bg-sky-100 text-sky-600 dark:bg-sky-950 dark:text-sky-400' },
-  investment: { icon: <Repeat className="size-4" />, color: 'bg-nest-emerald/10 text-nest-emerald' },
+  investment: { icon: <Repeat className="size-4" />, color: 'bg-nest-primary/10 text-nest-primary' },
 };
 
 export default function WalletView() {
@@ -122,7 +122,7 @@ export default function WalletView() {
             {/* Deposit */}
             <Dialog open={depositDialogOpen} onOpenChange={setDepositDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-white text-nest-emerald hover:bg-white/90 font-semibold gap-1.5">
+                <Button className="bg-white text-nest-primary hover:bg-white/90 font-semibold gap-1.5">
                   <Plus className="size-4" />
                   Deposit
                 </Button>
@@ -143,8 +143,8 @@ export default function WalletView() {
                           className={cn(
                             'px-3 py-1.5 rounded-lg text-xs font-medium border transition-all',
                             Number(depositAmount) === amt
-                              ? 'border-nest-emerald bg-nest-emerald/10 text-nest-emerald'
-                              : 'border-border hover:border-nest-emerald/50'
+                              ? 'border-nest-primary bg-nest-primary/10 text-nest-primary'
+                              : 'border-border hover:border-nest-primary/50'
                           )}
                         >
                           {formatNairaFull(amt)}
@@ -162,11 +162,11 @@ export default function WalletView() {
                   <Separator />
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Payment Method</p>
-                    <button className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-nest-emerald/30">
+                    <button className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-nest-primary/30">
                       <CreditCard className="size-4 text-muted-foreground" />
                       <span className="text-sm">Pay with Card (Flutterwave)</span>
                     </button>
-                    <button className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-nest-emerald/30">
+                    <button className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-nest-primary/30">
                       <Banknote className="size-4 text-muted-foreground" />
                       <span className="text-sm">Bank Transfer</span>
                     </button>
@@ -174,7 +174,7 @@ export default function WalletView() {
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setDepositDialogOpen(false)}>Cancel</Button>
-                  <Button className="bg-nest-emerald hover:bg-nest-emerald/90 text-white" disabled={!depositAmount || Number(depositAmount) <= 0}>
+                  <Button className="bg-nest-primary hover:bg-nest-primary/90 text-white" disabled={!depositAmount || Number(depositAmount) <= 0}>
                     Deposit {depositAmount ? formatNairaFull(Number(depositAmount)) : ''}
                   </Button>
                 </DialogFooter>
@@ -215,8 +215,8 @@ export default function WalletView() {
                         className={cn(
                           'px-3 py-1.5 rounded-lg text-xs font-medium border transition-all',
                           Number(withdrawAmount) === amt
-                            ? 'border-nest-emerald bg-nest-emerald/10 text-nest-emerald'
-                            : 'border-border hover:border-nest-emerald/50'
+                            ? 'border-nest-primary bg-nest-primary/10 text-nest-primary'
+                            : 'border-border hover:border-nest-primary/50'
                         )}
                       >
                         {formatNairaFull(amt)}
@@ -229,7 +229,7 @@ export default function WalletView() {
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setWithdrawDialogOpen(false)}>Cancel</Button>
-                  <Button className="bg-nest-emerald hover:bg-nest-emerald/90 text-white" disabled={!withdrawAmount || Number(withdrawAmount) <= 0 || Number(withdrawAmount) > balance}>
+                  <Button className="bg-nest-primary hover:bg-nest-primary/90 text-white" disabled={!withdrawAmount || Number(withdrawAmount) <= 0 || Number(withdrawAmount) > balance}>
                     Withdraw
                   </Button>
                 </DialogFooter>
@@ -273,7 +273,7 @@ export default function WalletView() {
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setTransferDialogOpen(false)}>Cancel</Button>
-                  <Button className="bg-nest-emerald hover:bg-nest-emerald/90 text-white" disabled={!transferAmount || Number(transferAmount) <= 0 || !transferRecipient}>
+                  <Button className="bg-nest-primary hover:bg-nest-primary/90 text-white" disabled={!transferAmount || Number(transferAmount) <= 0 || !transferRecipient}>
                     Transfer
                   </Button>
                 </DialogFooter>
@@ -346,7 +346,7 @@ export default function WalletView() {
                     <div className="text-right flex-shrink-0 ml-3">
                       <p className={cn(
                         'text-sm font-bold',
-                        ['credit', 'dividend'].includes(txn.type) ? 'text-nest-emerald' : 'text-foreground'
+                        ['credit', 'dividend'].includes(txn.type) ? 'text-nest-primary' : 'text-foreground'
                       )}>
                         {['credit', 'dividend'].includes(txn.type) ? '+' : '-'}{formatNairaFull(txn.amount)}
                       </p>

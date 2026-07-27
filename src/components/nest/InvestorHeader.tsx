@@ -92,11 +92,11 @@ export default function InvestorHeader() {
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-2"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nest-emerald">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nest-primary">
                 <Home className="size-4 text-white" />
               </div>
               <span className="text-lg font-bold tracking-tight">
-                <span className="text-nest-emerald">NEST</span>
+                <span className="text-nest-primary">NEST</span>
               </span>
             </motion.div>
           </button>
@@ -112,7 +112,7 @@ export default function InvestorHeader() {
                 className={cn(
                   'relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                   currentView === item.view
-                    ? 'text-nest-emerald'
+                    ? 'text-nest-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 )}
               >
@@ -121,7 +121,7 @@ export default function InvestorHeader() {
                 {currentView === item.view && (
                   <motion.div
                     layoutId="nav-indicator"
-                    className="absolute inset-0 rounded-lg bg-nest-emerald/10"
+                    className="absolute inset-0 rounded-lg bg-nest-primary/10"
                     transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -139,7 +139,7 @@ export default function InvestorHeader() {
               className={cn(
                 'hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                 currentView === 'admin' || currentView.startsWith('admin-')
-                  ? 'text-nest-emerald'
+                  ? 'text-nest-primary'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >
@@ -185,7 +185,7 @@ export default function InvestorHeader() {
                 <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
                   <Avatar className="h-9 w-9">
                     <AvatarImage src="" alt="User" />
-                    <AvatarFallback className="bg-nest-emerald/10 text-nest-emerald text-sm font-semibold">
+                    <AvatarFallback className="bg-nest-primary/10 text-nest-primary text-sm font-semibold">
                       AO
                     </AvatarFallback>
                   </Avatar>
@@ -230,11 +230,11 @@ export default function InvestorHeader() {
               <SheetContent side="right" className="w-72 p-0">
                 <SheetHeader className="p-6 pb-4">
                   <SheetTitle className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nest-emerald">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nest-primary">
                       <Home className="size-4 text-white" />
                     </div>
                     <span className="text-lg font-bold">
-                      <span className="text-nest-emerald">NEST</span>
+                      <span className="text-nest-primary">NEST</span>
                     </span>
                   </SheetTitle>
                 </SheetHeader>
@@ -243,7 +243,7 @@ export default function InvestorHeader() {
                   <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 mb-4">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src="" alt="User" />
-                      <AvatarFallback className="bg-nest-emerald/10 text-nest-emerald text-sm font-semibold">
+                      <AvatarFallback className="bg-nest-primary/10 text-nest-primary text-sm font-semibold">
                         AO
                       </AvatarFallback>
                     </Avatar>
@@ -260,7 +260,7 @@ export default function InvestorHeader() {
                           className={cn(
                             'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
                             currentView === item.view
-                              ? 'bg-nest-emerald/10 text-nest-emerald'
+                              ? 'bg-nest-primary/10 text-nest-primary'
                               : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                           )}
                         >
@@ -276,7 +276,7 @@ export default function InvestorHeader() {
                         className={cn(
                           'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
                           currentView === 'admin' || currentView.startsWith('admin-')
-                            ? 'bg-nest-emerald/10 text-nest-emerald'
+                            ? 'bg-nest-primary/10 text-nest-primary'
                             : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                         )}
                       >

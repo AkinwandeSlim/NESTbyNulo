@@ -144,32 +144,32 @@ export default function PortfolioView() {
             value: formatNairaFull(data?.currentValue || 0),
             change: `+${(data?.capitalAppreciationPercent || 0).toFixed(1)}%`,
             icon: <TrendingUp className="size-4" />,
-            color: 'text-nest-emerald',
-            bg: 'from-nest-emerald/5 to-transparent',
+            color: 'text-nest-primary',
+            bg: 'from-nest-primary/5 to-transparent',
           },
           {
             label: 'Total Invested',
             value: formatNairaFull(data?.totalInvested || 0),
             change: `${data?.propertiesOwned || 0} properties`,
             icon: <Wallet className="size-4" />,
-            color: 'text-nest-emerald',
-            bg: 'from-nest-emerald/5 to-transparent',
+            color: 'text-nest-primary',
+            bg: 'from-nest-primary/5 to-transparent',
           },
           {
             label: 'Rental Income',
             value: formatNairaFull(data?.rentalIncomeEarned || 0),
             change: `₦${data?.pendingReturns?.toLocaleString() || 0} pending`,
             icon: <DollarSign className="size-4" />,
-            color: 'text-nest-gold',
-            bg: 'from-nest-gold/5 to-transparent',
+            color: 'text-nest-accent',
+            bg: 'from-nest-accent/5 to-transparent',
           },
           {
             label: 'Total Returns',
             value: formatNairaFull(data?.totalReturns || 0),
             change: `+${(data?.overallReturnPercent || 0).toFixed(1)}% all-time`,
             icon: <ArrowUpRight className="size-4" />,
-            color: 'text-nest-emerald',
-            bg: 'from-nest-emerald/5 to-transparent',
+            color: 'text-nest-primary',
+            bg: 'from-nest-primary/5 to-transparent',
           },
         ].map((stat) => (
           <Card key={stat.label} className={cn('p-4 gap-0 bg-gradient-to-br', stat.bg)}>
@@ -200,7 +200,7 @@ export default function PortfolioView() {
                 <h3 className="text-sm font-semibold">Portfolio Growth</h3>
                 <p className="text-xs text-muted-foreground">Value over time</p>
               </div>
-              <Badge variant="secondary" className="text-xs bg-nest-emerald/10 text-nest-emerald">
+              <Badge variant="secondary" className="text-xs bg-nest-primary/10 text-nest-primary">
                 <TrendingUp className="size-3 mr-1" />
                 +{((data?.currentValue || 0) / (data?.totalInvested || 1) * 100 - 100).toFixed(1)}%
               </Badge>
@@ -382,7 +382,7 @@ export default function PortfolioView() {
               <h3 className="text-sm font-semibold">Recent Transactions</h3>
               <p className="text-xs text-muted-foreground">Your latest investment activity</p>
             </div>
-            <Button variant="ghost" size="sm" className="text-xs text-nest-emerald" onClick={() => setView('wallet')}>
+            <Button variant="ghost" size="sm" className="text-xs text-nest-primary" onClick={() => setView('wallet')}>
               View All <ArrowRight className="size-3 ml-1" />
             </Button>
           </div>
@@ -394,7 +394,7 @@ export default function PortfolioView() {
                   <div className="flex items-center gap-3">
                     <div className={cn(
                       'flex h-9 w-9 items-center justify-center rounded-lg',
-                      txn.type === 'dividend' ? 'bg-nest-gold/10 text-nest-gold' : 'bg-nest-emerald/10 text-nest-emerald'
+                      txn.type === 'dividend' ? 'bg-nest-accent/10 text-nest-accent' : 'bg-nest-primary/10 text-nest-primary'
                     )}>
                       {txn.type === 'dividend' ? <DollarSign className="size-4" /> : <ArrowUpRight className="size-4" />}
                     </div>
@@ -409,7 +409,7 @@ export default function PortfolioView() {
                   <div className="text-right">
                     <p className={cn(
                       'text-sm font-bold',
-                      txn.type === 'dividend' ? 'text-nest-gold' : 'text-nest-emerald'
+                      txn.type === 'dividend' ? 'text-nest-accent' : 'text-nest-primary'
                     )}>
                       {txn.type === 'dividend' ? '+' : ''}{formatNairaFull(txn.amount)}
                     </p>

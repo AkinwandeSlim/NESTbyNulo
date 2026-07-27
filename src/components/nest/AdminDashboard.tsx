@@ -174,12 +174,12 @@ export default function AdminDashboard() {
     )}>
       {/* Logo */}
       <button onClick={() => setView('browse')} className={cn('flex items-center gap-2.5 px-5 text-left', mobile ? 'mb-6' : 'mb-8 pt-6')}>
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-nest-emerald">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-nest-primary">
           <Home className="size-5 text-white" />
         </div>
         <div>
           <span className="text-base font-bold text-foreground">
-            <span className="text-nest-emerald">NEST</span>
+            <span className="text-nest-primary">NEST</span>
           </span>
           <p className="text-[10px] text-muted-foreground -mt-0.5">Admin Panel</p>
         </div>
@@ -208,14 +208,14 @@ export default function AdminDashboard() {
               className={cn(
                 'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-nest-emerald/10 text-nest-emerald'
+                  ? 'bg-nest-primary/10 text-nest-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
               )}
             >
               {item.icon}
               {item.label}
               {isActive && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-nest-emerald" />
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-nest-primary" />
               )}
             </button>
           );
@@ -226,10 +226,10 @@ export default function AdminDashboard() {
 
       {/* Bottom */}
       <div className="p-4">
-        <Card className="p-3 gap-0 bg-nest-emerald/5 border-nest-emerald/20">
+        <Card className="p-3 gap-0 bg-nest-primary/5 border-nest-primary/20">
           <div className="flex items-center gap-2 mb-1">
-            <Sparkles className="size-3.5 text-nest-emerald" />
-            <span className="text-xs font-semibold text-nest-emerald">Platform Status</span>
+            <Sparkles className="size-3.5 text-nest-primary" />
+            <span className="text-xs font-semibold text-nest-primary">Platform Status</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -298,7 +298,7 @@ export default function AdminDashboard() {
                 </p>
               </div>
             </div>
-            <Badge variant="secondary" className="hidden sm:flex items-center gap-1.5 bg-nest-emerald/10 text-nest-emerald">
+            <Badge variant="secondary" className="hidden sm:flex items-center gap-1.5 bg-nest-primary/10 text-nest-primary">
               <Activity className="size-3" />
               Live
             </Badge>
@@ -326,32 +326,32 @@ export default function AdminDashboard() {
                       value: formatNairaFull(data?.assetsUnderManagement || 0),
                       change: `+${data?.platformGrowth || 0}%`,
                       icon: <Wallet className="size-4" />,
-                      color: 'text-nest-emerald',
-                      bg: 'from-nest-emerald/5 to-transparent',
+                      color: 'text-nest-primary',
+                      bg: 'from-nest-primary/5 to-transparent',
                     },
                     {
                       label: 'Capital Raised',
                       value: formatNairaFull(data?.capitalRaised || 0),
                       change: `${data?.fundingProgress || 0}% funded`,
                       icon: <DollarSign className="size-4" />,
-                      color: 'text-nest-emerald',
-                      bg: 'from-nest-emerald/5 to-transparent',
+                      color: 'text-nest-primary',
+                      bg: 'from-nest-primary/5 to-transparent',
                     },
                     {
                       label: 'Revenue',
                       value: formatNairaFull(data?.revenue || 0),
                       change: `Net: ${formatNairaFull(data?.netIncome || 0)}`,
                       icon: <TrendingUp className="size-4" />,
-                      color: 'text-nest-gold',
-                      bg: 'from-nest-gold/5 to-transparent',
+                      color: 'text-nest-accent',
+                      bg: 'from-nest-accent/5 to-transparent',
                     },
                     {
                       label: 'Active Investors',
                       value: (data?.investorCount || 0).toLocaleString(),
                       change: `+${data?.newInvestors || 0} this month`,
                       icon: <Users className="size-4" />,
-                      color: 'text-nest-emerald',
-                      bg: 'from-nest-emerald/5 to-transparent',
+                      color: 'text-nest-primary',
+                      bg: 'from-nest-primary/5 to-transparent',
                     },
                   ].map((kpi) => (
                     <Card key={kpi.label} className={cn('p-4 gap-0 bg-gradient-to-br', kpi.bg)}>
@@ -406,7 +406,7 @@ export default function AdminDashboard() {
                         <h3 className="text-sm font-semibold">Platform Growth</h3>
                         <p className="text-xs text-muted-foreground">Investments & revenue over time</p>
                       </div>
-                      <Badge variant="secondary" className="text-xs bg-nest-emerald/10 text-nest-emerald">
+                      <Badge variant="secondary" className="text-xs bg-nest-primary/10 text-nest-primary">
                         <TrendingUp className="size-3 mr-1" />
                         +{data?.platformGrowth || 0}%
                       </Badge>
@@ -538,10 +538,10 @@ export default function AdminDashboard() {
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-center">
-                          <MapPin className="size-6 text-nest-emerald mx-auto mb-2" />
+                          <MapPin className="size-6 text-nest-primary mx-auto mb-2" />
                           {(data?.geographicBreakdown || []).map((geo) => (
                             <div key={geo.state} className="flex items-center justify-center gap-2 text-xs mb-1">
-                              <div className="h-2 w-2 rounded-full bg-nest-emerald" />
+                              <div className="h-2 w-2 rounded-full bg-nest-primary" />
                               <span className="font-medium">{geo.state}</span>
                               <span className="text-muted-foreground">({geo.count} properties)</span>
                             </div>
@@ -631,7 +631,7 @@ export default function AdminDashboard() {
                                 </div>
                               </td>
                               <td className="text-right py-2.5 text-xs font-medium">{formatNairaFull(prop.fundingRaised)}</td>
-                              <td className="text-right py-2.5 text-xs font-medium text-nest-emerald">
+                              <td className="text-right py-2.5 text-xs font-medium text-nest-primary">
                                 {formatPercent(prop.rentalYield)}
                               </td>
                               <td className="text-right py-2.5 text-xs font-medium">{formatPercent(prop.expectedIRR)}</td>
@@ -639,7 +639,7 @@ export default function AdminDashboard() {
                                 <div className="flex items-center justify-end gap-2">
                                   <div className="w-12 h-1.5 rounded-full bg-muted overflow-hidden">
                                     <div
-                                      className="h-full rounded-full bg-nest-emerald"
+                                      className="h-full rounded-full bg-nest-primary"
                                       style={{ width: `${prop.fundingProgress}%` }}
                                     />
                                   </div>
@@ -665,9 +665,9 @@ export default function AdminDashboard() {
               className="flex items-center justify-center py-20"
             >
               <div className="text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-nest-emerald/10 mx-auto mb-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-nest-primary/10 mx-auto mb-4">
                   {adminNavItems.find(i => i.view === currentView)?.icon && (
-                    <span className="text-nest-emerald">
+                    <span className="text-nest-primary">
                       {adminNavItems.find(i => i.view === currentView)?.icon}
                     </span>
                   )}

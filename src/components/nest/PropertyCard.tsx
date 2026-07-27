@@ -113,7 +113,7 @@ export default function PropertyCard({
                   {property.status === 'funding' ? 'Funding' : property.status}
                 </Badge>
                 {property.featured && (
-                  <Badge className="bg-nest-gold/90 text-white border-0">
+                  <Badge className="bg-nest-accent/90 text-white border-0">
                     <BadgeCheck className="size-3 mr-0.5" />
                     Featured
                   </Badge>
@@ -122,7 +122,7 @@ export default function PropertyCard({
               {/* Yield Badge */}
               {property.rentalYield != null && (
                 <div className="absolute top-3 right-3">
-                  <div className="flex items-center gap-1 rounded-full bg-nest-emerald px-2.5 py-1 text-xs font-semibold text-white">
+                  <div className="flex items-center gap-1 rounded-full bg-nest-primary px-2.5 py-1 text-xs font-semibold text-white">
                     <TrendingUp className="size-3" />
                     {formatPercent(property.rentalYield)}
                   </div>
@@ -147,7 +147,7 @@ export default function PropertyCard({
                     {property.developer.companyName}
                   </span>
                   {property.developer.isVerified && (
-                    <BadgeCheck className="size-3 text-nest-emerald" />
+                    <BadgeCheck className="size-3 text-nest-primary" />
                   )}
                 </div>
               )}
@@ -175,7 +175,7 @@ export default function PropertyCard({
               {/* Invest Button */}
               <Button
                 onClick={handleInvestClick}
-                className="w-full bg-nest-emerald hover:bg-nest-emerald/90 text-white"
+                className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white"
                 size="sm"
               >
                 Invest Now
@@ -203,7 +203,7 @@ export default function PropertyCard({
         tabIndex={0}
         className="group w-full text-left cursor-pointer"
       >
-        <Card className="overflow-hidden p-0 gap-0 nest-card-hover border-border/50 hover:border-nest-emerald/20">
+        <Card className="overflow-hidden p-0 gap-0 nest-card-hover border-border/50 hover:border-nest-primary/20">
           {/* Image */}
           <div className="relative aspect-[16/11] overflow-hidden">
             <img
@@ -215,7 +215,7 @@ export default function PropertyCard({
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
             {/* Badges */}
             <div className="absolute top-2.5 left-2.5 flex gap-1.5">
-              <Badge className={cn('text-[10px]', getPropertyTypeLabel(property.propertyType) !== property.propertyType ? 'bg-nest-emerald/90 text-white border-0' : '')}>
+              <Badge className={cn('text-[10px]', getPropertyTypeLabel(property.propertyType) !== property.propertyType ? 'bg-nest-primary/90 text-white border-0' : '')}>
                 {getPropertyTypeLabel(property.propertyType)}
               </Badge>
               <Badge className={cn('text-[10px]', getStatusColor(property.status))}>
@@ -225,7 +225,7 @@ export default function PropertyCard({
             {/* Yield Badge */}
             {property.rentalYield != null && (
               <div className="absolute top-2.5 right-2.5">
-                <div className="flex items-center gap-1 rounded-full bg-nest-emerald px-2 py-0.5 text-[11px] font-semibold text-white">
+                <div className="flex items-center gap-1 rounded-full bg-nest-primary px-2 py-0.5 text-[11px] font-semibold text-white">
                   <TrendingUp className="size-3" />
                   {formatPercent(property.rentalYield)}
                 </div>
@@ -252,7 +252,7 @@ export default function PropertyCard({
                   {property.developer.companyName}
                 </span>
                 {property.developer.isVerified && (
-                  <BadgeCheck className="size-3 text-nest-emerald flex-shrink-0" />
+                  <BadgeCheck className="size-3 text-nest-primary flex-shrink-0" />
                 )}
               </div>
             )}
@@ -265,7 +265,7 @@ export default function PropertyCard({
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Yield</p>
-                <p className="text-xs font-bold text-nest-emerald">
+                <p className="text-xs font-bold text-nest-primary">
                   {property.rentalYield != null ? formatPercent(property.rentalYield) : '—'}
                 </p>
               </div>
@@ -291,7 +291,7 @@ export default function PropertyCard({
             {/* Action */}
             <Button
               onClick={handleInvestClick}
-              className="w-full bg-nest-emerald hover:bg-nest-emerald/90 text-white text-xs"
+              className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white text-xs"
               size="sm"
             >
               Invest Now

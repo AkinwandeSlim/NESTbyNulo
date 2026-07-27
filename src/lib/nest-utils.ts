@@ -68,13 +68,13 @@ export function getPropertyTypeLabel(type: string): string {
 export function getStatusColor(status: string): string {
   switch (status) {
     case "funding":
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200";
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
     case "funded":
       return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
     case "active":
       return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
     case "published":
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200";
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
     case "paused":
       return "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200";
     case "completed":

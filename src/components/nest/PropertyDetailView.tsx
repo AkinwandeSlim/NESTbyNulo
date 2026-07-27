@@ -264,7 +264,7 @@ export default function PropertyDetailView() {
                       onClick={() => setSelectedImage(i)}
                       className={cn(
                         'flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all',
-                        selectedImage === i ? 'border-nest-emerald shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
+                        selectedImage === i ? 'border-nest-primary shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
                       )}
                     >
                       <img src={img} alt="" className="h-full w-full object-cover" />
@@ -281,7 +281,7 @@ export default function PropertyDetailView() {
                 <Badge className={getStatusColor(property.status)} variant="secondary">
                   {property.status === 'funding' ? 'Funding' : property.status}
                 </Badge>
-                <Badge variant="secondary" className="bg-nest-emerald/10 text-nest-emerald border-nest-emerald/20">
+                <Badge variant="secondary" className="bg-nest-primary/10 text-nest-primary border-nest-primary/20">
                   {getPropertyTypeLabel(property.propertyType)}
                 </Badge>
                 <Badge variant="secondary" className={getRiskBg(property.riskRating)}>
@@ -328,12 +328,12 @@ export default function PropertyDetailView() {
                 {/* Key Metrics Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {[
-                    { icon: <Building2 className="size-4 text-nest-emerald" />, label: 'Total Value', value: formatNairaFull(property.totalValue) },
-                    { icon: <Target className="size-4 text-nest-emerald" />, label: 'Min Investment', value: formatNairaFull(property.minInvestment) },
-                    { icon: <Percent className="size-4 text-nest-emerald" />, label: 'Rental Yield', value: property.rentalYield != null ? formatPercent(property.rentalYield) : '—' },
-                    { icon: <TrendingUp className="size-4 text-nest-emerald" />, label: 'Expected IRR', value: property.expectedIRR != null ? formatPercent(property.expectedIRR) : '—' },
+                    { icon: <Building2 className="size-4 text-nest-primary" />, label: 'Total Value', value: formatNairaFull(property.totalValue) },
+                    { icon: <Target className="size-4 text-nest-primary" />, label: 'Min Investment', value: formatNairaFull(property.minInvestment) },
+                    { icon: <Percent className="size-4 text-nest-primary" />, label: 'Rental Yield', value: property.rentalYield != null ? formatPercent(property.rentalYield) : '—' },
+                    { icon: <TrendingUp className="size-4 text-nest-primary" />, label: 'Expected IRR', value: property.expectedIRR != null ? formatPercent(property.expectedIRR) : '—' },
                     { icon: <Shield className="size-4" />, label: 'Risk Rating', value: property.riskRating.charAt(0).toUpperCase() + property.riskRating.slice(1), valueClass: getRiskColor(property.riskRating) },
-                    { icon: <Timer className="size-4 text-nest-emerald" />, label: 'Timeline', value: property.investmentTimeline || '18 months' },
+                    { icon: <Timer className="size-4 text-nest-primary" />, label: 'Timeline', value: property.investmentTimeline || '18 months' },
                   ].map((metric) => (
                     <Card key={metric.label} className="p-4 gap-0">
                       <div className="flex items-center gap-2 mb-2">
@@ -350,20 +350,20 @@ export default function PropertyDetailView() {
                   <Card className="p-4 gap-0">
                     <h3 className="text-sm font-semibold mb-3">Developer</h3>
                     <div className="flex items-start gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-nest-emerald/10 text-nest-emerald font-bold text-lg">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-nest-primary/10 text-nest-primary font-bold text-lg">
                         {property.developer.companyName.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
                           <p className="font-semibold text-sm">{property.developer.companyName}</p>
-                          {property.developer.isVerified && <BadgeCheck className="size-4 text-nest-emerald" />}
+                          {property.developer.isVerified && <BadgeCheck className="size-4 text-nest-primary" />}
                         </div>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           {property.developer.totalProjects} projects · ₦{((property.developer.totalFunding || 0) / 1e6).toFixed(0)}M raised
                         </p>
                         {property.developer.rating > 0 && (
                           <div className="flex items-center gap-1 mt-1">
-                            <Star className="size-3 fill-nest-gold text-nest-gold" />
+                            <Star className="size-3 fill-nest-accent text-nest-accent" />
                             <span className="text-xs font-medium">{property.developer.rating.toFixed(1)}</span>
                           </div>
                         )}
@@ -377,13 +377,13 @@ export default function PropertyDetailView() {
                   <Card className="p-4 gap-0">
                     <h3 className="text-sm font-semibold mb-3">Property Manager</h3>
                     <div className="flex items-start gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-nest-gold/10 text-nest-gold font-bold text-lg">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-nest-accent/10 text-nest-accent font-bold text-lg">
                         {property.propertyManager.companyName.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
                           <p className="font-semibold text-sm">{property.propertyManager.companyName}</p>
-                          {property.propertyManager.isVerified && <BadgeCheck className="size-4 text-nest-emerald" />}
+                          {property.propertyManager.isVerified && <BadgeCheck className="size-4 text-nest-primary" />}
                         </div>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           {property.propertyManager.managedCount} properties managed
@@ -426,13 +426,13 @@ export default function PropertyDetailView() {
                           <div className={cn(
                             'flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs',
                             step.done
-                              ? 'bg-nest-emerald border-nest-emerald text-white'
+                              ? 'bg-nest-primary border-nest-primary text-white'
                               : 'bg-background border-border text-muted-foreground'
                           )}>
                             {step.icon}
                           </div>
                           {i < timelineSteps.length - 1 && (
-                            <div className={cn('w-0.5 h-8', step.done ? 'bg-nest-emerald' : 'bg-border')} />
+                            <div className={cn('w-0.5 h-8', step.done ? 'bg-nest-primary' : 'bg-border')} />
                           )}
                         </div>
                         <div className="pt-1 pb-4">
@@ -449,9 +449,9 @@ export default function PropertyDetailView() {
               <TabsContent value="financials" className="space-y-6">
                 {/* Financial Summary Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <Card className="p-4 gap-0 bg-gradient-to-br from-nest-emerald/5 to-transparent border-nest-emerald/20">
+                  <Card className="p-4 gap-0 bg-gradient-to-br from-nest-primary/5 to-transparent border-nest-primary/20">
                     <p className="text-xs text-muted-foreground mb-1">Projected Annual Return</p>
-                    <p className="text-lg font-bold text-nest-emerald">
+                    <p className="text-lg font-bold text-nest-primary">
                       {financialData?.projectedAnnualReturn ? `+${formatPercent(financialData.projectedAnnualReturn)}` : '+12.5%'}
                     </p>
                   </Card>
@@ -492,7 +492,7 @@ export default function PropertyDetailView() {
                             <tr key={i} className="border-b border-border/50 last:border-0">
                               <td className="py-2.5 font-medium">Year {row.year}</td>
                               <td className="py-2.5 text-right">{formatNairaFull(Math.round(row.value))}</td>
-                              <td className="py-2.5 text-right text-nest-emerald">{formatNairaFull(Math.round(row.income))}</td>
+                              <td className="py-2.5 text-right text-nest-primary">{formatNairaFull(Math.round(row.income))}</td>
                               <td className="py-2.5 text-right font-medium">{formatNairaFull(Math.round(totalReturn))}</td>
                             </tr>
                           );
@@ -575,7 +575,7 @@ export default function PropertyDetailView() {
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div>
                     <p className="text-xs text-muted-foreground">Raised</p>
-                    <p className="font-bold text-nest-emerald">{formatNairaFull(property.fundingRaised)}</p>
+                    <p className="font-bold text-nest-primary">{formatNairaFull(property.fundingRaised)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Goal</p>
@@ -596,14 +596,14 @@ export default function PropertyDetailView() {
                 <Separator />
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex items-center gap-2">
-                    <Percent className="size-4 text-nest-emerald" />
+                    <Percent className="size-4 text-nest-primary" />
                     <div>
                       <p className="text-[10px] text-muted-foreground">Rental Yield</p>
                       <p className="text-sm font-bold">{property.rentalYield != null ? formatPercent(property.rentalYield) : '—'}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="size-4 text-nest-emerald" />
+                    <TrendingUp className="size-4 text-nest-primary" />
                     <div>
                       <p className="text-[10px] text-muted-foreground">Expected IRR</p>
                       <p className="text-sm font-bold">{property.expectedIRR != null ? formatPercent(property.expectedIRR) : '—'}</p>
@@ -622,7 +622,7 @@ export default function PropertyDetailView() {
               </div>
               <Button
                 onClick={handleInvest}
-                className="w-full bg-nest-emerald hover:bg-nest-emerald/90 text-white h-12 text-base font-semibold"
+                className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white h-12 text-base font-semibold"
               >
                 Invest in This Property
                 <ChevronRight className="size-4 ml-1" />
@@ -633,7 +633,7 @@ export default function PropertyDetailView() {
             {property.opportunity?.spvName && (
               <Card className="p-4 gap-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <Shield className="size-4 text-nest-emerald" />
+                  <Shield className="size-4 text-nest-primary" />
                   <p className="text-sm font-semibold">SPV Protection</p>
                 </div>
                 <p className="text-xs text-muted-foreground">
