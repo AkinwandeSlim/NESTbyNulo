@@ -1,0 +1,426 @@
+// NEST by Nulo Africa — Database Schema
+// Fractional Real Estate Investment Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── USERS & ROLES ───
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  phone         String?
+  firstName     String
+  lastName      String?
+  avatar        String?
+  role          String   @default("investor")
+  kycStatus     String   @default("pending")
+  kycVerifiedAt DateTime?
+  isVerified    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  investorProfile    InvestorProfile?
+  developerProfile   DeveloperProfile?
+  propertyManagerProfile PropertyManagerProfile?
+  wallet             Wallet?
+  investments        Investment[]
+  transactions       Transaction[]
+  notifications      Notification[]
+  supportTickets     SupportTicket[]
+  auditLogs          AuditLog[]
+  referralsMade      Referral[] @relation("Referrer")
+  referralReceived   Referral?  @relation("Referee")
+  learningProgress   LearningProgress[]
+}
+
+model InvestorProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  riskTolerance     String   @default("moderate")
+  investmentGoal    String?
+  totalInvested     Float    @default(0)
+  totalReturns      Float    @default(0)
+  portfolioValue    Float    @default(0)
+  rentalIncomeEarned Float   @default(0)
+  propertiesOwned   Int      @default(0)
+  preferredCurrency String   @default("NGN")
+  annualIncomeRange String?
+  netWorthRange     String?
+  accredited        Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DeveloperProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  companyName     String
+  registrationNo  String?
+  website         String?
+  description     String?
+  logo            String?
+  hqAddress       String?
+  foundedYear     Int?
+  totalProjects   Int      @default(0)
+  totalFunding    Float    @default(0)
+  isVerified      Boolean  @default(false)
+  rating          Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  properties Property[]
+}
+
+model PropertyManagerProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  companyName   String
+  licenseNo     String?
+  description   String?
+  logo          String?
+  phone         String?
+  email         String?
+  managedCount  Int      @default(0)
+  rating        Float    @default(0)
+  isVerified    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  properties Property[]
+}
+
+// ─── PROPERTIES ───
+
+model Property {
+  id                String   @id @default(cuid())
+  title             String
+  slug              String   @unique
+  description       String
+  shortDescription  String?
+  propertyType      String
+  status            String   @default("draft")
+  address           String
+  city              String
+  state             String
+  country           String   @default("Nigeria")
+  latitude          Float?
+  longitude         Float?
+  totalUnits        Int?
+  totalValue        Float
+  minInvestment     Float    @default(500000)
+  maxInvestment     Float?
+  fundingTarget     Float
+  fundingRaised     Float    @default(0)
+  rentalYield       Float?
+  expectedIRR       Float?
+  riskRating        String   @default("moderate")
+  investmentTimeline String?
+  completionDate    DateTime?
+  images            String
+  coverImage        String?
+  videoUrl          String?
+  featured          Boolean  @default(false)
+  trending          Boolean  @default(false)
+  isNew             Boolean  @default(true)
+  developerId       String?
+  propertyManagerId String?
+  spvId             String?  @unique
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  developer       DeveloperProfile?     @relation(fields: [developerId], references: [id])
+  propertyManager PropertyManagerProfile? @relation(fields: [propertyManagerId], references: [id])
+  spv             SPV?                   @relation(fields: [spvId], references: [id])
+  opportunity      InvestmentOpportunity?
+  investments     Investment[]
+  valuations      Valuation[]
+  maintenance     MaintenanceRequest[]
+  documents       PropertyDocument[]
+  media           PropertyMedia[]
+
+  @@index([status])
+  @@index([propertyType])
+  @@index([city])
+  @@index([featured])
+}
+
+model PropertyDocument {
+  id         String   @id @default(cuid())
+  propertyId String
+  title      String
+  type       String
+  fileUrl    String
+  fileSize   Int?
+  mimeType   String?
+  createdAt  DateTime @default(now())
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model PropertyMedia {
+  id         String   @id @default(cuid())
+  propertyId String
+  type       String
+  url        String
+  caption    String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+// ─── INVESTMENT OPPORTUNITIES ───
+
+model InvestmentOpportunity {
+  id               String   @id @default(cuid())
+  propertyId       String   @unique
+  investmentMemo   String?
+  financialSummary String?
+  fundingStartDate DateTime
+  fundingEndDate   DateTime?
+  minInvestment    Float
+  maxInvestment    Float?
+  maxInvestors     Int?
+  currentInvestors Int      @default(0)
+  spvName          String?
+  spvStructure     String?
+  faq              String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+// ─── SPVs ───
+
+model SPV {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  regNumber   String?  @unique
+  description String?
+  structure   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  property Property?
+}
+
+// ─── INVESTMENTS ───
+
+model Investment {
+  id              String   @id @default(cuid())
+  userId          String
+  propertyId      String
+  amount          Float
+  units           Float    @default(0)
+  status          String   @default("pending")
+  paymentMethod   String?
+  paymentRef      String?  @unique
+  investedAt      DateTime?
+  confirmedAt     DateTime?
+  certificateNo   String?  @unique
+  rentalYield     Float?
+  expectedReturn  Float?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([propertyId])
+  @@index([status])
+}
+
+// ─── WALLETS ───
+
+model Wallet {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  balance       Float    @default(0)
+  currency      String   @default("NGN")
+  isLocked      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ─── TRANSACTIONS ───
+
+model Transaction {
+  id           String   @id @default(cuid())
+  userId       String
+  type         String
+  amount       Float
+  status       String   @default("pending")
+  reference    String   @unique
+  description  String?
+  metadata     String?
+  investmentId String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id])
+  investment Investment? @relation(fields: [investmentId], references: [id])
+
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ─── RENTAL DISTRIBUTIONS ───
+
+model RentalDistribution {
+  id               String   @id @default(cuid())
+  propertyId       String
+  totalAmount      Float
+  period           String
+  distributionDate DateTime
+  status           String   @default("pending")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// ─── VALUATIONS ───
+
+model Valuation {
+  id         String   @id @default(cuid())
+  propertyId String
+  value      Float
+  date       DateTime
+  source     String?
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+// ─── MAINTENANCE ───
+
+model MaintenanceRequest {
+  id          String   @id @default(cuid())
+  propertyId  String
+  title       String
+  description String?
+  status      String   @default("open")
+  priority    String   @default("medium")
+  cost        Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+// ─── NOTIFICATIONS ───
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  metadata  String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+}
+
+// ─── SUPPORT ───
+
+model SupportTicket {
+  id        String   @id @default(cuid())
+  userId    String
+  subject   String
+  message   String
+  status    String   @default("open")
+  priority  String   @default("medium")
+  category  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── AUDIT LOGS ───
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([entity])
+  @@index([createdAt])
+}
+
+// ─── REFERRALS ───
+
+model Referral {
+  id         String   @id @default(cuid())
+  referrerId String
+  referredId String   @unique
+  bonus      Float    @default(0)
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  referrer User @relation("Referrer", fields: [referrerId], references: [id])
+  referred User @relation("Referee", fields: [referredId], references: [id])
+}
+
+// ─── LEARNING CONTENT ───
+
+model LearningContent {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  content     String?
+  type        String
+  category    String?
+  imageUrl    String?
+  videoUrl    String?
+  isPublished Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model LearningProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  contentId String
+  progress  Float    @default(0)
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

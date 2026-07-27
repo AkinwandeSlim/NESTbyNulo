@@ -1,0 +1,185 @@
+Resolving dependencies
+Resolved, downloaded and extracted [63]
+Saved lockfile
+🌱 Seeding NEST by Nulo Africa database...
+
+Cleaning existing data...
+prisma:query DELETE FROM `main`.`LearningProgress` WHERE 1=1
+  ✓ Cleared LearningProgress
+prisma:query DELETE FROM `main`.`Referral` WHERE 1=1
+  ✓ Cleared Referral
+prisma:query DELETE FROM `main`.`AuditLog` WHERE 1=1
+  ✓ Cleared AuditLog
+prisma:query DELETE FROM `main`.`SupportTicket` WHERE 1=1
+  ✓ Cleared SupportTicket
+prisma:query DELETE FROM `main`.`Notification` WHERE 1=1
+  ✓ Cleared Notification
+prisma:query DELETE FROM `main`.`Transaction` WHERE 1=1
+  ✓ Cleared Transaction
+prisma:query DELETE FROM `main`.`Investment` WHERE 1=1
+  ✓ Cleared Investment
+prisma:query DELETE FROM `main`.`MaintenanceRequest` WHERE 1=1
+  ✓ Cleared MaintenanceRequest
+prisma:query DELETE FROM `main`.`PropertyMedia` WHERE 1=1
+  ✓ Cleared PropertyMedia
+prisma:query DELETE FROM `main`.`PropertyDocument` WHERE 1=1
+  ✓ Cleared PropertyDocument
+prisma:query DELETE FROM `main`.`Valuation` WHERE 1=1
+  ✓ Cleared Valuation
+prisma:query DELETE FROM `main`.`RentalDistribution` WHERE 1=1
+  ✓ Cleared RentalDistribution
+prisma:query DELETE FROM `main`.`InvestmentOpportunity` WHERE 1=1
+  ✓ Cleared InvestmentOpportunity
+prisma:query DELETE FROM `main`.`SPV` WHERE 1=1
+  ✓ Cleared SPV
+prisma:query DELETE FROM `main`.`Property` WHERE 1=1
+  ✓ Cleared Property
+prisma:query DELETE FROM `main`.`Wallet` WHERE 1=1
+  ✓ Cleared Wallet
+prisma:query DELETE FROM `main`.`PropertyManagerProfile` WHERE 1=1
+  ✓ Cleared PropertyManagerProfile
+prisma:query DELETE FROM `main`.`DeveloperProfile` WHERE 1=1
+  ✓ Cleared DeveloperProfile
+prisma:query DELETE FROM `main`.`InvestorProfile` WHERE 1=1
+  ✓ Cleared InvestorProfile
+prisma:query DELETE FROM `main`.`User` WHERE 1=1
+  ✓ Cleared User
+
+👤 Creating users...
+prisma:query INSERT INTO `main`.`User` (`id`, `email`, `phone`, `firstName`, `lastName`, `role`, `kycStatus`, `kycVerifiedAt`, `isVerified`, `isActive`, `lastLoginAt`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `email` AS `email`, `phone` AS `phone`, `firstName` AS `firstName`, `lastName` AS `lastName`, `avatar` AS `avatar`, `role` AS `role`, `kycStatus` AS `kycStatus`, `kycVerifiedAt` AS `kycVerifiedAt`, `isVerified` AS `isVerified`, `isActive` AS `isActive`, `lastLoginAt` AS `lastLoginAt`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Admin: Adebayo Ogunlesi (admin@nestnulo.com)
+prisma:query INSERT INTO `main`.`User` (`id`, `email`, `phone`, `firstName`, `lastName`, `role`, `kycStatus`, `kycVerifiedAt`, `isVerified`, `isActive`, `lastLoginAt`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `email` AS `email`, `phone` AS `phone`, `firstName` AS `firstName`, `lastName` AS `lastName`, `avatar` AS `avatar`, `role` AS `role`, `kycStatus` AS `kycStatus`, `kycVerifiedAt` AS `kycVerifiedAt`, `isVerified` AS `isVerified`, `isActive` AS `isActive`, `lastLoginAt` AS `lastLoginAt`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Investor: Chioma Adewale (chioma.adewale@gmail.com)
+prisma:query INSERT INTO `main`.`User` (`id`, `email`, `phone`, `firstName`, `lastName`, `role`, `kycStatus`, `kycVerifiedAt`, `isVerified`, `isActive`, `lastLoginAt`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `email` AS `email`, `phone` AS `phone`, `firstName` AS `firstName`, `lastName` AS `lastName`, `avatar` AS `avatar`, `role` AS `role`, `kycStatus` AS `kycStatus`, `kycVerifiedAt` AS `kycVerifiedAt`, `isVerified` AS `isVerified`, `isActive` AS `isActive`, `lastLoginAt` AS `lastLoginAt`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Developer: Emeka Nwosu (info@primecrestng.com)
+
+📋 Creating profiles...
+prisma:query INSERT INTO `main`.`InvestorProfile` (`id`, `userId`, `riskTolerance`, `investmentGoal`, `totalInvested`, `totalReturns`, `portfolioValue`, `rentalIncomeEarned`, `propertiesOwned`, `preferredCurrency`, `annualIncomeRange`, `netWorthRange`, `accredited`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `userId` AS `userId`, `riskTolerance` AS `riskTolerance`, `investmentGoal` AS `investmentGoal`, `totalInvested` AS `totalInvested`, `totalReturns` AS `totalReturns`, `portfolioValue` AS `portfolioValue`, `rentalIncomeEarned` AS `rentalIncomeEarned`, `propertiesOwned` AS `propertiesOwned`, `preferredCurrency` AS `preferredCurrency`, `annualIncomeRange` AS `annualIncomeRange`, `netWorthRange` AS `netWorthRange`, `accredited` AS `accredited`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Investor Profile: ₦15,750,000 invested
+prisma:query INSERT INTO `main`.`DeveloperProfile` (`id`, `userId`, `companyName`, `registrationNo`, `website`, `description`, `logo`, `hqAddress`, `foundedYear`, `totalProjects`, `totalFunding`, `isVerified`, `rating`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `userId` AS `userId`, `companyName` AS `companyName`, `registrationNo` AS `registrationNo`, `website` AS `website`, `description` AS `description`, `logo` AS `logo`, `hqAddress` AS `hqAddress`, `foundedYear` AS `foundedYear`, `totalProjects` AS `totalProjects`, `totalFunding` AS `totalFunding`, `isVerified` AS `isVerified`, `rating` AS `rating`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Developer Profile: PrimeCrest Developments Nigeria Ltd
+
+🏢 Creating properties...
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ The Lekki Residence — ₦185M | 83.9% funded | Lagos
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Azure Heights — ₦420M | 90.0% funded | Lagos
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Coral Bay Estate — ₦360M | 42.0% funded | Lagos
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Greenfield Gardens — ₦240M | 50.0% funded | Lagos
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ The Yaba Hub — ₦195M | 85.1% funded | Lagos
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Campus Quarters — ₦96M | 80.0% funded | Ile-Ife
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Marina Tower — ₦500M | 85.0% funded | Lagos
+prisma:query INSERT INTO `main`.`Property` (`id`, `title`, `slug`, `description`, `shortDescription`, `propertyType`, `status`, `address`, `city`, `state`, `country`, `latitude`, `longitude`, `totalUnits`, `totalValue`, `minInvestment`, `maxInvestment`, `fundingTarget`, `fundingRaised`, `rentalYield`, `expectedIRR`, `riskRating`, `investmentTimeline`, `images`, `coverImage`, `featured`, `trending`, `isNew`, `developerId`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `title` AS `title`, `slug` AS `slug`, `description` AS `description`, `shortDescription` AS `shortDescription`, `propertyType` AS `propertyType`, `status` AS `status`, `address` AS `address`, `city` AS `city`, `state` AS `state`, `country` AS `country`, `latitude` AS `latitude`, `longitude` AS `longitude`, `totalUnits` AS `totalUnits`, `totalValue` AS `totalValue`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `fundingTarget` AS `fundingTarget`, `fundingRaised` AS `fundingRaised`, `rentalYield` AS `rentalYield`, `expectedIRR` AS `expectedIRR`, `riskRating` AS `riskRating`, `investmentTimeline` AS `investmentTimeline`, `completionDate` AS `completionDate`, `images` AS `images`, `coverImage` AS `coverImage`, `videoUrl` AS `videoUrl`, `featured` AS `featured`, `trending` AS `trending`, `isNew` AS `isNew`, `developerId` AS `developerId`, `propertyManagerId` AS `propertyManagerId`, `spvId` AS `spvId`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Heritage Homes — ₦108M | 45.0% funded | Badagry
+
+📊 Creating investment opportunities...
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: The Lekki Residence
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: Azure Heights
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: Coral Bay Estate
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: Greenfield Gardens
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: The Yaba Hub
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: Campus Quarters
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: Marina Tower
+prisma:query INSERT INTO `main`.`InvestmentOpportunity` (`id`, `propertyId`, `investmentMemo`, `financialSummary`, `fundingStartDate`, `fundingEndDate`, `minInvestment`, `maxInvestment`, `maxInvestors`, `currentInvestors`, `spvName`, `spvStructure`, `faq`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `propertyId` AS `propertyId`, `investmentMemo` AS `investmentMemo`, `financialSummary` AS `financialSummary`, `fundingStartDate` AS `fundingStartDate`, `fundingEndDate` AS `fundingEndDate`, `minInvestment` AS `minInvestment`, `maxInvestment` AS `maxInvestment`, `maxInvestors` AS `maxInvestors`, `currentInvestors` AS `currentInvestors`, `spvName` AS `spvName`, `spvStructure` AS `spvStructure`, `faq` AS `faq`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Opportunity: Heritage Homes
+
+💰 Creating wallets...
+prisma:query INSERT INTO `main`.`Wallet` (`id`, `userId`, `balance`, `currency`, `isLocked`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?) RETURNING `id` AS `id`, `userId` AS `userId`, `balance` AS `balance`, `currency` AS `currency`, `isLocked` AS `isLocked`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Investor wallet created
+
+📈 Creating sample investments...
+prisma:query INSERT INTO `main`.`Investment` (`id`, `userId`, `propertyId`, `amount`, `units`, `status`, `paymentMethod`, `investedAt`, `confirmedAt`, `certificateNo`, `rentalYield`, `expectedReturn`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `userId` AS `userId`, `propertyId` AS `propertyId`, `amount` AS `amount`, `units` AS `units`, `status` AS `status`, `paymentMethod` AS `paymentMethod`, `paymentRef` AS `paymentRef`, `investedAt` AS `investedAt`, `confirmedAt` AS `confirmedAt`, `certificateNo` AS `certificateNo`, `rentalYield` AS `rentalYield`, `expectedReturn` AS `expectedReturn`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Investment: ₦5,000,000 in The Lekki Residence
+prisma:query INSERT INTO `main`.`Investment` (`id`, `userId`, `propertyId`, `amount`, `units`, `status`, `paymentMethod`, `investedAt`, `confirmedAt`, `certificateNo`, `rentalYield`, `expectedReturn`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `userId` AS `userId`, `propertyId` AS `propertyId`, `amount` AS `amount`, `units` AS `units`, `status` AS `status`, `paymentMethod` AS `paymentMethod`, `paymentRef` AS `paymentRef`, `investedAt` AS `investedAt`, `confirmedAt` AS `confirmedAt`, `certificateNo` AS `certificateNo`, `rentalYield` AS `rentalYield`, `expectedReturn` AS `expectedReturn`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Investment: ₦3,000,000 in Azure Heights
+prisma:query INSERT INTO `main`.`Investment` (`id`, `userId`, `propertyId`, `amount`, `units`, `status`, `paymentMethod`, `investedAt`, `confirmedAt`, `certificateNo`, `rentalYield`, `expectedReturn`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `userId` AS `userId`, `propertyId` AS `propertyId`, `amount` AS `amount`, `units` AS `units`, `status` AS `status`, `paymentMethod` AS `paymentMethod`, `paymentRef` AS `paymentRef`, `investedAt` AS `investedAt`, `confirmedAt` AS `confirmedAt`, `certificateNo` AS `certificateNo`, `rentalYield` AS `rentalYield`, `expectedReturn` AS `expectedReturn`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Investment: ₦2,500,000 in The Yaba Hub
+prisma:query INSERT INTO `main`.`Investment` (`id`, `userId`, `propertyId`, `amount`, `units`, `status`, `paymentMethod`, `investedAt`, `confirmedAt`, `certificateNo`, `rentalYield`, `expectedReturn`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `userId` AS `userId`, `propertyId` AS `propertyId`, `amount` AS `amount`, `units` AS `units`, `status` AS `status`, `paymentMethod` AS `paymentMethod`, `paymentRef` AS `paymentRef`, `investedAt` AS `investedAt`, `confirmedAt` AS `confirmedAt`, `certificateNo` AS `certificateNo`, `rentalYield` AS `rentalYield`, `expectedReturn` AS `expectedReturn`, `createdAt` AS `createdAt`, `updatedAt` AS `updatedAt`
+  ✓ Investment: ₦5,250,000 in Campus Quarters
+
+💳 Creating sample transactions...
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`Transaction` (`id`, `userId`, `type`, `amount`, `status`, `reference`, `description`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+  ✓ 6 transactions created
+
+📄 Creating property documents...
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyDocument` (`id`, `propertyId`, `title`, `type`, `fileUrl`, `fileSize`, `mimeType`, `createdAt`) VALUES (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?), (?,?,?,?,?,?,?,?)
+prisma:query COMMIT
+  ✓ 32 documents created
+
+🎬 Creating property media...
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+prisma:query BEGIN IMMEDIATE
+prisma:query INSERT INTO `main`.`PropertyMedia` (`id`, `propertyId`, `type`, `url`, `caption`, `sortOrder`, `createdAt`) VALUES (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?), (?,?,?,?,?,?,?)
+prisma:query COMMIT
+  ✓ 40 media items created
+
+============================================================
+✅ NEST by Nulo Africa — Seed Complete!
+============================================================
+  👤 Users:              3
+  📋 Profiles:           2 (investor + developer)
+  🏢 Properties:         8
+  📊 Opportunities:      8
+  📈 Investments:         4
+  💳 Transactions:        6
+  📄 Documents:          32
+  🎬 Media:              40
+  💰 Total Property Value: ₦2.10B
+  💰 Total Funding Raised: ₦1.52B
+============================================================
