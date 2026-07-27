@@ -73,13 +73,13 @@ export default function PropertyCard({
     setView('property-detail');
   };
 
-  const handleInvestClick = (e: React.MouseEvent) => {
+  const handleInvestClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     selectProperty(property.slug);
     setView('invest');
   };
 
-  const imageUrl = property.coverImage || `https://picsum.photos/seed/${property.slug}/400/280`;
+  const imageUrl = property.coverImage || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=280&fit=crop';
 
   if (variant === 'featured') {
     return (
@@ -90,9 +90,12 @@ export default function PropertyCard({
         whileHover={{ y: -8 }}
         className={cn('min-w-[300px] max-w-[340px] flex-shrink-0', className)}
       >
-        <button
+        <div
           onClick={handleCardClick}
-          className="group w-full text-left"
+          onKeyDown={(e) => e.key === 'Enter' && handleCardClick()}
+          role="button"
+          tabIndex={0}
+          className="group w-full text-left cursor-pointer"
         >
           <div className="relative overflow-hidden rounded-xl bg-card border border-border shadow-sm">
             {/* Image */}
@@ -179,7 +182,7 @@ export default function PropertyCard({
               </Button>
             </div>
           </div>
-        </button>
+        </div>
       </motion.div>
     );
   }
@@ -193,9 +196,12 @@ export default function PropertyCard({
       whileHover={{ y: -4 }}
       className={cn('w-full', className)}
     >
-      <button
+      <div
         onClick={handleCardClick}
-        className="group w-full text-left"
+        onKeyDown={(e) => e.key === 'Enter' && handleCardClick()}
+        role="button"
+        tabIndex={0}
+        className="group w-full text-left cursor-pointer"
       >
         <Card className="overflow-hidden p-0 gap-0 nest-card-hover border-border/50 hover:border-nest-emerald/20">
           {/* Image */}
@@ -292,7 +298,7 @@ export default function PropertyCard({
             </Button>
           </div>
         </Card>
-      </button>
+      </div>
     </motion.div>
   );
 }

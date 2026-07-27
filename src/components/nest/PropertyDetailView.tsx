@@ -203,7 +203,13 @@ export default function PropertyDetailView() {
 
   const images = property.images.length > 0
     ? property.images
-    : Array.from({ length: 5 }, (_, i) => `https://picsum.photos/seed/${property.slug}-${i}/800/500`);
+    : [
+        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=500&fit=crop',
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=500&fit=crop',
+        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=500&fit=crop',
+        'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&h=500&fit=crop',
+        'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&h=500&fit=crop',
+      ];
 
   const financialData = property.opportunity?.financialSummary;
   const faqItems = property.opportunity?.faq || [];
@@ -244,7 +250,7 @@ export default function PropertyDetailView() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    src={images[selectedImage] || `https://picsum.photos/seed/${property.slug}-${selectedImage}/800/500`}
+                    src={images[selectedImage]}
                     alt={`${property.title} - Image ${selectedImage + 1}`}
                     className="h-full w-full object-cover"
                   />
@@ -261,7 +267,7 @@ export default function PropertyDetailView() {
                         selectedImage === i ? 'border-nest-emerald shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
                       )}
                     >
-                      <img src={img || `https://picsum.photos/seed/${property.slug}-${i}/200/140`} alt="" className="h-full w-full object-cover" />
+                      <img src={img} alt="" className="h-full w-full object-cover" />
                     </button>
                   ))}
                 </div>
@@ -405,7 +411,7 @@ export default function PropertyDetailView() {
                       <p className="text-xs">{property.address}</p>
                     </div>
                     <div className="absolute inset-0 opacity-20">
-                      <div className="w-full h-full" style={{ backgroundImage: 'url(https://picsum.photos/seed/map-' + property.slug + '/800/400)', backgroundSize: 'cover' }} />
+                      <div className="w-full h-full" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop)', backgroundSize: 'cover' }} />
                     </div>
                   </div>
                 </div>

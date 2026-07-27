@@ -532,7 +532,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="relative w-full h-48 rounded-xl bg-muted overflow-hidden">
                       <img
-                        src="https://picsum.photos/seed/nigeria-map/400/300"
+                        src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400&h=300&fit=crop"
                         alt="Geographic distribution"
                         className="h-full w-full object-cover opacity-30"
                       />
@@ -620,7 +620,7 @@ export default function AdminDashboard() {
                               <td className="py-2.5">
                                 <div className="flex items-center gap-2.5">
                                   <img
-                                    src={prop.coverImage || `https://picsum.photos/seed/${prop.slug}/40/28`}
+                                    src={prop.coverImage || `https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=40&h=28&fit=crop`}
                                     alt={prop.title}
                                     className="h-8 w-11 rounded-md object-cover flex-shrink-0"
                                   />

@@ -289,7 +289,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
           <Card className="p-4 gap-0 mb-6">
             <div className="flex items-center gap-3">
               <img
-                src={property.coverImage || `https://picsum.photos/seed/${property.slug}/100/70`}
+                src={property.coverImage || `https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=100&h=70&fit=crop`}
                 alt={property.title}
                 className="h-14 w-20 rounded-lg object-cover"
               />
