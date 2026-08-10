@@ -1,0 +1,633 @@
+    60→  { label: 'Investors CRM', view: 'admin-crm', icon: <Users className="size-4" /> },
+    61→  { label: 'Finance', view: 'admin-finance', icon: <Banknote className="size-4" /> },
+    62→  { label: 'Analytics', view: 'admin-analytics', icon: <BarChart3 className="size-4" /> },
+    63→  { label: 'Support', view: 'admin-support', icon: <HeadphonesIcon className="size-4" /> },
+    64→];
+    65→
+    66→interface DashboardData {
+    67→  assetsUnderManagement: number;
+    68→  capitalRaised: number;
+    69→  fundingProgress: number;
+    70→  revenue: number;
+    71→  platformGrowth: number;
+    72→  investorCount: number;
+    73→  newInvestors: number;
+    74→  activeInvestments: number;
+    75→  avgInvestmentSize: number;
+    76→  totalProperties: number;
+    77→  publishedProperties: number;
+    78→  fundingProperties: number;
+    79→  occupancy: number;
+    80→  vacancy: number;
+    81→  avgYield: number;
+    82→  avgIRR: number;
+    83→  cashPosition: number;
+    84→  pendingDisbursements: number;
+    85→  monthlyOperatingCosts: number;
+    86→  netIncome: number;
+    87→  monthlyGrowth: {
+    88→    month: string;
+    89→    investments: number;
+    90→    investors: number;
+    91→    properties: number;
+    92→    revenue: number;
+    93→  }[];
+    94→  topProperties: {
+    95→    id: string;
+    96→    title: string;
+    97→    slug: string;
+    98→    propertyType: string;
+    99→    city: string;
+   100→    state: string;
+   101→    totalValue: number;
+   102→    fundingTarget: number;
+   103→    fundingRaised: number;
+   104→    fundingProgress: number;
+   105→    rentalYield: number;
+   106→    expectedIRR: number;
+   107→    riskRating: string;
+   108→    status: string;
+   109→    developer: string | null;
+   110→    coverImage: string | null;
+   111→  }[];
+   112→  propertyTypeBreakdown: {
+   113→    type: string;
+   114→    count: number;
+   115→    value: number;
+   116→  }[];
+   117→  geographicBreakdown: {
+   118→    state: string;
+   119→    count: number;
+   120→    value: number;
+   121→  }[];
+   122→}
+   123→
+   124→const PIE_COLORS = ['#10b981', '#f59e0b', '#06b6d4', '#8b5cf6', '#ec4899', '#f97316'];
+   125→
+   126→export default function AdminDashboard() {
+   127→  const { currentView, setView, adminSidebarOpen, toggleAdminSidebar } = useNestStore();
+   128→  const [data, setData] = useState<DashboardData | null>(null);
+   129→  const [loading, setLoading] = useState(true);
+   130→
+   131→  useEffect(() => {
+   132→    async function fetchDashboard() {
+   133→      try {
+   134→        setLoading(true);
+   135→        const res = await fetch('/api/dashboard');
+   136→        const json = await res.json();
+   137→        setData(json);
+   138→      } catch {
+   139→        // silent
+   140→      } finally {
+   141→        setLoading(false);
+   142→      }
+   143→    }
+   144→    fetchDashboard();
+   145→  }, []);
+   146→
+   147→  const handleNav = (view: View) => {
+   148→    setView(view);
+   149→    // Close sidebar on mobile
+   150→    if (window.innerWidth < 1024) {
+   151→      toggleAdminSidebar();
+   152→    }
+   153→  };
+   154→
+   155→  const pieData = data?.propertyTypeBreakdown
+   156→    .filter(p => p.count > 0)
+   157→    .map(p => ({
+   158→      name: getPropertyTypeLabel(p.type),
+   159→      value: p.value,
+   160→    })) || [];
+   161→
+   162→  const barData = data?.propertyTypeBreakdown
+   163→    .filter(p => p.count > 0)
+   164→    .map(p => ({
+   165→      name: getPropertyTypeLabel(p.type),
+   166→      value: p.value,
+   167→      count: p.count,
+   168→    })) || [];
+   169→
+   170→  const renderSidebar = (mobile: boolean) => (
+   171→    <div className={cn(
+   172→      'flex flex-col h-full',
+   173→      mobile && 'pt-4'
+   174→    )}>
+   175→      {/* Logo */}
+   176→      <button onClick={() => setView('browse')} className={cn('flex items-center gap-2.5 px-5 text-left', mobile ? 'mb-6' : 'mb-8 pt-6')}>
+   177→        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-nest-primary">
+   178→          <Home className="size-5 text-white" />
+   179→        </div>
+   180→        <div>
+   181→          <span className="text-base font-bold text-foreground">
+   182→            <span className="text-nest-primary">NEST</span>
+   183→          </span>
+   184→          <p className="text-[10px] text-muted-foreground -mt-0.5">Admin Panel</p>
+   185→        </div>
+   186→        {mobile && (
+   187→          <Button
+   188→            variant="ghost"
+   189→            size="icon"
+   190→            className="ml-auto h-8 w-8"
+   191→            onClick={toggleAdminSidebar}
+   192→          >
+   193→            <ChevronRight className="size-4" />
+   194→          </Button>
+   195→        )}
+   196→      </button>
+   197→
+   198→      <Separator className="opacity-50" />
+   199→
+   200→      {/* Navigation */}
+   201→      <nav className="flex-1 px-3 py-4 space-y-1">
+   202→        {adminNavItems.map((item) => {
+   203→          const isActive = currentView === item.view;
+   204→          return (
+   205→            <button
+   206→              key={item.view}
+   207→              onClick={() => handleNav(item.view)}
+   208→              className={cn(
+   209→                'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all',
+   210→                isActive
+   211→                  ? 'bg-nest-primary/10 text-nest-primary'
+   212→                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+   213→              )}
+   214→            >
+   215→              {item.icon}
+   216→              {item.label}
+   217→              {isActive && (
+   218→                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-nest-primary" />
+   219→              )}
+   220→            </button>
+   221→          );
+   222→        })}
+   223→      </nav>
+   224→
+   225→      <Separator className="opacity-50" />
+   226→
+   227→      {/* Bottom */}
+   228→      <div className="p-4">
+   229→        <Card className="p-3 gap-0 bg-nest-primary/5 border-nest-primary/20">
+   230→          <div className="flex items-center gap-2 mb-1">
+   231→            <Sparkles className="size-3.5 text-nest-primary" />
+   232→            <span className="text-xs font-semibold text-nest-primary">Platform Status</span>
+   233→          </div>
+   234→          <div className="flex items-center gap-1.5">
+   235→            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+   236→            <span className="text-xs text-muted-foreground">All systems operational</span>
+   237→          </div>
+   238→        </Card>
+   239→      </div>
+   240→    </div>
+   241→  );
+   242→
+   243→  return (
+   244→    <div className="min-h-screen">
+   245→      {/* Desktop Sidebar */}
+   246→      <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-[260px] lg:flex-col bg-card border-r border-border z-40">
+   247→        {renderSidebar(false)}
+   248→      </aside>
+   249→
+   250→      {/* Mobile Sidebar Overlay */}
+   251→      <AnimatePresence>
+   252→        {adminSidebarOpen && (
+   253→          <>
+   254→            <motion.div
+   255→              initial={{ opacity: 0 }}
+   256→              animate={{ opacity: 1 }}
+   257→              exit={{ opacity: 0 }}
+   258→              className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+   259→              onClick={toggleAdminSidebar}
+   260→            />
+   261→            <motion.aside
+   262→              initial={{ x: -260 }}
+   263→              animate={{ x: 0 }}
+   264→              exit={{ x: -260 }}
+   265→              transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
+   266→              className="fixed inset-y-0 left-0 z-50 w-[260px] bg-card border-r border-border lg:hidden"
+   267→            >
+   268→              {renderSidebar(true)}
+   269→            </motion.aside>
+   270→          </>
+   271→        )}
+   272→      </AnimatePresence>
+   273→
+   274→      {/* Main Content */}
+   275→      <main className="lg:pl-[260px]">
+   276→        <div className="p-4 sm:p-6 lg:p-8">
+   277→          {/* Top Bar */}
+   278→          <motion.div
+   279→            initial={{ opacity: 0, y: -10 }}
+   280→            animate={{ opacity: 1, y: 0 }}
+   281→            className="flex items-center justify-between mb-6"
+   282→          >
+   283→            <div className="flex items-center gap-3">
+   284→              <Button
+   285→                variant="ghost"
+   286→                size="icon"
+   287→                className="lg:hidden"
+   288→                onClick={toggleAdminSidebar}
+   289→              >
+   290→                <ChevronLeft className="size-5" />
+   291→              </Button>
+   292→              <div>
+   293→                <h1 className="text-xl sm:text-2xl font-bold">
+   294→                  {adminNavItems.find(i => i.view === currentView)?.label || 'Dashboard'}
+   295→                </h1>
+   296→                <p className="text-xs text-muted-foreground">
+   297→                  {currentView === 'admin' ? 'Platform overview and key metrics' : 'Manage your platform'}
+   298→                </p>
+   299→              </div>
+   300→            </div>
+   301→            <Badge variant="secondary" className="hidden sm:flex items-center gap-1.5 bg-nest-primary/10 text-nest-primary">
+   302→              <Activity className="size-3" />
+   303→              Live
+   304→            </Badge>
+   305→          </motion.div>
+   306→
+   307→          {currentView === 'admin' && (
+   308→            <div className="space-y-6">
+   309→              {/* KPI Cards */}
+   310→              {loading ? (
+   311→                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+   312→                  {Array.from({ length: 4 }).map((_, i) => (
+   313→                    <Skeleton key={i} className="h-32 rounded-xl" />
+   314→                  ))}
+   315→                </div>
+   316→              ) : (
+   317→                <motion.div
+   318→                  initial={{ opacity: 0, y: 20 }}
+   319→                  animate={{ opacity: 1, y: 0 }}
+   320→                  transition={{ delay: 0.1 }}
+   321→                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"
+   322→                >
+   323→                  {[
+   324→                    {
+   325→                      label: 'Assets Under Management',
+   326→                      value: formatNairaFull(data?.assetsUnderManagement || 0),
+   327→                      change: `+${data?.platformGrowth || 0}%`,
+   328→                      icon: <Wallet className="size-4" />,
+   329→                      color: 'text-nest-primary',
+   330→                      bg: 'from-nest-primary/5 to-transparent',
+   331→                    },
+   332→                    {
+   333→                      label: 'Capital Raised',
+   334→                      value: formatNairaFull(data?.capitalRaised || 0),
+   335→                      change: `${data?.fundingProgress || 0}% funded`,
+   336→                      icon: <DollarSign className="size-4" />,
+   337→                      color: 'text-nest-primary',
+   338→                      bg: 'from-nest-primary/5 to-transparent',
+   339→                    },
+   340→                    {
+   341→                      label: 'Revenue',
+   342→                      value: formatNairaFull(data?.revenue || 0),
+   343→                      change: `Net: ${formatNairaFull(data?.netIncome || 0)}`,
+   344→                      icon: <TrendingUp className="size-4" />,
+   345→                      color: 'text-nest-accent',
+   346→                      bg: 'from-nest-accent/5 to-transparent',
+   347→                    },
+   348→                    {
+   349→                      label: 'Active Investors',
+   350→                      value: (data?.investorCount || 0).toLocaleString(),
+   351→                      change: `+${data?.newInvestors || 0} this month`,
+   352→                      icon: <Users className="size-4" />,
+   353→                      color: 'text-nest-primary',
+   354→                      bg: 'from-nest-primary/5 to-transparent',
+   355→                    },
+   356→                  ].map((kpi) => (
+   357→                    <Card key={kpi.label} className={cn('p-4 gap-0 bg-gradient-to-br', kpi.bg)}>
+   358→                      <div className="flex items-center justify-between mb-2">
+   359→                        <span className="text-xs text-muted-foreground">{kpi.label}</span>
+   360→                        <div className={cn('flex h-7 w-7 items-center justify-center rounded-lg bg-background/80', kpi.color)}>
+   361→                          {kpi.icon}
+   362→                        </div>
+   363→                      </div>
+   364→                      <p className="text-xl font-bold">{kpi.value}</p>
+   365→                      <p className={cn('text-xs mt-1', kpi.color)}>{kpi.change}</p>
+   366→                    </Card>
+   367→                  ))}
+   368→                </motion.div>
+   369→              )}
+   370→
+   371→              {/* Secondary KPIs */}
+   372→              {!loading && data && (
+   373→                <motion.div
+   374→                  initial={{ opacity: 0, y: 20 }}
+   375→                  animate={{ opacity: 1, y: 0 }}
+   376→                  transition={{ delay: 0.15 }}
+   377→                  className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
+   378→                >
+   379→                  {[
+   380→                    { label: 'Properties', value: String(data.totalProperties) },
+   381→                    { label: 'Active Deals', value: String(data.fundingProperties) },
+   382→                    { label: 'Avg Yield', value: formatPercent(data.avgYield) },
+   383→                    { label: 'Avg IRR', value: formatPercent(data.avgIRR) },
+   384→                    { label: 'Occupancy', value: `${data.occupancy}%` },
+   385→                    { label: 'Cash Position', value: formatNaira(data.cashPosition) },
+   386→                  ].map((stat) => (
+   387→                    <Card key={stat.label} className="p-3 gap-0">
+   388→                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+   389→                      <p className="text-base font-bold mt-0.5">{stat.value}</p>
+   390→                    </Card>
+   391→                  ))}
+   392→                </motion.div>
+   393→              )}
+   394→
+   395→              {/* Charts Row */}
+   396→              <div className="grid lg:grid-cols-2 gap-6">
+   397→                {/* Platform Growth */}
+   398→                <motion.div
+   399→                  initial={{ opacity: 0, y: 20 }}
+   400→                  animate={{ opacity: 1, y: 0 }}
+   401→                  transition={{ delay: 0.2 }}
+   402→                >
+   403→                  <Card className="p-5 gap-4">
+   404→                    <div className="flex items-center justify-between">
+   405→                      <div>
+   406→                        <h3 className="text-sm font-semibold">Platform Growth</h3>
+   407→                        <p className="text-xs text-muted-foreground">Investments & revenue over time</p>
+   408→                      </div>
+   409→                      <Badge variant="secondary" className="text-xs bg-nest-primary/10 text-nest-primary">
+   410→                        <TrendingUp className="size-3 mr-1" />
+   411→                        +{data?.platformGrowth || 0}%
+   412→                      </Badge>
+   413→                    </div>
+   414→                    <div className="h-64">
+   415→                      <ResponsiveContainer width="100%" height="100%">
+   416→                        <AreaChart data={data?.monthlyGrowth || []} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+   417→                          <defs>
+   418→                            <linearGradient id="adminGrad" x1="0" y1="0" x2="0" y2="1">
+   419→                              <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+   420→                              <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+   421→                            </linearGradient>
+   422→                          </defs>
+   423→                          <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.85 0 0 / 0.3)" />
+   424→                          <XAxis
+   425→                            dataKey="month"
+   426→                            tick={{ fontSize: 10, fill: 'oklch(0.5 0.02 40)' }}
+   427→                            axisLine={false}
+   428→                            tickLine={false}
+   429→                          />
+   430→                          <YAxis
+   431→                            tick={{ fontSize: 10, fill: 'oklch(0.5 0.02 40)' }}
+   432→                            axisLine={false}
+   433→                            tickLine={false}
+   434→                            tickFormatter={(v) => formatNaira(v)}
+   435→                          />
+   436→                          <Tooltip
+   437→                            contentStyle={{
+   438→                              backgroundColor: 'oklch(1 0 0)',
+   439→                              border: '1px solid oklch(0.91 0.005 90)',
+   440→                              borderRadius: '8px',
+   441→                              fontSize: '12px',
+   442→                            }}
+   443→                            formatter={(value: number, name: string) => [
+   444→                              name === 'investments' ? formatNairaFull(value) : value,
+   445→                              name === 'investments' ? 'Investments' : 'Revenue',
+   446→                            ]}
+   447→                          />
+   448→                          <Area
+   449→                            type="monotone"
+   450→                            dataKey="investments"
+   451→                            stroke="#10b981"
+   452→                            strokeWidth={2}
+   453→                            fill="url(#adminGrad)"
+   454→                          />
+   455→                          <Area
+   456→                            type="monotone"
+   457→                            dataKey="revenue"
+   458→                            stroke="#f59e0b"
+   459→                            strokeWidth={2}
+   460→                            fill="none"
+   461→                            strokeDasharray="4 4"
+   462→                          />
+   463→                        </AreaChart>
+   464→                      </ResponsiveContainer>
+   465→                    </div>
+   466→                  </Card>
+   467→                </motion.div>
+   468→
+   469→                {/* Funding by Property Type */}
+   470→                <motion.div
+   471→                  initial={{ opacity: 0, y: 20 }}
+   472→                  animate={{ opacity: 1, y: 0 }}
+   473→                  transition={{ delay: 0.25 }}
+   474→                >
+   475→                  <Card className="p-5 gap-4">
+   476→                    <div>
+   477→                      <h3 className="text-sm font-semibold">Funding by Property Type</h3>
+   478→                      <p className="text-xs text-muted-foreground">Distribution of total value</p>
+   479→                    </div>
+   480→                    <div className="h-64">
+   481→                      <ResponsiveContainer width="100%" height="100%">
+   482→                        <BarChart data={barData} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+   483→                          <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.85 0 0 / 0.3)" />
+   484→                          <XAxis
+   485→                            dataKey="name"
+   486→                            tick={{ fontSize: 10, fill: 'oklch(0.5 0.02 40)' }}
+   487→                            axisLine={false}
+   488→                            tickLine={false}
+   489→                          />
+   490→                          <YAxis
+   491→                            tick={{ fontSize: 10, fill: 'oklch(0.5 0.02 40)' }}
+   492→                            axisLine={false}
+   493→                            tickLine={false}
+   494→                            tickFormatter={(v) => formatNaira(v)}
+   495→                          />
+   496→                          <Tooltip
+   497→                            contentStyle={{
+   498→                              backgroundColor: 'oklch(1 0 0)',
+   499→                              border: '1px solid oklch(0.91 0.005 90)',
+   500→                              borderRadius: '8px',
+   501→                              fontSize: '12px',
+   502→                            }}
+   503→                            formatter={(value: number) => [formatNairaFull(value), 'Total Value']}
+   504→                          />
+   505→                          <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+   506→                            {barData.map((_, i) => (
+   507→                              <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+   508→                            ))}
+   509→                          </Bar>
+   510→                        </BarChart>
+   511→                      </ResponsiveContainer>
+   512→                    </div>
+   513→                  </Card>
+   514→                </motion.div>
+   515→              </div>
+   516→
+   517→              {/* Geographic + Table */}
+   518→              <div className="grid lg:grid-cols-3 gap-6">
+   519→                {/* Map Placeholder */}
+   520→                <motion.div
+   521→                  initial={{ opacity: 0, y: 20 }}
+   522→                  animate={{ opacity: 1, y: 0 }}
+   523→                  transition={{ delay: 0.3 }}
+   524→                >
+   525→                  <Card className="p-5 gap-4 h-full">
+   526→                    <div className="flex items-center justify-between">
+   527→                      <div>
+   528→                        <h3 className="text-sm font-semibold">Geographic Distribution</h3>
+   529→                        <p className="text-xs text-muted-foreground">Investments by state</p>
+   530→                      </div>
+   531→                      <Globe className="size-4 text-muted-foreground" />
+   532→                    </div>
+   533→                    <div className="relative w-full h-48 rounded-xl bg-muted overflow-hidden">
+   534→                      <img
+   535→                        src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400&h=300&fit=crop"
+   536→                        alt="Geographic distribution"
+   537→                        className="h-full w-full object-cover opacity-30"
+   538→                      />
+   539→                      <div className="absolute inset-0 flex items-center justify-center">
+   540→                        <div className="text-center">
+   541→                          <MapPin className="size-6 text-nest-primary mx-auto mb-2" />
+   542→                          {(data?.geographicBreakdown || []).map((geo) => (
+   543→                            <div key={geo.state} className="flex items-center justify-center gap-2 text-xs mb-1">
+   544→                              <div className="h-2 w-2 rounded-full bg-nest-primary" />
+   545→                              <span className="font-medium">{geo.state}</span>
+   546→                              <span className="text-muted-foreground">({geo.count} properties)</span>
+   547→                            </div>
+   548→                          ))}
+   549→                        </div>
+   550→                      </div>
+   551→                    </div>
+   552→                    {/* Allocation Pie */}
+   553→                    <div className="h-44">
+   554→                      <ResponsiveContainer width="100%" height="100%">
+   555→                        <PieChart>
+   556→                          <Pie
+   557→                            data={data?.geographicBreakdown.map(g => ({ name: g.state, value: g.value })) || []}
+   558→                            cx="50%"
+   559→                            cy="50%"
+   560→                            innerRadius={35}
+   561→                            outerRadius={60}
+   562→                            paddingAngle={3}
+   563→                            dataKey="value"
+   564→                          >
+   565→                            {(data?.geographicBreakdown || []).map((_, i) => (
+   566→                              <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+   567→                            ))}
+   568→                          </Pie>
+   569→                          <Tooltip
+   570→                            contentStyle={{
+   571→                              backgroundColor: 'oklch(1 0 0)',
+   572→                              border: '1px solid oklch(0.91 0.005 90)',
+   573→                              borderRadius: '8px',
+   574→                              fontSize: '12px',
+   575→                            }}
+   576→                            formatter={(value: number) => [formatNairaFull(value), '']}
+   577→                          />
+   578→                          <Legend
+   579→                            verticalAlign="bottom"
+   580→                            iconType="circle"
+   581→                            iconSize={8}
+   582→                            formatter={(value: string) => (
+   583→                              <span className="text-xs text-muted-foreground">{value}</span>
+   584→                            )}
+   585→                          />
+   586→                        </PieChart>
+   587→                      </ResponsiveContainer>
+   588→                    </div>
+   589→                  </Card>
+   590→                </motion.div>
+   591→
+   592→                {/* Top Properties Table */}
+   593→                <motion.div
+   594→                  initial={{ opacity: 0, y: 20 }}
+   595→                  animate={{ opacity: 1, y: 0 }}
+   596→                  transition={{ delay: 0.35 }}
+   597→                  className="lg:col-span-2"
+   598→                >
+   599→                  <Card className="p-5 gap-0">
+   600→                    <div className="flex items-center justify-between mb-4">
+   601→                      <div>
+   602→                        <h3 className="text-sm font-semibold">Top Performing Properties</h3>
+   603→                        <p className="text-xs text-muted-foreground">By funding raised</p>
+   604→                      </div>
+   605→                    </div>
+   606→                    <div className="overflow-x-auto">
+   607→                      <table className="w-full text-sm">
+   608→                        <thead>
+   609→                          <tr className="border-b border-border">
+   610→                            <th className="text-left py-2.5 text-xs text-muted-foreground font-medium">Property</th>
+   611→                            <th className="text-right py-2.5 text-xs text-muted-foreground font-medium">Funding</th>
+   612→                            <th className="text-right py-2.5 text-xs text-muted-foreground font-medium">Yield</th>
+   613→                            <th className="text-right py-2.5 text-xs text-muted-foreground font-medium">IRR</th>
+   614→                            <th className="text-right py-2.5 text-xs text-muted-foreground font-medium">Progress</th>
+   615→                          </tr>
+   616→                        </thead>
+   617→                        <tbody>
+   618→                          {(data?.topProperties || []).slice(0, 5).map((prop) => (
+   619→                            <tr key={prop.id} className="border-b border-border/50 last:border-0 hover:bg-muted/30">
+   620→                              <td className="py-2.5">
+   621→                                <div className="flex items-center gap-2.5">
+   622→                                  <img
+   623→                                    src={prop.coverImage || `https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=40&h=28&fit=crop`}
+   624→                                    alt={prop.title}
+   625→                                    className="h-8 w-11 rounded-md object-cover flex-shrink-0"
+   626→                                  />
+   627→                                  <div className="min-w-0">
+   628→                                    <p className="font-medium text-xs truncate max-w-[150px]">{prop.title}</p>
+   629→                                    <p className="text-[10px] text-muted-foreground">{prop.city}</p>
+   630→                                  </div>
+   631→                                </div>
+   632→                              </td>
+   633→                              <td className="text-right py-2.5 text-xs font-medium">{formatNairaFull(prop.fundingRaised)}</td>
+   634→                              <td className="text-right py-2.5 text-xs font-medium text-nest-primary">
+   635→                                {formatPercent(prop.rentalYield)}
+   636→                              </td>
+   637→                              <td className="text-right py-2.5 text-xs font-medium">{formatPercent(prop.expectedIRR)}</td>
+   638→                              <td className="text-right py-2.5">
+   639→                                <div className="flex items-center justify-end gap-2">
+   640→                                  <div className="w-12 h-1.5 rounded-full bg-muted overflow-hidden">
+   641→                                    <div
+   642→                                      className="h-full rounded-full bg-nest-primary"
+   643→                                      style={{ width: `${prop.fundingProgress}%` }}
+   644→                                    />
+   645→                                  </div>
+   646→                                  <span className="text-[10px] text-muted-foreground w-8 text-right">{prop.fundingProgress}%</span>
+   647→                                </div>
+   648→                              </td>
+   649→                            </tr>
+   650→                          ))}
+   651→                        </tbody>
+   652→                      </table>
+   653→                    </div>
+   654→                  </Card>
+   655→                </motion.div>
+   656→              </div>
+   657→            </div>
+   658→          )}
+   659→
+   660→          {/* Placeholder for non-overview admin views */}
+   661→          {currentView !== 'admin' && (
+   662→            <motion.div
+   663→              initial={{ opacity: 0, y: 20 }}
+   664→              animate={{ opacity: 1, y: 0 }}
+   665→              className="flex items-center justify-center py-20"
+   666→            >
+   667→              <div className="text-center">
+   668→                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-nest-primary/10 mx-auto mb-4">
+   669→                  {adminNavItems.find(i => i.view === currentView)?.icon && (
+   670→                    <span className="text-nest-primary">
+   671→                      {adminNavItems.find(i => i.view === currentView)?.icon}
+   672→                    </span>
+   673→                  )}
+   674→                </div>
+   675→                <h2 className="text-lg font-semibold mb-1">
+   676→                  {adminNavItems.find(i => i.view === currentView)?.label}
+   677→                </h2>
+   678→                <p className="text-sm text-muted-foreground mb-4">
+   679→                  This section is coming soon. Stay tuned for updates.
+   680→                </p>
+   681→                <Button variant="outline" onClick={() => setView('admin')}>
+   682→                  Back to Overview
+   683→                </Button>
+   684→              </div>
+   685→            </motion.div>
+   686→          )}
+   687→        </div>
+   688→      </main>
+   689→    </div>
+   690→  );
+   691→}
+   692→

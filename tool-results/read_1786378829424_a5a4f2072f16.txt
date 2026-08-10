@@ -1,0 +1,662 @@
+     1→'use client';
+     2→
+     3→import { useEffect, useState } from 'react';
+     4→import { motion, AnimatePresence } from 'framer-motion';
+     5→import {
+     6→  ArrowLeft,
+     7→  MapPin,
+     8→  Building2,
+     9→  TrendingUp,
+    10→  Clock,
+    11→  Shield,
+    12→  BadgeCheck,
+    13→  Users,
+    14→  Download,
+    15→  ChevronRight,
+    16→  CheckCircle2,
+    17→  FileText,
+    18→  BarChart3,
+    19→  Info,
+    20→  CalendarDays,
+    21→  Target,
+    22→  Percent,
+    23→  Timer,
+    24→  Star,
+    25→  Phone,
+    26→  Mail,
+    27→} from 'lucide-react';
+    28→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+    29→import { Badge } from '@/components/ui/badge';
+    30→import { Button } from '@/components/ui/button';
+    31→import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+    32→import { Separator } from '@/components/ui/separator';
+    33→import { Progress } from '@/components/ui/progress';
+    34→import { Skeleton } from '@/components/ui/skeleton';
+    35→import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+    36→import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+    37→import { useNestStore } from '@/lib/nest-store';
+    38→import {
+    39→  formatNaira,
+    40→  formatNairaFull,
+    41→  formatPercent,
+    42→  getRiskColor,
+    43→  getRiskBg,
+    44→  getPropertyTypeLabel,
+    45→  getStatusColor,
+    46→  cn,
+    47→} from '@/lib/nest-utils';
+    48→import PropertyCard, { type PropertyCardData } from './PropertyCard';
+    49→
+    50→interface PropertyDetail {
+    51→  id: string;
+    52→  slug: string;
+    53→  title: string;
+    54→  description: string;
+    55→  shortDescription?: string;
+    56→  propertyType: string;
+    57→  status: string;
+    58→  address: string;
+    59→  city: string;
+    60→  state: string;
+    61→  country: string;
+    62→  totalUnits?: number;
+    63→  totalValue: number;
+    64→  minInvestment: number;
+    65→  maxInvestment?: number;
+    66→  fundingTarget: number;
+    67→  fundingRaised: number;
+    68→  rentalYield?: number;
+    69→  expectedIRR?: number;
+    70→  riskRating: string;
+    71→  investmentTimeline?: string;
+    72→  completionDate?: string;
+    73→  images: string[];
+    74→  coverImage?: string;
+    75→  featured: boolean;
+    76→  trending: boolean;
+    77→  fundingProgress: number;
+    78→  fundingRemaining: number;
+    79→  developer: {
+    80→    id: string;
+    81→    companyName: string;
+    82→    registrationNo?: string;
+    83→    website?: string;
+    84→    description?: string;
+    85→    logo?: string;
+    86→    hqAddress?: string;
+    87→    foundedYear?: number;
+    88→    totalProjects: number;
+    89→    totalFunding: number;
+    90→    isVerified: boolean;
+    91→    rating: number;
+    92→  } | null;
+    93→  propertyManager: {
+    94→    id: string;
+    95→    companyName: string;
+    96→    licenseNo?: string;
+    97→    description?: string;
+    98→    logo?: string;
+    99→    phone?: string;
+   100→    email?: string;
+   101→    managedCount: number;
+   102→    rating: number;
+   103→    isVerified: boolean;
+   104→  } | null;
+   105→  opportunity: {
+   106→    id: string;
+   107→    investmentMemo?: string;
+   108→    financialSummary: {
+   109→      projectedAnnualReturn?: number;
+   110→      breakEvenPeriod?: string;
+   111→      exitStrategy?: string;
+   112→    } | null;
+   113→    fundingStartDate: string;
+   114→    fundingEndDate?: string;
+   115→    minInvestment: number;
+   116→    maxInvestment?: number;
+   117→    maxInvestors?: number;
+   118→    currentInvestors: number;
+   119→    spvName?: string;
+   120→    faq: { question: string; answer: string }[] | null;
+   121→  } | null;
+   122→  documents: {
+   123→    id: string;
+   124→    title: string;
+   125→    type: string;
+   126→    fileUrl: string;
+   127→    fileSize?: number;
+   128→  }[];
+   129→  similarProperties: PropertyCardData[];
+   130→}
+   131→
+   132→export default function PropertyDetailView() {
+   133→  const { selectedPropertySlug, setView, selectProperty } = useNestStore();
+   134→  const [property, setProperty] = useState<PropertyDetail | null>(null);
+   135→  const [loading, setLoading] = useState(true);
+   136→  const [selectedImage, setSelectedImage] = useState(0);
+   137→  const [activeTab, setActiveTab] = useState('overview');
+   138→
+   139→  useEffect(() => {
+   140→    if (!selectedPropertySlug) return;
+   141→    async function fetchProperty() {
+   142→      try {
+   143→        setLoading(true);
+   144→        setSelectedImage(0);
+   145→        const res = await fetch(`/api/properties/${selectedPropertySlug}`);
+   146→        const data = await res.json();
+   147→        setProperty(data.property || null);
+   148→      } catch {
+   149→        // silent
+   150→      } finally {
+   151→        setLoading(false);
+   152→      }
+   153→    }
+   154→    fetchProperty();
+   155→  }, [selectedPropertySlug]);
+   156→
+   157→  const handleBack = () => {
+   158→    selectProperty(null);
+   159→    setView('browse');
+   160→  };
+   161→
+   162→  const handleInvest = () => {
+   163→    setView('invest');
+   164→  };
+   165→
+   166→  const handlePropertyClick = (slug: string) => {
+   167→    selectProperty(slug);
+   168→    window.scrollTo({ top: 0, behavior: 'smooth' });
+   169→  };
+   170→
+   171→  if (!selectedPropertySlug) return null;
+   172→
+   173→  if (loading) {
+   174→    return (
+   175→      <div className="min-h-screen pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+   176→        <Skeleton className="h-10 w-32 mb-8" />
+   177→        <div className="grid lg:grid-cols-5 gap-8">
+   178→          <div className="lg:col-span-3 space-y-4">
+   179→            <Skeleton className="aspect-[16/10] w-full rounded-xl" />
+   180→            <Skeleton className="h-8 w-3/4" />
+   181→            <Skeleton className="h-4 w-1/2" />
+   182→          </div>
+   183→          <div className="lg:col-span-2 space-y-4">
+   184→            <Skeleton className="h-40 rounded-xl" />
+   185→            <Skeleton className="h-20 rounded-xl" />
+   186→            <Skeleton className="h-12 rounded-xl" />
+   187→          </div>
+   188→        </div>
+   189→      </div>
+   190→    );
+   191→  }
+   192→
+   193→  if (!property) {
+   194→    return (
+   195→      <div className="min-h-screen flex items-center justify-center">
+   196→        <div className="text-center">
+   197→          <h2 className="text-xl font-semibold mb-2">Property not found</h2>
+   198→          <Button variant="outline" onClick={handleBack}>Back to Browse</Button>
+   199→        </div>
+   200→      </div>
+   201→    );
+   202→  }
+   203→
+   204→  const images = property.images.length > 0
+   205→    ? property.images
+   206→    : [
+   207→        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=500&fit=crop',
+   208→        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=500&fit=crop',
+   209→        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=500&fit=crop',
+   210→        'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&h=500&fit=crop',
+   211→        'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&h=500&fit=crop',
+   212→      ];
+   213→
+   214→  const financialData = property.opportunity?.financialSummary;
+   215→  const faqItems = property.opportunity?.faq || [];
+   216→
+   217→  const timelineSteps = [
+   218→    { label: 'Project Announced', date: property.opportunity?.fundingStartDate ? new Date(property.opportunity.fundingStartDate).toLocaleDateString('en-NG', { month: 'short', year: 'numeric' }) : 'Q1 2024', icon: <FileText className="size-4" />, done: true },
+   219→    { label: 'Funding Open', date: property.opportunity?.fundingStartDate ? new Date(property.opportunity.fundingStartDate).toLocaleDateString('en-NG', { month: 'short', year: 'numeric' }) : 'Q2 2024', icon: <BarChart3 className="size-4" />, done: property.status === 'funding' },
+   220→    { label: 'Funding Goal', date: 'Q3 2024', icon: <Target className="size-4" />, done: property.fundingProgress >= 100 },
+   221→    { label: 'Construction / Acquisition', date: property.investmentTimeline || 'Q4 2024', icon: <Building2 className="size-4" />, done: false },
+   222→    { label: 'Returns Start', date: 'Q1 2025', icon: <TrendingUp className="size-4" />, done: false },
+   223→  ];
+   224→
+   225→  return (
+   226→    <div className="min-h-screen pt-20 pb-24">
+   227→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   228→        {/* Back Button */}
+   229→        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="pt-4 mb-6">
+   230→          <Button variant="ghost" size="sm" onClick={handleBack} className="gap-1.5">
+   231→            <ArrowLeft className="size-4" />
+   232→            Back to Properties
+   233→          </Button>
+   234→        </motion.div>
+   235→
+   236→        <div className="grid lg:grid-cols-5 gap-8">
+   237→          {/* ─── MAIN CONTENT ─── */}
+   238→          <motion.div
+   239→            initial={{ opacity: 0, y: 20 }}
+   240→            animate={{ opacity: 1, y: 0 }}
+   241→            className="lg:col-span-3 space-y-6"
+   242→          >
+   243→            {/* Image Gallery */}
+   244→            <div className="space-y-3">
+   245→              <div className="relative overflow-hidden rounded-xl aspect-[16/10]">
+   246→                <AnimatePresence mode="wait">
+   247→                  <motion.img
+   248→                    key={selectedImage}
+   249→                    initial={{ opacity: 0 }}
+   250→                    animate={{ opacity: 1 }}
+   251→                    exit={{ opacity: 0 }}
+   252→                    transition={{ duration: 0.3 }}
+   253→                    src={images[selectedImage]}
+   254→                    alt={`${property.title} - Image ${selectedImage + 1}`}
+   255→                    className="h-full w-full object-cover"
+   256→                  />
+   257→                </AnimatePresence>
+   258→              </div>
+   259→              <ScrollArea className="w-full">
+   260→                <div className="flex gap-2 pb-2">
+   261→                  {images.slice(0, 6).map((img, i) => (
+   262→                    <button
+   263→                      key={i}
+   264→                      onClick={() => setSelectedImage(i)}
+   265→                      className={cn(
+   266→                        'flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all',
+   267→                        selectedImage === i ? 'border-nest-primary shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
+   268→                      )}
+   269→                    >
+   270→                      <img src={img} alt="" className="h-full w-full object-cover" />
+   271→                    </button>
+   272→                  ))}
+   273→                </div>
+   274→                <ScrollBar orientation="horizontal" />
+   275→              </ScrollArea>
+   276→            </div>
+   277→
+   278→            {/* Title & Badges */}
+   279→            <div>
+   280→              <div className="flex flex-wrap gap-2 mb-3">
+   281→                <Badge className={getStatusColor(property.status)} variant="secondary">
+   282→                  {property.status === 'funding' ? 'Funding' : property.status}
+   283→                </Badge>
+   284→                <Badge variant="secondary" className="bg-nest-primary/10 text-nest-primary border-nest-primary/20">
+   285→                  {getPropertyTypeLabel(property.propertyType)}
+   286→                </Badge>
+   287→                <Badge variant="secondary" className={getRiskBg(property.riskRating)}>
+   288→                  {property.riskRating.charAt(0).toUpperCase() + property.riskRating.slice(1)} Risk
+   289→                </Badge>
+   290→              </div>
+   291→              <h1 className="text-2xl sm:text-3xl font-bold mb-2">{property.title}</h1>
+   292→              <div className="flex items-center gap-2 text-muted-foreground">
+   293→                <MapPin className="size-4" />
+   294→                <span className="text-sm">{property.address}, {property.city}, {property.state}, {property.country}</span>
+   295→              </div>
+   296→            </div>
+   297→
+   298→            {/* Tabs */}
+   299→            <Tabs value={activeTab} onValueChange={setActiveTab}>
+   300→              <TabsList className="w-full justify-start">
+   301→                <TabsTrigger value="overview" className="gap-1.5">
+   302→                  <Info className="size-3.5" />
+   303→                  Overview
+   304→                </TabsTrigger>
+   305→                <TabsTrigger value="financials" className="gap-1.5">
+   306→                  <BarChart3 className="size-3.5" />
+   307→                  Financials
+   308→                </TabsTrigger>
+   309→                <TabsTrigger value="documents" className="gap-1.5">
+   310→                  <FileText className="size-3.5" />
+   311→                  Documents
+   312→                </TabsTrigger>
+   313→                <TabsTrigger value="faq" className="gap-1.5">
+   314→                  <Info className="size-3.5" />
+   315→                  FAQ
+   316→                </TabsTrigger>
+   317→              </TabsList>
+   318→
+   319→              {/* ── Overview Tab ── */}
+   320→              <TabsContent value="overview" className="space-y-6">
+   321→                <div>
+   322→                  <h3 className="text-lg font-semibold mb-2">About This Property</h3>
+   323→                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+   324→                    {property.description}
+   325→                  </p>
+   326→                </div>
+   327→
+   328→                {/* Key Metrics Grid */}
+   329→                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+   330→                  {[
+   331→                    { icon: <Building2 className="size-4 text-nest-primary" />, label: 'Total Value', value: formatNairaFull(property.totalValue) },
+   332→                    { icon: <Target className="size-4 text-nest-primary" />, label: 'Min Investment', value: formatNairaFull(property.minInvestment) },
+   333→                    { icon: <Percent className="size-4 text-nest-primary" />, label: 'Rental Yield', value: property.rentalYield != null ? formatPercent(property.rentalYield) : '—' },
+   334→                    { icon: <TrendingUp className="size-4 text-nest-primary" />, label: 'Expected IRR', value: property.expectedIRR != null ? formatPercent(property.expectedIRR) : '—' },
+   335→                    { icon: <Shield className="size-4" />, label: 'Risk Rating', value: property.riskRating.charAt(0).toUpperCase() + property.riskRating.slice(1), valueClass: getRiskColor(property.riskRating) },
+   336→                    { icon: <Timer className="size-4 text-nest-primary" />, label: 'Timeline', value: property.investmentTimeline || '18 months' },
+   337→                  ].map((metric) => (
+   338→                    <Card key={metric.label} className="p-4 gap-0">
+   339→                      <div className="flex items-center gap-2 mb-2">
+   340→                        {metric.icon}
+   341→                        <span className="text-xs text-muted-foreground">{metric.label}</span>
+   342→                      </div>
+   343→                      <p className={cn('text-base font-bold', metric.valueClass)}>{metric.value}</p>
+   344→                    </Card>
+   345→                  ))}
+   346→                </div>
+   347→
+   348→                {/* Developer */}
+   349→                {property.developer && (
+   350→                  <Card className="p-4 gap-0">
+   351→                    <h3 className="text-sm font-semibold mb-3">Developer</h3>
+   352→                    <div className="flex items-start gap-3">
+   353→                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-nest-primary/10 text-nest-primary font-bold text-lg">
+   354→                        {property.developer.companyName.charAt(0)}
+   355→                      </div>
+   356→                      <div className="flex-1 min-w-0">
+   357→                        <div className="flex items-center gap-1.5">
+   358→                          <p className="font-semibold text-sm">{property.developer.companyName}</p>
+   359→                          {property.developer.isVerified && <BadgeCheck className="size-4 text-nest-primary" />}
+   360→                        </div>
+   361→                        <p className="text-xs text-muted-foreground mt-0.5">
+   362→                          {property.developer.totalProjects} projects · ₦{((property.developer.totalFunding || 0) / 1e6).toFixed(0)}M raised
+   363→                        </p>
+   364→                        {property.developer.rating > 0 && (
+   365→                          <div className="flex items-center gap-1 mt-1">
+   366→                            <Star className="size-3 fill-nest-accent text-nest-accent" />
+   367→                            <span className="text-xs font-medium">{property.developer.rating.toFixed(1)}</span>
+   368→                          </div>
+   369→                        )}
+   370→                      </div>
+   371→                    </div>
+   372→                  </Card>
+   373→                )}
+   374→
+   375→                {/* Property Manager */}
+   376→                {property.propertyManager && (
+   377→                  <Card className="p-4 gap-0">
+   378→                    <h3 className="text-sm font-semibold mb-3">Property Manager</h3>
+   379→                    <div className="flex items-start gap-3">
+   380→                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-nest-accent/10 text-nest-accent font-bold text-lg">
+   381→                        {property.propertyManager.companyName.charAt(0)}
+   382→                      </div>
+   383→                      <div className="flex-1 min-w-0">
+   384→                        <div className="flex items-center gap-1.5">
+   385→                          <p className="font-semibold text-sm">{property.propertyManager.companyName}</p>
+   386→                          {property.propertyManager.isVerified && <BadgeCheck className="size-4 text-nest-primary" />}
+   387→                        </div>
+   388→                        <p className="text-xs text-muted-foreground mt-0.5">
+   389→                          {property.propertyManager.managedCount} properties managed
+   390→                        </p>
+   391→                        <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+   392→                          {property.propertyManager.email && (
+   393→                            <span className="flex items-center gap-1"><Mail className="size-3" />{property.propertyManager.email}</span>
+   394→                          )}
+   395→                          {property.propertyManager.phone && (
+   396→                            <span className="flex items-center gap-1"><Phone className="size-3" />{property.propertyManager.phone}</span>
+   397→                          )}
+   398→                        </div>
+   399→                      </div>
+   400→                    </div>
+   401→                  </Card>
+   402→                )}
+   403→
+   404→                {/* Location Placeholder Map */}
+   405→                <div>
+   406→                  <h3 className="text-sm font-semibold mb-3">Location</h3>
+   407→                  <div className="relative w-full h-48 rounded-xl bg-muted overflow-hidden">
+   408→                    <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground">
+   409→                      <MapPin className="size-8 mb-2" />
+   410→                      <p className="text-sm font-medium">{property.city}, {property.state}</p>
+   411→                      <p className="text-xs">{property.address}</p>
+   412→                    </div>
+   413→                    <div className="absolute inset-0 opacity-20">
+   414→                      <div className="w-full h-full" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop)', backgroundSize: 'cover' }} />
+   415→                    </div>
+   416→                  </div>
+   417→                </div>
+   418→
+   419→                {/* Investment Timeline */}
+   420→                <div>
+   421→                  <h3 className="text-sm font-semibold mb-3">Investment Timeline</h3>
+   422→                  <div className="space-y-0">
+   423→                    {timelineSteps.map((step, i) => (
+   424→                      <div key={i} className="flex gap-3">
+   425→                        <div className="flex flex-col items-center">
+   426→                          <div className={cn(
+   427→                            'flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs',
+   428→                            step.done
+   429→                              ? 'bg-nest-primary border-nest-primary text-white'
+   430→                              : 'bg-background border-border text-muted-foreground'
+   431→                          )}>
+   432→                            {step.icon}
+   433→                          </div>
+   434→                          {i < timelineSteps.length - 1 && (
+   435→                            <div className={cn('w-0.5 h-8', step.done ? 'bg-nest-primary' : 'bg-border')} />
+   436→                          )}
+   437→                        </div>
+   438→                        <div className="pt-1 pb-4">
+   439→                          <p className="text-sm font-medium">{step.label}</p>
+   440→                          <p className="text-xs text-muted-foreground">{step.date}</p>
+   441→                        </div>
+   442→                      </div>
+   443→                    ))}
+   444→                  </div>
+   445→                </div>
+   446→              </TabsContent>
+   447→
+   448→              {/* ── Financials Tab ── */}
+   449→              <TabsContent value="financials" className="space-y-6">
+   450→                {/* Financial Summary Cards */}
+   451→                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+   452→                  <Card className="p-4 gap-0 bg-gradient-to-br from-nest-primary/5 to-transparent border-nest-primary/20">
+   453→                    <p className="text-xs text-muted-foreground mb-1">Projected Annual Return</p>
+   454→                    <p className="text-lg font-bold text-nest-primary">
+   455→                      {financialData?.projectedAnnualReturn ? `+${formatPercent(financialData.projectedAnnualReturn)}` : '+12.5%'}
+   456→                    </p>
+   457→                  </Card>
+   458→                  <Card className="p-4 gap-0">
+   459→                    <p className="text-xs text-muted-foreground mb-1">Break-even Period</p>
+   460→                    <p className="text-lg font-bold">{financialData?.breakEvenPeriod || '5-7 years'}</p>
+   461→                  </Card>
+   462→                  <Card className="p-4 gap-0">
+   463→                    <p className="text-xs text-muted-foreground mb-1">Exit Strategy</p>
+   464→                    <p className="text-sm font-medium">{financialData?.exitStrategy || 'Sale after 7 years or refinancing'}</p>
+   465→                  </Card>
+   466→                </div>
+   467→
+   468→                {/* Projection Table */}
+   469→                <Card className="p-4 gap-0">
+   470→                  <h3 className="text-sm font-semibold mb-3">Projected Returns (5 Years)</h3>
+   471→                  <div className="overflow-x-auto">
+   472→                    <table className="w-full text-sm">
+   473→                      <thead>
+   474→                        <tr className="border-b border-border">
+   475→                          <th className="text-left py-2 text-xs text-muted-foreground font-medium">Year</th>
+   476→                          <th className="text-right py-2 text-xs text-muted-foreground font-medium">Property Value</th>
+   477→                          <th className="text-right py-2 text-xs text-muted-foreground font-medium">Rental Income</th>
+   478→                          <th className="text-right py-2 text-xs text-muted-foreground font-medium">Total Return</th>
+   479→                        </tr>
+   480→                      </thead>
+   481→                      <tbody>
+   482→                        {[
+   483→                          { year: 1, value: property.totalValue, income: property.totalValue * (property.rentalYield || 0.08), total: 0 },
+   484→                          { year: 2, value: property.totalValue * 1.06, income: property.totalValue * 1.06 * (property.rentalYield || 0.08), total: 0 },
+   485→                          { year: 3, value: property.totalValue * 1.12, income: property.totalValue * 1.12 * (property.rentalYield || 0.08), total: 0 },
+   486→                          { year: 4, value: property.totalValue * 1.19, income: property.totalValue * 1.19 * (property.rentalYield || 0.08), total: 0 },
+   487→                          { year: 5, value: property.totalValue * 1.27, income: property.totalValue * 1.27 * (property.rentalYield || 0.08), total: 0 },
+   488→                        ].map((row, i) => {
+   489→                          const appreciation = row.value - property.totalValue;
+   490→                          const totalReturn = appreciation + (row.income * row.year);
+   491→                          return (
+   492→                            <tr key={i} className="border-b border-border/50 last:border-0">
+   493→                              <td className="py-2.5 font-medium">Year {row.year}</td>
+   494→                              <td className="py-2.5 text-right">{formatNairaFull(Math.round(row.value))}</td>
+   495→                              <td className="py-2.5 text-right text-nest-primary">{formatNairaFull(Math.round(row.income))}</td>
+   496→                              <td className="py-2.5 text-right font-medium">{formatNairaFull(Math.round(totalReturn))}</td>
+   497→                            </tr>
+   498→                          );
+   499→                        })}
+   500→                      </tbody>
+   501→                    </table>
+   502→                  </div>
+   503→                </Card>
+   504→              </TabsContent>
+   505→
+   506→              {/* ── Documents Tab ── */}
+   507→              <TabsContent value="documents" className="space-y-4">
+   508→                <div className="space-y-2">
+   509→                  {(property.documents.length > 0 ? property.documents : [
+   510→                    { id: '1', title: 'Investment Memorandum', type: 'memo', fileUrl: '#', fileSize: 2500000 },
+   511→                    { id: '2', title: 'Property Valuation Report', type: 'valuation', fileUrl: '#', fileSize: 1800000 },
+   512→                    { id: '3', title: 'Building Plan & Approvals', type: 'plan', fileUrl: '#', fileSize: 3200000 },
+   513→                    { id: '4', title: 'SPV Formation Documents', type: 'spv', fileUrl: '#', fileSize: 1500000 },
+   514→                    { id: '5', title: 'Risk Disclosure Statement', type: 'disclosure', fileUrl: '#', fileSize: 800000 },
+   515→                    { id: '6', title: 'Developer Track Record', type: 'developer', fileUrl: '#', fileSize: 1200000 },
+   516→                  ]).map((doc) => (
+   517→                    <Card key={doc.id} className="p-3 gap-0 flex items-center justify-between">
+   518→                      <div className="flex items-center gap-3">
+   519→                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+   520→                          <FileText className="size-4 text-muted-foreground" />
+   521→                        </div>
+   522→                        <div>
+   523→                          <p className="text-sm font-medium">{doc.title}</p>
+   524→                          <p className="text-xs text-muted-foreground">
+   525→                            {(doc.fileSize! / 1024 / 1024).toFixed(1)} MB · PDF
+   526→                          </p>
+   527→                        </div>
+   528→                      </div>
+   529→                      <Button variant="ghost" size="icon" className="h-8 w-8">
+   530→                        <Download className="size-4" />
+   531→                      </Button>
+   532→                    </Card>
+   533→                  ))}
+   534→                </div>
+   535→              </TabsContent>
+   536→
+   537→              {/* ── FAQ Tab ── */}
+   538→              <TabsContent value="faq" className="space-y-4">
+   539→                <Accordion type="single" collapsible className="w-full">
+   540→                  {(faqItems.length > 0 ? faqItems : [
+   541→                    { question: 'What is the minimum investment amount?', answer: 'The minimum investment for this property is ' + formatNairaFull(property.minInvestment) + '. You can invest in fractional units, making it accessible to a wide range of investors.' },
+   542→                    { question: 'How are returns distributed?', answer: 'Returns are distributed quarterly via bank transfer to your registered account. Rental income is calculated based on your proportionate ownership and distributed after operational expenses.' },
+   543→                    { question: 'What happens if I want to exit early?', answer: 'While we recommend holding investments for the full term, you can list your shares on our secondary marketplace. We facilitate peer-to-peer transfers with a small processing fee.' },
+   544→                    { question: 'Is my investment secured?', answer: 'Yes. Your investment is held in a Special Purpose Vehicle (SPV) specifically created for this property. The SPV holds legal title to the property, and investors hold shares in the SPV proportionate to their investment.' },
+   545→                    { question: 'Who manages the property?', answer: 'A certified property manager oversees day-to-day operations including tenant management, maintenance, and rent collection. You receive regular reports on property performance.' },
+   546→                    { question: 'What are the risks involved?', answer: 'Key risks include market fluctuations, tenant vacancy, and construction delays (for off-plan). All risks are disclosed in the Investment Memorandum. We conduct thorough due diligence on every property.' },
+   547→                  ]).map((item, i) => (
+   548→                    <AccordionItem key={i} value={`faq-${i}`}>
+   549→                      <AccordionTrigger className="text-sm">{item.question}</AccordionTrigger>
+   550→                      <AccordionContent className="text-sm text-muted-foreground">{item.answer}</AccordionContent>
+   551→                    </AccordionItem>
+   552→                  ))}
+   553→                </Accordion>
+   554→              </TabsContent>
+   555→            </Tabs>
+   556→          </motion.div>
+   557→
+   558→          {/* ─── SIDEBAR ─── */}
+   559→          <motion.div
+   560→            initial={{ opacity: 0, y: 20 }}
+   561→            animate={{ opacity: 1, y: 0 }}
+   562→            transition={{ delay: 0.1 }}
+   563→            className="lg:col-span-2 space-y-4"
+   564→          >
+   565→            {/* Investment Card */}
+   566→            <Card className="p-5 gap-4 sticky top-24">
+   567→              <div className="space-y-3">
+   568→                <div className="flex items-center justify-between">
+   569→                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Funding Progress</p>
+   570→                  <Badge className={getRiskBg(property.riskRating)} variant="secondary">
+   571→                    {property.fundingProgress}%
+   572→                  </Badge>
+   573→                </div>
+   574→                <Progress value={property.fundingProgress} className="h-2.5" />
+   575→                <div className="grid grid-cols-2 gap-3 text-sm">
+   576→                  <div>
+   577→                    <p className="text-xs text-muted-foreground">Raised</p>
+   578→                    <p className="font-bold text-nest-primary">{formatNairaFull(property.fundingRaised)}</p>
+   579→                  </div>
+   580→                  <div>
+   581→                    <p className="text-xs text-muted-foreground">Goal</p>
+   582→                    <p className="font-bold">{formatNairaFull(property.fundingTarget)}</p>
+   583→                  </div>
+   584→                  <div>
+   585→                    <p className="text-xs text-muted-foreground">Min. Investment</p>
+   586→                    <p className="font-bold">{formatNairaFull(property.minInvestment)}</p>
+   587→                  </div>
+   588→                  <div>
+   589→                    <p className="text-xs text-muted-foreground">Investors</p>
+   590→                    <p className="font-bold">
+   591→                      {property.opportunity?.currentInvestors || 0}
+   592→                      {property.opportunity?.maxInvestors ? ` / ${property.opportunity.maxInvestors}` : ''}
+   593→                    </p>
+   594→                  </div>
+   595→                </div>
+   596→                <Separator />
+   597→                <div className="grid grid-cols-2 gap-3">
+   598→                  <div className="flex items-center gap-2">
+   599→                    <Percent className="size-4 text-nest-primary" />
+   600→                    <div>
+   601→                      <p className="text-[10px] text-muted-foreground">Rental Yield</p>
+   602→                      <p className="text-sm font-bold">{property.rentalYield != null ? formatPercent(property.rentalYield) : '—'}</p>
+   603→                    </div>
+   604→                  </div>
+   605→                  <div className="flex items-center gap-2">
+   606→                    <TrendingUp className="size-4 text-nest-primary" />
+   607→                    <div>
+   608→                      <p className="text-[10px] text-muted-foreground">Expected IRR</p>
+   609→                      <p className="text-sm font-bold">{property.expectedIRR != null ? formatPercent(property.expectedIRR) : '—'}</p>
+   610→                    </div>
+   611→                  </div>
+   612→                </div>
+   613→                <Separator />
+   614→                <div className="space-y-2">
+   615→                  {property.opportunity?.fundingEndDate && (
+   616→                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+   617→                      <CalendarDays className="size-3.5" />
+   618→                      Closes {new Date(property.opportunity.fundingEndDate).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}
+   619→                    </div>
+   620→                  )}
+   621→                </div>
+   622→              </div>
+   623→              <Button
+   624→                onClick={handleInvest}
+   625→                className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white h-12 text-base font-semibold"
+   626→              >
+   627→                Invest in This Property
+   628→                <ChevronRight className="size-4 ml-1" />
+   629→              </Button>
+   630→            </Card>
+   631→
+   632→            {/* SPV Info */}
+   633→            {property.opportunity?.spvName && (
+   634→              <Card className="p-4 gap-0">
+   635→                <div className="flex items-center gap-2 mb-1">
+   636→                  <Shield className="size-4 text-nest-primary" />
+   637→                  <p className="text-sm font-semibold">SPV Protection</p>
+   638→                </div>
+   639→                <p className="text-xs text-muted-foreground">
+   640→                  Your investment is held in {property.opportunity.spvName}, a Special Purpose Vehicle that provides legal protection and transparent ownership.
+   641→                </p>
+   642→              </Card>
+   643→            )}
+   644→          </motion.div>
+   645→        </div>
+   646→
+   647→        {/* Similar Properties */}
+   648→        {property.similarProperties && property.similarProperties.length > 0 && (
+   649→          <section className="mt-16">
+   650→            <h2 className="text-xl font-bold mb-5">Similar Properties</h2>
+   651→            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+   652→              {property.similarProperties.map((prop, i) => (
+   653→                <PropertyCard key={prop.id} property={prop} index={i} />
+   654→              ))}
+   655→            </div>
+   656→          </section>
+   657→        )}
+   658→      </div>
+   659→    </div>
+   660→  );
+   661→}
+   662→
