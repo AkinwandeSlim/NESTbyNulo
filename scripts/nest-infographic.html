@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200, initial-scale=1.0">
+<title>NEST by Nulo Africa — How Fractional Ownership Works</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --nest-orange: #FF6600;
+    --nest-amber: #F59E0B;
+    --nest-ivory: #FFF7ED;
+    --nest-dark: #1A1A1A;
+    --text: #1F2937;
+    --text-sub: #6B7280;
+    --text-muted: #9CA3AF;
+    --surface: #F9FAFB;
+    --border: #E5E7EB;
+    --white: #FFFFFF;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--white);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    width: 1100px;
+    margin: 0 auto;
+    padding: 48px 40px 56px;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .brand-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--nest-orange);
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--nest-dark);
+    line-height: 1.3;
+  }
+  .header h1 span {
+    color: var(--nest-orange);
+  }
+  .header p {
+    font-size: 15px;
+    color: var(--text-sub);
+    margin-top: 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  /* ─── CONCEPT SECTION ─── */
+  .concept {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: linear-gradient(135deg, #FFF7ED 0%, #FFFBF5 100%);
+    border: 1.5px solid #FDDCB5;
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 32px;
+  }
+  .concept-left {
+    flex: 0 0 320px;
+    text-align: center;
+  }
+  .concept-right {
+    flex: 1;
+  }
+  .concept-right h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--nest-dark);
+    margin-bottom: 12px;
+  }
+  .concept-right p {
+    font-size: 14px;
+    color: var(--text-sub);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .concept-right p strong {
+    color: var(--nest-dark);
+  }
+
+  /* ─── PROPERTY VISUAL ─── */
+  .property-visual {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin: 0 auto;
+  }
+  .property-card {
+    width: 300px;
+    height: 180px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--nest-orange), #E85D00);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(255, 102, 0, 0.25);
+  }
+  .property-card .roof {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(180deg, #CC5200 0%, var(--nest-orange) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .property-card .roof span {
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .property-card .body {
+    position: absolute;
+    top: 40px; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.12);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3px;
+    padding: 8px;
+  }
+  .slice {
+    border-radius: 3px;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.5);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slice.highlight {
+    background: rgba(255,255,255,0.95);
+    border-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .slice.highlight span {
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--nest-orange);
+  }
+  .property-price {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .property-price .old {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+  .property-price .new {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--nest-orange);
+  }
+  .property-price .label {
+    font-size: 11px;
+    color: var(--text-sub);
+  margin-top: 2px;
+  }
+
+  /* ─── BEFORE vs AFTER ─── */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    margin-bottom: 32px;
+    align-items: stretch;
+  }
+  .comp-card {
+    padding: 28px 28px;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+  }
+  .comp-card.before {
+    background: #F9FAFB;
+  }
+  .comp-card.after {
+    background: linear-gradient(135deg, #FFF7ED, #FFFBF5);
+    border-color: #FDDCB5;
+  }
+  .comp-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .comp-divider svg {
+    width: 28px;
+    height: 28px;
+    color: var(--nest-orange);
+  }
+  .comp-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .comp-card.before .comp-tag { color: var(--text-muted); }
+  .comp-card.after .comp-tag { color: var(--nest-orange); }
+  .comp-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--nest-dark);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .comp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .comp-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+  .comp-card.before .comp-icon {
+    background: #F3F4F6;
+    color: var(--text-muted);
+  }
+  .comp-card.after .comp-icon {
+    background: var(--nest-orange);
+    color: white;
+  }
+  .comp-item p {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.5;
+  }
+  .comp-item p strong {
+    color: var(--text);
+  }
+
+  /* ─── 4 STEPS ─── */
+  .steps-section {
+    margin-bottom: 32px;
+  }
+  .steps-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--nest-dark);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .step {
+    text-align: center;
+    padding: 0 16px;
+    position: relative;
+  }
+  .step-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--nest-orange);
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+  }
+  .step h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--nest-dark);
+    margin-bottom: 6px;
+  }
+  .step p {
+    font-size: 12px;
+    color: var(--text-sub);
+    line-height: 1.5;
+  }
+  .step-arrow {
+    position: absolute;
+    top: 22px;
+    right: -12px;
+    color: #D4D4D8;
+    font-size: 18px;
+    z-index: 1;
+  }
+  .step:last-child .step-arrow { display: none; }
+
+  /* ─── RETURNS BREAKDOWN ─── */
+  .returns-section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .returns-left h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--nest-dark);
+    margin-bottom: 16px;
+  }
+  .return-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .return-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .return-icon.rental { background: #ECFDF5; color: #059669; }
+  .return-icon.appreciation { background: #FFF7ED; color: var(--nest-orange); }
+  .return-icon.legal { background: #EFF6FF; color: #2563EB; }
+  .return-item h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--nest-dark);
+  }
+  .return-item p {
+    font-size: 12px;
+    color: var(--text-sub);
+    line-height: 1.4;
+    }
+  .returns-right {
+    text-align: center;
+  }
+  .example-card {
+    background: white;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .example-card .label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .example-amount {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--nest-dark);
+  }
+  .example-amount span {
+    font-size: 16px;
+    color: var(--text-sub);
+    font-weight: 500;
+  }
+  .example-detail {
+    margin-top: 16px;
+    text-align: left;
+  }
+  .example-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #F3F4F6;
+    font-size: 13px;
+  }
+  .example-row:last-child { border-bottom: none; }
+  .example-row .lbl { color: var(--text-sub); }
+  .example-row .val { font-weight: 700; color: var(--nest-dark); }
+  .example-row .val.positive { color: #059669; }
+  .example-row.total {
+    border-top: 2px solid var(--nest-orange);
+    border-bottom: none;
+    margin-top: 4px;
+    padding-top: 12px;
+  }
+  .example-row.total .val {
+    color: var(--nest-orange);
+    font-size: 15px;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .footer p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .footer .brand {
+    font-weight: 700;
+    color: var(--nest-orange);
+  }
+</style>
+</head>
+<body>
+<div id="root">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand-tag">Nulo Africa</div>
+    <h1>How <span>NEST</span> Fractional Ownership Works</h1>
+    <p>Own a piece of premium African real estate starting from just <strong>NGN 500,000</strong> — no loan, no hassle, no landlord duties.</p>
+  </div>
+
+  <!-- CONCEPT: THE PROPERTY SPLIT -->
+  <div class="concept">
+    <div class="concept-left">
+      <div class="property-visual">
+        <div class="property-card">
+          <div class="roof"><span>The Lekki Residence</span></div>
+          <div class="body">
+            <!-- 15 slices, 5x3 grid -->
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice highlight"><span>YOU</span></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice highlight"><span>YOU</span></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice highlight"><span>YOU</span></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+          </div>
+        </div>
+        <div class="property-price">
+          <div class="old">NGN 100,000,000</div>
+          <div class="new">NGN 500,000</div>
+          <div class="label">per unit (1/200th share)</div>
+        </div>
+      </div>
+    </div>
+    <div class="concept-right">
+      <h2>One Property. Many Owners. Shared Returns.</h2>
+      <p>NEST acquires a <strong>NGN 100 million property</strong> in Lekki, Lagos through a legally registered Special Purpose Vehicle (SPV). The property is divided into <strong>200 units of NGN 500,000 each</strong>. You buy as many units as you want — 1 unit, 10 units, or 50 units.</p>
+      <p>Each unit entitles you to an <strong>equal share of rental income</strong> and <strong>property appreciation</strong>. Your investment is legally protected by the SPV structure — the same structure used by institutional real estate funds worldwide.</p>
+    </div>
+  </div>
+
+  <!-- BEFORE vs AFTER NEST -->
+  <div class="comparison">
+    <div class="comp-card before">
+      <div class="comp-tag">Without NEST</div>
+      <h3>Traditional Real Estate Investment</h3>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <p><strong>NGN 20M - 100M</strong> needed to buy a property in a prime location</p>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <p><strong>Bank loan</strong> required with 15-25% interest rates</p>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <p><strong>Full landlord burden</strong> — maintenance, tenants, legal issues</p>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <p><strong>All eggs in one basket</strong> — 100% risk on one property</p>
+      </div>
+    </div>
+    <div class="comp-divider">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+    </div>
+    <div class="comp-card after">
+      <div class="comp-tag">With NEST</div>
+      <h3>Fractional Real Estate Investment</h3>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <p><strong>From NGN 500,000</strong> — invest with your savings, no loan needed</p>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <p><strong>NEST manages everything</strong> — maintenance, tenants, legal, insurance</p>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <p><strong>Diversify across properties</strong> — spread risk, maximize returns</p>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <p><strong>SPV legal protection</strong> — your investment is legally ring-fenced</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 STEPS -->
+  <div class="steps-section">
+    <h2>Your Investment Journey in 4 Simple Steps</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Browse Properties</h3>
+        <p>Explore curated, verified properties across Lagos, Abuja, and other prime locations. Filter by type, yield, and risk.</p>
+        <div class="step-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Pick Your Share</h3>
+        <p>Choose how many units to buy. Each unit is a fraction of the property. Start with just NGN 500,000.</p>
+        <div class="step-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Pay Securely</h3>
+        <p>Pay via card, bank transfer, or wallet. Your investment is confirmed instantly. You receive a digital certificate.</p>
+        <div class="step-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Earn Returns</h3>
+        <p>Receive quarterly rental income directly to your wallet. Watch your investment grow as the property appreciates.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RETURNS BREAKDOWN -->
+  <div class="returns-section">
+    <div class="returns-left">
+      <h2>Three Ways You Earn</h2>
+      <div class="return-item">
+        <div class="return-icon rental">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
+        <div>
+          <h4>Rental Income</h4>
+          <p>Quarterly dividend payments from tenant rents, deposited directly into your NEST wallet.</p>
+        </div>
+      </div>
+      <div class="return-item">
+        <div class="return-icon appreciation">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+        </div>
+        <div>
+          <h4>Property Appreciation</h4>
+          <p>As the property value grows over time, your share grows with it. Historically 15-25% annually in prime Lagos locations.</p>
+        </div>
+      </div>
+      <div class="return-item">
+        <div class="return-icon legal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <div>
+          <h4>SPV Legal Protection</h4>
+          <p>Each property is held in a separate legal entity. Your investment is ring-fenced and protected by Nigerian corporate law.</p>
+        </div>
+      </div>
+    </div>
+    <div class="returns-right">
+      <div class="example-card">
+        <div class="label">Example Investment</div>
+        <div class="example-amount">NGN 1,500,000 <span>(3 units)</span></div>
+        <div class="example-detail">
+          <div class="example-row">
+            <span class="lbl">Property</span>
+            <span class="val">The Lekki Residence</span>
+          </div>
+          <div class="example-row">
+            <span class="lbl">Your Ownership</span>
+            <span class="val">1.5% (3 of 200 units)</span>
+          </div>
+          <div class="example-row">
+            <span class="lbl">Annual Rental Yield</span>
+            <span class="val">8%</span>
+          </div>
+          <div class="example-row">
+            <span class="lbl">Quarterly Rental Income</span>
+            <span class="val positive">+NGN 30,000</span>
+          </div>
+          <div class="example-row">
+            <span class="lbl">Annual Rental Income</span>
+            <span class="val positive">+NGN 120,000</span>
+          </div>
+          <div class="example-row">
+            <span class="lbl">Annual Appreciation (est.)</span>
+            <span class="val positive">+NGN 375,000</span>
+          </div>
+          <div class="example-row total">
+            <span class="lbl">Estimated Total Annual Return</span>
+            <span class="val">+NGN 495,000 (33%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p><span class="brand">NEST</span> by Nulo Africa &mdash; Building Generational Wealth Through Fractional Real Estate</p>
+    <p style="margin-top: 4px;">nest.nuloafrica.com &nbsp;|&nbsp; For informational purposes only. Returns are estimates and not guaranteed.</p>
+  </div>
+
+</div>
+</body>
+</html>
