@@ -156,6 +156,10 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
   useEffect(() => {
     if (session === null) return; // Still loading
     if (!session) {
+      // Store the property slug for redirect after sign-in
+      if (slug) {
+        sessionStorage.setItem('redirectAfterSignIn', `/properties/${slug}`);
+      }
       window.location.href = '/sign-in';
       return;
     }
@@ -164,7 +168,7 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
       setView('browse');
       return;
     }
-  }, [session, setView]);
+  }, [session, setView, slug]);
 
   useEffect(() => {
     if (!slug) return;

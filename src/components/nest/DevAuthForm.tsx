@@ -40,7 +40,10 @@ export default function DevAuthForm({ mode }: { mode: Mode }) {
         setPending(false);
         return;
       }
-      router.push('/account');
+      // Check for redirect URL from investment flow
+      const redirectUrl = sessionStorage.getItem('redirectAfterSignIn');
+      sessionStorage.removeItem('redirectAfterSignIn');
+      router.push(redirectUrl || '/account');
       router.refresh();
     } catch {
       setError('Check your connection and try again.');
