@@ -13,6 +13,7 @@ import {
   User,
   LogOut,
   Menu,
+  Search,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/nest-utils';
+import { useNestStore } from '@/lib/nest-store';
 import InvestorOverview from './InvestorOverview';
 import PortfolioView from './PortfolioView';
 import WalletView from './WalletView';
@@ -142,6 +144,21 @@ export default function InvestorDashboard({ user }: InvestorDashboardProps) {
           );
         })}
       </nav>
+
+      {/* Browse Properties — back to the main property browser */}
+      <div className="px-3 pb-2">
+        <button
+          onClick={() => {
+            useNestStore.getState().setView('browse');
+            window.location.href = '/';
+          }}
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
+        >
+          <Search className="size-4" />
+          Browse Properties
+          <ChevronRight className="ml-auto size-3.5 opacity-50" />
+        </button>
+      </div>
 
       <Separator className="opacity-50" />
 
