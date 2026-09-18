@@ -18,9 +18,20 @@ export type SessionUser = {
 };
 
 // Use Prisma's generated type for queries with wallet included
-type PrismaUserWithWallet = Prisma.UserGetPayload<{
-  include: { wallet: true };
-}>;
+type PrismaUserWithWallet = {
+  id: string;
+  clerkId: string | null;
+  email: string;
+  phone: string | null;
+  firstName: string;
+  lastName: string | null;
+  role: string;
+  status: string;
+  authSource: string;
+  createdAt: Date;
+  rejectionReason: string | null;
+  wallet: { id: string; balanceKobo: bigint; balance: number; currency: string; isLocked: boolean; createdAt: Date; updatedAt: Date; userId: string } | null;
+};
 
 function toSessionUser(u: PrismaUserWithWallet): SessionUser {
   return {

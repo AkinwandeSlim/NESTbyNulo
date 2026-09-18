@@ -17,9 +17,9 @@ interface ProfileViewProps {
     email: string;
     firstName: string | null;
     lastName: string | null;
-    phone: string | null;
+    phone?: string | null;
     status: string;
-    createdAt: string;
+    createdAt?: string;
   };
 }
 
@@ -55,7 +55,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
               {user.status === 'VERIFIED' ? 'Verified' : user.status === 'PENDING' ? 'Pending' : 'Issue'}
             </Badge>
             <span className="text-xs text-muted-foreground">
-              Joined {new Date(user.createdAt).toLocaleDateString()}
+              Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
             </span>
           </div>
         </div>
