@@ -2,696 +2,129 @@
 > nextjs_tailwind_shadcn_ts@0.2.1 dev
 > next dev -p 3000
 
-▲ Next.js 16.1.3 (Turbopack)
+▲ Next.js 16.3.5 (Turbopack)
 - Local:         http://localhost:3000
 - Network:       http://169.254.96.168:3000
-- Environments: .env
+- Environments: .env.local, .env
+✓ Ready in 1150ms
+⚠ Warning: Next.js ignored package-lock.json in C:\MyFiles\DOCUMENT-2026\Nuelo_Poc\NULO-DEV because it is outside the current Git repository (C:\MyFiles\DOCUMENT-2026\Nuelo_Poc\NULO-DEV\NESTbyNULOAFRICA).
+ To use this directory, set `turbopack.root` in your Next.js config.
 
-✓ Starting...
-✓ Ready in 2.2s
- GET /api/auth/me 401 in 630ms (compile: 434ms, render: 197ms)
- POST /api/auth/register 201 in 720ms (compile: 584ms, render: 137ms)
- GET /api/auth/me 200 in 24ms (compile: 9ms, render: 15ms)
-○ Compiling / ...
- GET / 200 in 6.6s (compile: 6.0s, render: 683ms)
- GET /api/auth/me 401 in 31ms (compile: 16ms, render: 16ms)
-Error fetching properties: TypeError: Do not know how to serialize a BigInt
-    at JSON.stringify (<anonymous>)
-    at GET (src\app\api\properties\route.ts:90:25)
-  88 |     }));
-  89 |
-> 90 |     return NextResponse.json({
-     |                         ^
-  91 |       properties: formattedProperties,
-  92 |       pagination: {
-  93 |         page,
- GET /api/properties?limit=20&sort=createdAt&order=desc 500 in 636ms (compile: 134ms, render: 502ms)
-Error fetching properties: TypeError: Do not know how to serialize a BigInt
-    at JSON.stringify (<anonymous>)
-    at GET (src\app\api\properties\route.ts:90:25)
-  88 |     }));
-  89 |
-> 90 |     return NextResponse.json({
-     |                         ^
-  91 |       properties: formattedProperties,
-  92 |       pagination: {
-  93 |         page,
- GET /api/properties?trending=true&limit=5 500 in 825ms (compile: 146ms, render: 679ms)
-Error fetching properties: TypeError: Do not know how to serialize a BigInt
-    at JSON.stringify (<anonymous>)
-    at GET (src\app\api\properties\route.ts:90:25)
-  88 |     }));
-  89 |
-> 90 |     return NextResponse.json({
-     |                         ^
-  91 |       properties: formattedProperties,
-  92 |       pagination: {
-  93 |         page,
- GET /api/properties?featured=true&limit=5 500 in 951ms (compile: 162ms, render: 789ms)
- GET /api/portfolio 401 in 54ms (compile: 45ms, render: 9ms)
-Error fetching properties: TypeError: Do not know how to serialize a BigInt
-    at JSON.stringify (<anonymous>)
-    at GET (src\app\api\properties\route.ts:90:25)
-  88 |     }));
-  89 |
-> 90 |     return NextResponse.json({
-     |                         ^
-  91 |       properties: formattedProperties,
-  92 |       pagination: {
-  93 |         page,
- GET /api/properties?limit=3 500 in 253ms (compile: 7ms, render: 246ms)
-✓ Compiled in 2.8s
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET / 200 in 1097ms (compile: 249ms, render: 849ms)
- GET /api/auth/me 401 in 29ms (compile: 7ms, render: 22ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 597ms (compile: 395ms, render: 202ms)
- GET /api/properties?featured=true&limit=5 200 in 621ms (compile: 458ms, render: 163ms)
- GET /api/properties?trending=true&limit=5 200 in 637ms (compile: 499ms, render: 138ms)
-✓ Compiled in 3.5s
-✓ Compiled in 3.1s
-✓ Compiled in 2.4s
- GET / 200 in 478ms (compile: 356ms, render: 122ms)
-✓ Compiled in 2.1s
-✓ Compiled in 2.5s
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 48ms (compile: 10ms, render: 38ms)
- GET /api/properties?featured=true&limit=5 200 in 72ms (compile: 25ms, render: 46ms)
- GET /api/properties?trending=true&limit=5 200 in 41ms (compile: 20ms, render: 21ms)
-✓ Compiled in 2.9s
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 74ms (compile: 9ms, render: 65ms)
- GET /api/properties?featured=true&limit=5 200 in 80ms (compile: 24ms, render: 56ms)
- GET /api/properties?trending=true&limit=5 200 in 70ms (compile: 27ms, render: 43ms)
-✓ Compiled in 2.8s
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 59ms (compile: 10ms, render: 50ms)
- GET /api/properties?featured=true&limit=5 200 in 67ms (compile: 23ms, render: 43ms)
- GET /api/properties?trending=true&limit=5 200 in 70ms (compile: 36ms, render: 34ms)
-✓ Compiled in 2.9s
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 59ms (compile: 9ms, render: 50ms)
- GET /api/properties?featured=true&limit=5 200 in 49ms (compile: 9ms, render: 40ms)
- GET /api/properties?trending=true&limit=5 200 in 54ms (compile: 24ms, render: 30ms)
- GET /api/portfolio 401 in 31ms (compile: 13ms, render: 18ms)
- GET /api/properties?limit=3 200 in 15ms (compile: 4ms, render: 12ms)
- GET /api/properties/the-lekki-residence 200 in 1909ms (compile: 1871ms, render: 38ms)
- GET /api/portfolio 401 in 16ms (compile: 7ms, render: 9ms)
- GET /api/portfolio 401 in 10ms (compile: 4ms, render: 6ms)
- GET / 200 in 303ms (compile: 107ms, render: 196ms)
- GET /api/auth/me 401 in 13ms (compile: 5ms, render: 8ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 23ms (compile: 3ms, render: 20ms)
- GET /api/properties?featured=true&limit=5 200 in 31ms (compile: 13ms, render: 18ms)
- GET /api/properties?trending=true&limit=5 200 in 15ms (compile: 6ms, render: 9ms)
- GET /sign-in 200 in 79ms (compile: 57ms, render: 22ms)
- POST /api/auth/sign-in 404 in 176ms (compile: 89ms, render: 87ms)
- GET /sign-up 200 in 76ms (compile: 57ms, render: 19ms)
- POST /api/auth/sign-up 404 in 61ms (compile: 11ms, render: 50ms)
- GET /sign-up 200 in 477ms (compile: 65ms, render: 411ms)
- GET /sign-up 200 in 741ms (compile: 183ms, render: 558ms)
- GET /sign-up 200 in 97ms (compile: 28ms, render: 69ms)
- GET /sign-up 200 in 503ms (compile: 11ms, render: 491ms)
- GET /api/properties?limit=2 200 in 36ms (compile: 8ms, render: 28ms)
- GET /api/properties?limit=2 200 in 18ms (compile: 5ms, render: 13ms)
- POST /api/auth/register 400 in 27ms (compile: 8ms, render: 19ms)
- POST /api/auth/login 200 in 200ms (compile: 113ms, render: 86ms)
- GET /api/wallet 200 in 83ms (compile: 57ms, render: 26ms)
- GET /api/portfolio 200 in 39ms (compile: 4ms, render: 35ms)
- POST /api/auth/login 200 in 94ms (compile: 3ms, render: 90ms)
- GET /api/admin/stats 200 in 112ms (compile: 85ms, render: 27ms)
- GET /api/properties?limit=3 200 in 37ms (compile: 7ms, render: 29ms)
- GET /api/portfolio 401 in 21ms (compile: 7ms, render: 14ms)
- POST /api/auth/login 200 in 82ms (compile: 4ms, render: 78ms)
- GET /api/wallet 200 in 21ms (compile: 4ms, render: 17ms)
- GET /api/portfolio 200 in 32ms (compile: 5ms, render: 26ms)
- GET /api/investments 200 in 195ms (compile: 167ms, render: 28ms)
- GET /api/properties/the-lekki-residence 200 in 202ms (compile: 151ms, render: 51ms)
- POST /api/auth/login 200 in 123ms (compile: 8ms, render: 115ms)
- GET /api/admin/stats 200 in 20ms (compile: 3ms, render: 17ms)
- GET /api/admin/users?status=PENDING 200 in 145ms (compile: 114ms, render: 31ms)
- POST /api/auth/login 200 in 90ms (compile: 6ms, render: 85ms)
- POST /api/auth/login 200 in 125ms (compile: 6ms, render: 119ms)
- POST /api/auth/login 200 in 87ms (compile: 4ms, render: 83ms)
- GET /api/wallet 200 in 21ms (compile: 4ms, render: 17ms)
- GET /sign-up 200 in 74ms (compile: 6ms, render: 68ms)
- GET /sign-in 200 in 239ms (compile: 180ms, render: 59ms)
- GET / 200 in 272ms (compile: 188ms, render: 83ms)
- GET /api/auth/me 401 in 12ms (compile: 7ms, render: 6ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 40ms (compile: 13ms, render: 27ms)
- GET /api/properties?featured=true&limit=5 200 in 25ms (compile: 5ms, render: 21ms)
- GET /api/properties?trending=true&limit=5 200 in 28ms (compile: 10ms, render: 18ms)
- GET /sign-in 200 in 32ms (compile: 5ms, render: 28ms)
- POST /api/auth/sign-in 404 in 291ms (compile: 177ms, render: 114ms)
-✓ Compiled in 1052ms
- GET /sign-in 200 in 238ms (compile: 98ms, render: 140ms)
- POST /api/auth/login 200 in 66ms (compile: 5ms, render: 61ms)
- GET /account 200 in 242ms (compile: 146ms, render: 95ms)
- GET /account 200 in 58ms (compile: 4ms, render: 54ms)
- GET /sign-in 200 in 30ms (compile: 5ms, render: 25ms)
- GET / 200 in 30ms (compile: 5ms, render: 25ms)
- GET /api/auth/me 200 in 16ms (compile: 5ms, render: 11ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 23ms (compile: 7ms, render: 16ms)
- GET /api/properties?featured=true&limit=5 200 in 15ms (compile: 4ms, render: 11ms)
- GET /api/properties?trending=true&limit=5 200 in 20ms (compile: 7ms, render: 13ms)
- GET /api/wallet 200 in 14ms (compile: 3ms, render: 11ms)
- GET / 200 in 316ms (compile: 5ms, render: 311ms)
- GET /api/auth/me 200 in 14ms (compile: 4ms, render: 10ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 25ms (compile: 5ms, render: 20ms)
- GET /api/properties?featured=true&limit=5 200 in 26ms (compile: 12ms, render: 14ms)
- GET /api/properties?trending=true&limit=5 200 in 19ms (compile: 9ms, render: 10ms)
- GET /account 200 in 126ms (compile: 6ms, render: 120ms)
- GET / 200 in 22ms (compile: 6ms, render: 16ms)
- GET /api/auth/me 200 in 13ms (compile: 3ms, render: 10ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 20ms (compile: 4ms, render: 16ms)
- GET /api/properties?featured=true&limit=5 200 in 24ms (compile: 10ms, render: 15ms)
- GET /api/properties?trending=true&limit=5 200 in 24ms (compile: 5ms, render: 19ms)
- POST /api/auth/logout 200 in 54ms (compile: 48ms, render: 6ms)
- GET / 200 in 81ms (compile: 4ms, render: 77ms)
- GET /api/auth/me 401 in 19ms (compile: 5ms, render: 14ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 32ms (compile: 11ms, render: 21ms)
- GET /api/properties?featured=true&limit=5 200 in 34ms (compile: 12ms, render: 22ms)
- GET /api/properties?trending=true&limit=5 200 in 27ms (compile: 17ms, render: 10ms)
- GET /api/portfolio 401 in 10ms (compile: 3ms, render: 7ms)
- GET /api/portfolio 401 in 9ms (compile: 3ms, render: 6ms)
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
-✓ Compiled in 887ms
- GET / 200 in 401ms (compile: 102ms, render: 299ms)
- GET /api/auth/me 401 in 11ms (compile: 3ms, render: 8ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 25ms (compile: 5ms, render: 20ms)
- GET /api/properties?featured=true&limit=5 200 in 24ms (compile: 5ms, render: 19ms)
- GET /api/properties?trending=true&limit=5 200 in 16ms (compile: 7ms, render: 9ms)
- GET /api/dashboard 200 in 74ms (compile: 61ms, render: 13ms)
- GET /api/auth/me 401 in 10ms (compile: 3ms, render: 7ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 18ms (compile: 4ms, render: 14ms)
- GET /api/properties?featured=true&limit=5 200 in 18ms (compile: 3ms, render: 15ms)
- GET /api/properties?trending=true&limit=5 200 in 19ms (compile: 11ms, render: 9ms)
- GET /api/dashboard 200 in 10ms (compile: 3ms, render: 8ms)
- GET /api/auth/me 401 in 10ms (compile: 3ms, render: 7ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 12ms (compile: 3ms, render: 9ms)
- GET /api/properties?trending=true&limit=5 200 in 25ms (compile: 3ms, render: 23ms)
- GET /api/properties?featured=true&limit=5 200 in 28ms (compile: 11ms, render: 17ms)
- GET /api/dashboard 200 in 11ms (compile: 3ms, render: 8ms)
- GET /api/auth/me 401 in 10ms (compile: 3ms, render: 7ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 12ms (compile: 3ms, render: 10ms)
- GET /api/properties?featured=true&limit=5 200 in 30ms (compile: 5ms, render: 24ms)
- GET /api/properties?trending=true&limit=5 200 in 32ms (compile: 18ms, render: 13ms)
- GET /api/wallet 401 in 12ms (compile: 3ms, render: 9ms)
- GET /api/dashboard 200 in 14ms (compile: 4ms, render: 9ms)
- GET /account 200 in 34ms (compile: 5ms, render: 29ms)
- GET /sign-in 200 in 26ms (compile: 7ms, render: 18ms)
- GET / 200 in 74ms (compile: 5ms, render: 69ms)
- GET /api/auth/me 401 in 10ms (compile: 4ms, render: 6ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 22ms (compile: 4ms, render: 19ms)
- GET /api/properties?featured=true&limit=5 200 in 24ms (compile: 9ms, render: 15ms)
- GET /api/properties?trending=true&limit=5 200 in 28ms (compile: 15ms, render: 13ms)
- GET /api/portfolio 401 in 9ms (compile: 3ms, render: 6ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 11ms (compile: 3ms, render: 9ms)
- GET /api/properties?trending=true&limit=5 200 in 23ms (compile: 5ms, render: 18ms)
- GET /api/properties?featured=true&limit=5 200 in 24ms (compile: 12ms, render: 12ms)
- GET /sign-up 200 in 115ms (compile: 87ms, render: 28ms)
- GET /sign-in 200 in 21ms (compile: 4ms, render: 18ms)
- POST /api/auth/login 200 in 57ms (compile: 3ms, render: 54ms)
- GET /account 200 in 83ms (compile: 7ms, render: 77ms)
- GET /account 200 in 43ms (compile: 4ms, render: 40ms)
- GET /sign-in 200 in 33ms (compile: 5ms, render: 28ms)
- GET / 200 in 19ms (compile: 4ms, render: 15ms)
- GET /api/auth/me 200 in 13ms (compile: 3ms, render: 10ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 27ms (compile: 5ms, render: 22ms)
- GET /api/properties?featured=true&limit=5 200 in 37ms (compile: 11ms, render: 26ms)
- GET /api/properties?trending=true&limit=5 200 in 24ms (compile: 14ms, render: 10ms)
- GET /api/wallet 200 in 17ms (compile: 3ms, render: 14ms)
- GET /api/portfolio 200 in 21ms (compile: 3ms, render: 18ms)
- GET / 200 in 78ms (compile: 8ms, render: 70ms)
- GET /api/auth/me 200 in 11ms (compile: 3ms, render: 8ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 25ms (compile: 5ms, render: 20ms)
- GET /api/properties?featured=true&limit=5 200 in 25ms (compile: 9ms, render: 16ms)
- GET /api/properties?trending=true&limit=5 200 in 26ms (compile: 17ms, render: 10ms)
- GET /api/portfolio 200 in 14ms (compile: 1993µs, render: 12ms)
- GET /account 200 in 45ms (compile: 4ms, render: 41ms)
- GET / 200 in 24ms (compile: 4ms, render: 20ms)
- GET /api/auth/me 200 in 31ms (compile: 4ms, render: 27ms)
- GET /api/portfolio 200 in 40ms (compile: 19ms, render: 21ms)
-✓ Compiled in 1611ms
-✓ Compiled in 1743ms
- GET / 200 in 68ms (compile: 6ms, render: 62ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 27ms (compile: 5ms, render: 22ms)
- GET /api/properties?featured=true&limit=5 200 in 29ms (compile: 11ms, render: 18ms)
- GET /api/properties?trending=true&limit=5 200 in 32ms (compile: 19ms, render: 13ms)
- GET /api/portfolio 200 in 19ms (compile: 3ms, render: 16ms)
- POST /api/auth/logout 200 in 10ms (compile: 4ms, render: 7ms)
- GET / 200 in 76ms (compile: 9ms, render: 68ms)
- GET /api/auth/me 401 in 12ms (compile: 5ms, render: 7ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 24ms (compile: 4ms, render: 20ms)
- GET /api/properties?featured=true&limit=5 200 in 25ms (compile: 10ms, render: 15ms)
- GET /api/properties?trending=true&limit=5 200 in 28ms (compile: 16ms, render: 12ms)
- GET /api/portfolio 401 in 10ms (compile: 3ms, render: 7ms)
- GET / 200 in 77ms (compile: 6ms, render: 71ms)
- GET /api/auth/me 401 in 10ms (compile: 4ms, render: 7ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 26ms (compile: 4ms, render: 22ms)
- GET /api/properties?featured=true&limit=5 200 in 22ms (compile: 4ms, render: 18ms)
- GET /api/properties?trending=true&limit=5 200 in 22ms (compile: 9ms, render: 14ms)
- GET /api/wallet 401 in 11ms (compile: 3ms, render: 9ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 12ms (compile: 3ms, render: 9ms)
- GET /api/properties?featured=true&limit=5 200 in 18ms (compile: 5ms, render: 14ms)
- GET /api/properties?trending=true&limit=5 200 in 24ms (compile: 12ms, render: 13ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 13ms (compile: 4ms, render: 9ms)
- GET /api/properties?featured=true&limit=5 200 in 23ms (compile: 8ms, render: 16ms)
- GET /api/properties?trending=true&limit=5 200 in 26ms (compile: 15ms, render: 12ms)
- GET /api/auth/me 401 in 8ms (compile: 2ms, render: 5ms)
-✓ Compiled in 944ms
-✓ Compiled in 886ms
- GET /api/auth/me 401 in 10ms (compile: 3ms, render: 7ms)
- GET / 200 in 2.6s (compile: 720ms, render: 1847ms)
- GET /api/auth/me 401 in 31ms (compile: 12ms, render: 19ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 47ms (compile: 9ms, render: 38ms)
- GET /api/properties?featured=true&limit=5 200 in 98ms (compile: 25ms, render: 73ms)
- GET /api/properties?trending=true&limit=5 200 in 69ms (compile: 17ms, render: 52ms)
-✓ Compiled in 2.5s
- GET /api/auth/me 401 in 23ms (compile: 8ms, render: 15ms)
- GET /api/properties/coral-bay-estate 200 in 488ms (compile: 395ms, render: 92ms)
- GET /api/properties/coral-bay-estate 200 in 66ms (compile: 13ms, render: 53ms)
-✓ Compiled in 2.5s
-✓ Compiled in 1847ms
-✓ Compiled in 1937ms
-✓ Compiled in 1938ms
-✓ Compiled in 1925ms
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 49ms (compile: 10ms, render: 39ms)
- GET /api/properties?featured=true&limit=5 200 in 49ms (compile: 6ms, render: 44ms)
- GET /api/properties?trending=true&limit=5 200 in 38ms (compile: 14ms, render: 23ms)
- GET / 200 in 2.0s (compile: 679ms, render: 1370ms)
- GET /api/auth/me 401 in 50ms (compile: 23ms, render: 27ms)
- GET /api/properties/coral-bay-estate 200 in 132ms (compile: 65ms, render: 67ms)
- GET /sign-in 200 in 398ms (compile: 108ms, render: 289ms)
- GET / 200 in 238ms (compile: 22ms, render: 216ms)
- GET /api/auth/me 401 in 41ms (compile: 17ms, render: 23ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 108ms (compile: 17ms, render: 91ms)
- GET /api/properties?featured=true&limit=5 200 in 111ms (compile: 45ms, render: 66ms)
- GET /api/properties?trending=true&limit=5 200 in 115ms (compile: 71ms, render: 45ms)
- GET /api/properties/azure-heights 200 in 132ms (compile: 72ms, render: 60ms)
- GET /api/auth/me 401 in 45ms (compile: 14ms, render: 31ms)
- GET /api/properties/azure-heights 200 in 133ms (compile: 72ms, render: 61ms)
- GET /sign-in 200 in 227ms (compile: 14ms, render: 212ms)
- GET / 200 in 333ms (compile: 23ms, render: 310ms)
- GET /api/auth/me 401 in 21ms (compile: 9ms, render: 12ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 52ms (compile: 12ms, render: 40ms)
- GET /api/properties?featured=true&limit=5 200 in 57ms (compile: 21ms, render: 36ms)
- GET /api/properties?trending=true&limit=5 200 in 59ms (compile: 31ms, render: 28ms)
- GET / 200 in 308ms (compile: 22ms, render: 286ms)
- GET /api/auth/me 401 in 14ms (compile: 5ms, render: 9ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 46ms (compile: 9ms, render: 38ms)
- GET /api/properties?featured=true&limit=5 200 in 46ms (compile: 15ms, render: 31ms)
- GET /api/properties?trending=true&limit=5 200 in 50ms (compile: 23ms, render: 27ms)
- GET /api/properties/coral-bay-estate 200 in 114ms (compile: 63ms, render: 51ms)
- GET /api/auth/me 401 in 42ms (compile: 12ms, render: 30ms)
- GET /api/properties/coral-bay-estate 200 in 100ms (compile: 59ms, render: 41ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 61ms (compile: 17ms, render: 44ms)
- GET /api/properties?trending=true&limit=5 200 in 85ms (compile: 23ms, render: 61ms)
- GET /api/properties?featured=true&limit=5 200 in 91ms (compile: 50ms, render: 40ms)
- GET /api/properties/coral-bay-estate 200 in 114ms (compile: 66ms, render: 48ms)
- GET /account 200 in 508ms (compile: 415ms, render: 93ms)
- GET /sign-in 200 in 86ms (compile: 8ms, render: 78ms)
- GET /sign-up 200 in 234ms (compile: 100ms, render: 134ms)
- GET /api/auth/me 401 in 40ms (compile: 16ms, render: 24ms)
- GET /api/properties/coral-bay-estate 200 in 135ms (compile: 74ms, render: 61ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 36ms (compile: 5ms, render: 31ms)
- GET /api/properties?featured=true&limit=5 200 in 29ms (compile: 5ms, render: 24ms)
- GET /api/properties?trending=true&limit=5 200 in 33ms (compile: 12ms, render: 21ms)
- GET / 200 in 245ms (compile: 18ms, render: 227ms)
- GET /api/auth/me 401 in 20ms (compile: 7ms, render: 13ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 57ms (compile: 9ms, render: 47ms)
- GET /api/properties?featured=true&limit=5 200 in 43ms (compile: 7ms, render: 35ms)
- GET /api/properties?trending=true&limit=5 200 in 46ms (compile: 20ms, render: 26ms)
- GET /api/auth/me 401 in 39ms (compile: 12ms, render: 27ms)
- GET /api/properties/the-lekki-residence 200 in 129ms (compile: 75ms, render: 54ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 66ms (compile: 14ms, render: 53ms)
- GET /api/properties?trending=true&limit=5 200 in 37ms (compile: 9ms, render: 28ms)
- GET /api/properties?featured=true&limit=5 200 in 43ms (compile: 20ms, render: 23ms)
- GET /api/auth/me 401 in 35ms (compile: 10ms, render: 25ms)
- GET /api/properties/coral-bay-estate 200 in 111ms (compile: 67ms, render: 44ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 65ms (compile: 11ms, render: 55ms)
- GET /api/properties?featured=true&limit=5 200 in 45ms (compile: 6ms, render: 39ms)
- GET /api/properties?trending=true&limit=5 200 in 52ms (compile: 21ms, render: 30ms)
- GET /api/auth/me 401 in 13ms (compile: 5ms, render: 9ms)
- GET /api/properties/azure-heights 200 in 48ms (compile: 28ms, render: 20ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 74ms (compile: 24ms, render: 49ms)
- GET /api/properties?featured=true&limit=5 200 in 84ms (compile: 26ms, render: 59ms)
- GET /api/properties?trending=true&limit=5 200 in 91ms (compile: 53ms, render: 38ms)
- GET /api/auth/me 401 in 59ms (compile: 21ms, render: 39ms)
- GET /api/properties/campus-quarters 200 in 116ms (compile: 78ms, render: 38ms)
- GET / 200 in 389ms (compile: 18ms, render: 370ms)
- GET /api/auth/me 401 in 22ms (compile: 6ms, render: 16ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 41ms (compile: 6ms, render: 35ms)
- GET /api/properties?featured=true&limit=5 200 in 42ms (compile: 15ms, render: 27ms)
- GET /api/properties?trending=true&limit=5 200 in 34ms (compile: 15ms, render: 19ms)
-✓ Compiled in 2.4s
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
-✓ Compiled in 1917ms
- GET /api/auth/me 401 in 110ms (compile: 30ms, render: 80ms)
- GET /api/properties?featured=true&limit=5 200 in 135ms (compile: 65ms, render: 69ms)
- GET /api/properties?trending=true&limit=5 200 in 134ms (compile: 82ms, render: 52ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 140ms (compile: 46ms, render: 94ms)
- GET / 200 in 1472ms (compile: 266ms, render: 1206ms)
- GET /api/auth/me 401 in 35ms (compile: 18ms, render: 17ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 45ms (compile: 8ms, render: 37ms)
- GET /api/properties?featured=true&limit=5 200 in 47ms (compile: 18ms, render: 29ms)
- GET /api/properties?trending=true&limit=5 200 in 50ms (compile: 29ms, render: 21ms)
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
-✓ Compiled in 1980ms
- GET / 200 in 1477ms (compile: 307ms, render: 1170ms)
- GET /api/auth/me 401 in 22ms (compile: 6ms, render: 17ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 48ms (compile: 8ms, render: 40ms)
- GET /api/properties?featured=true&limit=5 200 in 50ms (compile: 21ms, render: 30ms)
- GET /api/properties?trending=true&limit=5 200 in 54ms (compile: 32ms, render: 22ms)
- GET /api/auth/me 401 in 16ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 17ms (compile: 4ms, render: 13ms)
- GET /api/auth/me 401 in 15ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 18ms (compile: 5ms, render: 13ms)
- GET /api/auth/me 401 in 15ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 26ms (compile: 4ms, render: 23ms)
- GET /api/auth/me 401 in 18ms (compile: 6ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 6ms, render: 11ms)
- GET /api/auth/me 401 in 20ms (compile: 9ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 76ms (compile: 5ms, render: 71ms)
- GET /api/auth/me 401 in 12ms (compile: 4ms, render: 8ms)
-✓ Compiled in 1825ms
- GET /api/auth/me 401 in 13ms (compile: 4ms, render: 8ms)
- GET /api/auth/me 401 in 12ms (compile: 4ms, render: 8ms)
- GET /api/auth/me 401 in 13ms (compile: 3ms, render: 10ms)
- GET /api/auth/me 401 in 13ms (compile: 3ms, render: 9ms)
- GET /api/auth/me 401 in 16ms (compile: 4ms, render: 12ms)
- GET /api/auth/me 401 in 12ms (compile: 4ms, render: 8ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 17ms (compile: 6ms, render: 11ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 19ms (compile: 7ms, render: 12ms)
- GET /api/auth/me 401 in 20ms (compile: 5ms, render: 15ms)
- GET /api/auth/me 401 in 18ms (compile: 4ms, render: 14ms)
- GET /api/auth/me 401 in 18ms (compile: 5ms, render: 13ms)
- GET /api/auth/me 401 in 19ms (compile: 6ms, render: 13ms)
-✓ Compiled in 2s
- GET /api/auth/me 401 in 23ms (compile: 7ms, render: 16ms)
- GET /api/auth/me 401 in 21ms (compile: 7ms, render: 14ms)
- GET /api/auth/me 401 in 19ms (compile: 5ms, render: 14ms)
- GET /api/auth/me 401 in 19ms (compile: 5ms, render: 13ms)
- GET /api/auth/me 401 in 19ms (compile: 6ms, render: 13ms)
- GET /api/auth/me 401 in 20ms (compile: 6ms, render: 14ms)
- GET /api/auth/me 401 in 22ms (compile: 6ms, render: 16ms)
- GET /api/auth/me 401 in 22ms (compile: 6ms, render: 16ms)
- GET /api/auth/me 401 in 17ms (compile: 6ms, render: 12ms)
- GET /api/auth/me 401 in 19ms (compile: 7ms, render: 13ms)
- GET /api/auth/me 401 in 17ms (compile: 6ms, render: 10ms)
- GET /api/auth/me 401 in 19ms (compile: 5ms, render: 14ms)
- GET /api/auth/me 401 in 23ms (compile: 9ms, render: 15ms)
- GET /api/auth/me 401 in 21ms (compile: 7ms, render: 14ms)
-✓ Compiled in 2.9s
- GET /api/auth/me 401 in 39ms (compile: 14ms, render: 25ms)
- GET /api/auth/me 401 in 27ms (compile: 8ms, render: 18ms)
- GET /api/auth/me 401 in 32ms (compile: 12ms, render: 20ms)
- GET /api/auth/me 401 in 16ms (compile: 6ms, render: 10ms)
- GET /api/auth/me 401 in 17ms (compile: 6ms, render: 11ms)
- GET /api/auth/me 401 in 24ms (compile: 9ms, render: 15ms)
- GET /api/auth/me 401 in 18ms (compile: 4ms, render: 14ms)
- GET /api/auth/me 401 in 24ms (compile: 6ms, render: 18ms)
- GET /api/auth/me 401 in 30ms (compile: 10ms, render: 20ms)
- GET /api/auth/me 401 in 21ms (compile: 8ms, render: 13ms)
- GET /api/auth/me 401 in 29ms (compile: 9ms, render: 21ms)
- GET /api/auth/me 401 in 21ms (compile: 8ms, render: 13ms)
- GET /api/auth/me 401 in 22ms (compile: 6ms, render: 16ms)
- GET /api/auth/me 401 in 22ms (compile: 8ms, render: 14ms)
-✓ Finished filesystem cache database compaction in 11.3s
-✓ Compiled in 1770ms
-✓ Compiled in 1781ms
-✓ Compiled in 2.2s
- GET /api/auth/me 401 in 20ms (compile: 7ms, render: 13ms)
-✓ Compiled in 3.7s
-✓ Compiled in 3.2s
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 69ms (compile: 13ms, render: 57ms)
- GET /api/properties?featured=true&limit=5 200 in 61ms (compile: 10ms, render: 51ms)
- GET /api/properties?trending=true&limit=5 200 in 66ms (compile: 40ms, render: 26ms)
- GET /api/auth/me 401 in 24ms (compile: 8ms, render: 16ms)
- GET /api/auth/me 401 in 24ms (compile: 8ms, render: 17ms)
- GET /api/auth/me 401 in 18ms (compile: 6ms, render: 12ms)
- GET /api/auth/me 401 in 23ms (compile: 7ms, render: 16ms)
- GET /api/auth/me 401 in 19ms (compile: 7ms, render: 13ms)
- GET /api/auth/me 401 in 22ms (compile: 6ms, render: 16ms)
- GET /api/auth/me 401 in 24ms (compile: 8ms, render: 16ms)
- GET /api/auth/me 401 in 24ms (compile: 7ms, render: 17ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 56ms (compile: 8ms, render: 48ms)
- GET /api/properties?featured=true&limit=5 200 in 59ms (compile: 19ms, render: 41ms)
- GET /api/properties?trending=true&limit=5 200 in 65ms (compile: 31ms, render: 34ms)
- GET /api/auth/me 401 in 45ms (compile: 29ms, render: 16ms)
- GET /api/auth/me 401 in 23ms (compile: 9ms, render: 14ms)
- GET / 200 in 624ms (compile: 352ms, render: 272ms)
- GET /api/auth/me 401 in 22ms (compile: 7ms, render: 15ms)
- GET /api/auth/me 401 in 25ms (compile: 7ms, render: 18ms)
- GET /api/auth/me 401 in 24ms (compile: 6ms, render: 17ms)
- GET /api/auth/me 401 in 23ms (compile: 7ms, render: 16ms)
- GET /api/auth/me 401 in 28ms (compile: 9ms, render: 19ms)
- GET /api/auth/me 401 in 35ms (compile: 16ms, render: 19ms)
- GET /api/auth/me 401 in 31ms (compile: 10ms, render: 21ms)
- GET /api/auth/me 401 in 26ms (compile: 8ms, render: 19ms)
- GET /api/auth/me 401 in 28ms (compile: 8ms, render: 19ms)
- GET /api/auth/me 401 in 33ms (compile: 11ms, render: 21ms)
- GET /api/auth/me 401 in 33ms (compile: 10ms, render: 23ms)
- GET /api/auth/me 401 in 41ms (compile: 14ms, render: 27ms)
- GET /api/auth/me 401 in 31ms (compile: 8ms, render: 22ms)
- GET /api/auth/me 401 in 26ms (compile: 10ms, render: 16ms)
- GET /api/auth/me 401 in 22ms (compile: 6ms, render: 15ms)
- GET /api/auth/me 401 in 19ms (compile: 6ms, render: 14ms)
- GET /api/auth/me 401 in 29ms (compile: 8ms, render: 21ms)
- GET /api/auth/me 401 in 26ms (compile: 9ms, render: 17ms)
- GET /api/auth/me 401 in 20ms (compile: 8ms, render: 12ms)
- GET /api/auth/me 401 in 23ms (compile: 9ms, render: 14ms)
-✓ Compiled in 1931ms
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 53ms (compile: 9ms, render: 45ms)
- GET /api/properties?featured=true&limit=5 200 in 39ms (compile: 12ms, render: 27ms)
- GET /api/properties?trending=true&limit=5 200 in 41ms (compile: 20ms, render: 21ms)
- GET /api/auth/me 401 in 14ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 13ms (compile: 3ms, render: 10ms)
- GET /api/auth/me 401 in 17ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 401 in 13ms (compile: 6ms, render: 7ms)
- GET /api/auth/me 401 in 12ms (compile: 5ms, render: 8ms)
- GET /api/auth/me 401 in 13ms (compile: 3ms, render: 10ms)
- GET /api/auth/me 401 in 11ms (compile: 3ms, render: 8ms)
- GET /api/auth/me 401 in 13ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 13ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 11ms (compile: 3ms, render: 8ms)
- GET /api/auth/me 401 in 15ms (compile: 4ms, render: 12ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 15ms (compile: 4ms, render: 11ms)
-✓ Compiled in 1677ms
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 33ms (compile: 5ms, render: 28ms)
- GET /api/properties?featured=true&limit=5 200 in 36ms (compile: 4ms, render: 31ms)
- GET /api/properties?trending=true&limit=5 200 in 24ms (compile: 10ms, render: 14ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 14ms (compile: 3ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 16ms (compile: 6ms, render: 10ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
-✓ Compiled in 2s
- GET /api/auth/me 401 in 17ms (compile: 7ms, render: 10ms)
-✓ Compiled in 1773ms
- GET /api/auth/me 401 in 21ms (compile: 5ms, render: 16ms)
- GET /api/auth/me 401 in 34ms (compile: 9ms, render: 25ms)
- GET /api/auth/me 401 in 36ms (compile: 12ms, render: 25ms)
-✓ Compiled in 1612ms
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 55ms (compile: 9ms, render: 46ms)
- GET /api/properties?featured=true&limit=5 200 in 45ms (compile: 7ms, render: 38ms)
- GET /api/properties?trending=true&limit=5 200 in 49ms (compile: 18ms, render: 31ms)
- GET /api/auth/me 401 in 26ms (compile: 10ms, render: 17ms)
- GET /api/auth/me 401 in 29ms (compile: 9ms, render: 20ms)
- GET /api/portfolio 401 in 50ms (compile: 23ms, render: 27ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 59ms (compile: 12ms, render: 47ms)
- GET /api/properties?featured=true&limit=5 200 in 81ms (compile: 29ms, render: 53ms)
- GET /api/properties?trending=true&limit=5 200 in 82ms (compile: 64ms, render: 18ms)
- GET /api/auth/me 401 in 14ms (compile: 6ms, render: 8ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 17ms (compile: 7ms, render: 10ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 12ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 20ms (compile: 6ms, render: 14ms)
- GET /api/auth/me 401 in 18ms (compile: 6ms, render: 12ms)
- GET /api/auth/me 401 in 18ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 401 in 27ms (compile: 6ms, render: 21ms)
- GET /api/auth/me 401 in 21ms (compile: 7ms, render: 13ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
- GET /api/portfolio 401 in 34ms (compile: 14ms, render: 21ms)
-✓ Compiled in 2.1s
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 9ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 61ms (compile: 7ms, render: 54ms)
- GET /api/properties?featured=true&limit=5 200 in 50ms (compile: 10ms, render: 39ms)
- GET /api/properties?trending=true&limit=5 200 in 54ms (compile: 24ms, render: 30ms)
- GET /api/auth/me 401 in 19ms (compile: 7ms, render: 12ms)
- GET /api/auth/me 401 in 14ms (compile: 5ms, render: 9ms)
- GET /api/auth/me 401 in 18ms (compile: 5ms, render: 13ms)
- GET /api/auth/me 401 in 22ms (compile: 5ms, render: 17ms)
- GET /api/auth/me 401 in 27ms (compile: 11ms, render: 16ms)
- GET /api/auth/me 401 in 19ms (compile: 8ms, render: 11ms)
- GET /api/auth/me 401 in 19ms (compile: 7ms, render: 13ms)
- GET /api/auth/me 401 in 17ms (compile: 4ms, render: 13ms)
- GET /api/auth/me 401 in 28ms (compile: 6ms, render: 23ms)
- GET /api/auth/me 401 in 19ms (compile: 6ms, render: 13ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 15ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 18ms (compile: 5ms, render: 13ms)
-✓ Compiled in 2.4s
- GET /api/auth/me 401 in 19ms (compile: 7ms, render: 12ms)
- GET /api/portfolio 401 in 28ms (compile: 10ms, render: 18ms)
- GET /api/auth/me 401 in 12ms (compile: 4ms, render: 8ms)
-✓ Compiled in 2.1s
-✓ Compiled in 1797ms
- GET /api/auth/me 401 in 12ms (compile: 3ms, render: 8ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 47ms (compile: 7ms, render: 41ms)
- GET /api/properties?featured=true&limit=5 200 in 37ms (compile: 5ms, render: 31ms)
- GET /api/properties?trending=true&limit=5 200 in 38ms (compile: 15ms, render: 24ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 20ms (compile: 9ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 3ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 5ms, render: 9ms)
- GET /api/auth/me 401 in 13ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 14ms (compile: 3ms, render: 11ms)
- GET /api/auth/me 401 in 15ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 13ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 15ms (compile: 3ms, render: 12ms)
-✓ Compiled in 1952ms
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
-✓ Compiled in 1957ms
- GET /api/auth/me 401 in 19ms (compile: 4ms, render: 14ms)
-✓ Compiled in 1887ms
- GET /api/auth/me 401 in 16ms (compile: 4ms, render: 12ms)
- GET /api/portfolio 401 in 30ms (compile: 10ms, render: 21ms)
- GET /api/wallet 401 in 40ms (compile: 12ms, render: 28ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 85ms (compile: 12ms, render: 73ms)
- GET /api/properties?featured=true&limit=5 200 in 89ms (compile: 37ms, render: 53ms)
- GET /api/properties?trending=true&limit=5 200 in 93ms (compile: 56ms, render: 37ms)
- GET /api/auth/me 401 in 23ms (compile: 8ms, render: 15ms)
- GET /api/auth/me 401 in 25ms (compile: 10ms, render: 14ms)
- GET /api/auth/me 401 in 33ms (compile: 9ms, render: 24ms)
- GET /api/auth/me 401 in 30ms (compile: 10ms, render: 21ms)
- GET /api/auth/me 401 in 22ms (compile: 10ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 17ms (compile: 6ms, render: 11ms)
- GET /api/auth/me 401 in 12ms (compile: 4ms, render: 8ms)
- GET /api/auth/me 401 in 16ms (compile: 4ms, render: 12ms)
- GET /api/auth/me 401 in 13ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 10ms)
-✓ Compiled in 1680ms
- GET /api/auth/me 401 in 21ms (compile: 6ms, render: 15ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 47ms (compile: 9ms, render: 38ms)
- GET /api/properties?featured=true&limit=5 200 in 50ms (compile: 20ms, render: 30ms)
- GET /api/properties?trending=true&limit=5 200 in 55ms (compile: 28ms, render: 27ms)
- GET /api/auth/me 401 in 22ms (compile: 10ms, render: 12ms)
- GET /api/auth/me 401 in 17ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 17ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 12ms (compile: 3ms, render: 9ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
- GET /api/auth/me 401 in 17ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 401 in 15ms (compile: 5ms, render: 10ms)
- GET /api/auth/me 401 in 40ms (compile: 11ms, render: 29ms)
- GET /api/auth/me 401 in 26ms (compile: 7ms, render: 19ms)
- GET /api/auth/me 401 in 35ms (compile: 11ms, render: 24ms)
- GET /api/auth/me 401 in 32ms (compile: 11ms, render: 21ms)
- GET /api/auth/me 401 in 45ms (compile: 15ms, render: 30ms)
- GET /api/auth/me 401 in 36ms (compile: 13ms, render: 23ms)
- GET /api/auth/me 401 in 27ms (compile: 10ms, render: 17ms)
- GET / 200 in 1859ms (compile: 400ms, render: 1459ms)
- GET /api/auth/me 401 in 17ms (compile: 7ms, render: 10ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 44ms (compile: 6ms, render: 38ms)
- GET /api/properties?featured=true&limit=5 200 in 33ms (compile: 6ms, render: 27ms)
- GET /api/properties?trending=true&limit=5 200 in 35ms (compile: 15ms, render: 20ms)
- GET /api/auth/me 401 in 15ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 10ms (compile: 4ms, render: 6ms)
- GET /api/auth/me 401 in 12ms (compile: 3ms, render: 9ms)
- GET /api/auth/me 401 in 11ms (compile: 3ms, render: 7ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 401 in 14ms (compile: 5ms, render: 9ms)
- GET /api/auth/me 401 in 12ms (compile: 5ms, render: 7ms)
- GET /api/auth/me 401 in 14ms (compile: 4ms, render: 9ms)
- GET /api/auth/me 401 in 13ms (compile: 4ms, render: 10ms)
- GET /api/auth/me 401 in 11ms (compile: 3ms, render: 7ms)
- GET /api/auth/me 401 in 12ms (compile: 4ms, render: 8ms)
- GET /api/auth/me 401 in 10ms (compile: 4ms, render: 6ms)
- GET /api/auth/me 401 in 10ms (compile: 3ms, render: 7ms)
- GET /api/auth/me 401 in 11ms (compile: 4ms, render: 6ms)
- GET /api/auth/me 401 in 32ms (compile: 16ms, render: 16ms)
- GET /api/properties/coral-bay-estate 200 in 246ms (compile: 214ms, render: 32ms)
-✓ Compiled in 3.2s
- GET /api/auth/me 401 in 16ms (compile: 5ms, render: 11ms)
-✓ Compiled in 3.2s
- GET /api/auth/me 401 in 24ms (compile: 8ms, render: 16ms)
- GET /sign-in 200 in 383ms (compile: 79ms, render: 304ms)
-✓ Compiled in 3s
-✓ Compiled in 2.2s
- POST /api/auth/login 200 in 334ms (compile: 17ms, render: 317ms)
- GET /account 200 in 4.3s (compile: 4.1s, render: 198ms)
- GET /account 200 in 178ms (compile: 19ms, render: 159ms)
- GET /api/wallet 200 in 49ms (compile: 11ms, render: 39ms)
- GET /api/portfolio 200 in 50ms (compile: 5ms, render: 45ms)
- GET /api/portfolio 200 in 47ms (compile: 8ms, render: 39ms)
- GET /api/wallet 200 in 45ms (compile: 11ms, render: 34ms)
- GET /api/wallet 200 in 44ms (compile: 14ms, render: 30ms)
- GET /api/portfolio 200 in 39ms (compile: 7ms, render: 33ms)
-✓ Finished filesystem cache database compaction in 10.8s
- GET / 200 in 1669ms (compile: 310ms, render: 1359ms)
- GET /api/auth/me 200 in 32ms (compile: 11ms, render: 21ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 44ms (compile: 10ms, render: 34ms)
- GET /api/properties?featured=true&limit=5 200 in 46ms (compile: 19ms, render: 27ms)
- GET /api/properties?trending=true&limit=5 200 in 49ms (compile: 29ms, render: 20ms)
- GET /api/auth/me 200 in 18ms (compile: 4ms, render: 13ms)
- GET /api/auth/me 200 in 16ms (compile: 4ms, render: 12ms)
- GET /api/auth/me 200 in 21ms (compile: 4ms, render: 17ms)
- GET /api/auth/me 200 in 17ms (compile: 5ms, render: 13ms)
- GET /api/auth/me 200 in 17ms (compile: 4ms, render: 14ms)
- GET /api/auth/me 200 in 20ms (compile: 4ms, render: 16ms)
- GET /api/auth/me 200 in 16ms (compile: 4ms, render: 12ms)
- GET /api/auth/me 200 in 18ms (compile: 5ms, render: 13ms)
- GET /api/auth/me 200 in 15ms (compile: 4ms, render: 12ms)
- GET /api/auth/me 200 in 15ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 200 in 15ms (compile: 4ms, render: 11ms)
- GET /api/auth/me 200 in 16ms (compile: 4ms, render: 12ms)
- GET /api/auth/me 200 in 17ms (compile: 4ms, render: 13ms)
- GET /api/auth/me 200 in 16ms (compile: 4ms, render: 12ms)
- GET /account 200 in 110ms (compile: 15ms, render: 95ms)
- GET /api/wallet 200 in 46ms (compile: 14ms, render: 32ms)
- GET /api/portfolio 200 in 35ms (compile: 4ms, render: 31ms)
- GET /api/wallet 200 in 143ms (compile: 32ms, render: 111ms)
- GET /api/portfolio 200 in 40ms (compile: 7ms, render: 33ms)
- GET /api/wallet 200 in 20ms (compile: 3ms, render: 17ms)
- GET /api/portfolio 200 in 18ms (compile: 2ms, render: 16ms)
- GET / 200 in 82ms (compile: 6ms, render: 76ms)
- GET /api/auth/me 200 in 18ms (compile: 3ms, render: 14ms)
- GET /api/properties?limit=20&sort=createdAt&order=desc 200 in 20ms (compile: 5ms, render: 15ms)
- GET /api/properties?featured=true&limit=5 200 in 18ms (compile: 2ms, render: 16ms)
- GET /api/properties?trending=true&limit=5 200 in 14ms (compile: 5ms, render: 9ms)
- GET /api/auth/me 200 in 11ms (compile: 3ms, render: 8ms)
- GET /api/auth/me 200 in 9ms (compile: 3ms, render: 7ms)
- GET /api/auth/me 200 in 14ms (compile: 3ms, render: 11ms)
- GET /api/auth/me 200 in 10ms (compile: 2ms, render: 8ms)
- GET /api/auth/me 200 in 18ms (compile: 5ms, render: 12ms)
- GET /api/auth/me 200 in 12ms (compile: 3ms, render: 9ms)
- GET /api/auth/me 200 in 13ms (compile: 3ms, render: 10ms)
- GET /api/auth/me 200 in 10ms (compile: 1970µs, render: 8ms)
- GET /api/auth/me 200 in 12ms (compile: 3ms, render: 9ms)
- GET /api/auth/me 200 in 12ms (compile: 3ms, render: 9ms)
- GET /api/auth/me 200 in 12ms (compile: 4ms, render: 8ms)
- GET /api/auth/me 200 in 18ms (compile: 1982µs, render: 16ms)
- GET /api/auth/me 200 in 18ms (compile: 5ms, render: 13ms)
- GET /api/auth/me 200 in 12ms (compile: 4ms, render: 9ms)
+✓ Running next.config.js took 73ms
+
+prisma:error 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findUnique()` invocation in
+C:\MyFiles\DOCUMENT-2026\Nuelo_Poc\NULO-DEV\NESTbyNULOAFRICA\.next\dev\server\chunks\ssr\[root-of-the-server]__0sgb98n._.js:230:156
+
+  227 const store = await cookies();
+  228 const userId = parseSessionValue(store.get(SESSION_COOKIE)?.value);
+  229 if (!userId) return null;
+→ 230 const user = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findUnique(
+Can't reach database server at `aws-1-eu-west-1.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-eu-west-1.pooler.supabase.com:6543`.
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `{imported module ./src/lib/prisma.ts}["prisma"].user.findUnique()` invocation in
+C:\MyFiles\DOCUMENT-2026\Nuelo_Poc\NULO-DEV\NESTbyNULOAFRICA\.next\dev\server\chunks\ssr\[root-of-the-server]__0sgb98n._.js:230:156
+
+  227 const store = await cookies();
+  228 const userId = parseSessionValue(store.get(SESSION_COOKIE)?.value);
+  229 if (!userId) return null;
+→ 230 const user = await {imported module ./src/lib/prisma.ts}["prisma"].user.findUnique(
+Can't reach database server at `aws-1-eu-west-1.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-eu-west-1.pooler.supabase.com:6543`.
+    at <unknown> (src\lib\auth.ts:183:34)
+    at async getCurrentUser (src\lib\auth.ts:183:16)
+    at async AccountPage (src\app\account\page.tsx:12:16)
+  181 |   const userId = parseSessionValue(store.get(SESSION_COOKIE)?.value);
+  182 |   if (!userId) return null;
+> 183 |   const user = await prisma.user.findUnique({
+      |                                  ^
+  184 |     where: { id: userId },
+  185 |     include: { wallet: true },
+  186 |   }); {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '1807154471'
+}
+ GET /account 500 in 2.5s (next.js: 611ms, application-code: 1888ms)
+⨯ ./src/lib/db.ts:1:1
+Error: Module not found: Can't resolve '@prisma/client'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mPrismaClient[0m } [36mfrom[0m [32m'@prisma/client'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mconst[0m globalForPrisma = globalThis [36mas[0m unknown [36mas[0m {
+  [90m4 |[0m   prisma: [33mPrismaClient[0m | [36mundefined[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/lib/db.ts
+    ./src/lib/prisma.ts
+    ./src/lib/auth.ts
+    ./src/app/account/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/lib/db.ts:1:1
+Error: Module not found: Can't resolve '@prisma/client'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mPrismaClient[0m } [36mfrom[0m [32m'@prisma/client'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mconst[0m globalForPrisma = globalThis [36mas[0m unknown [36mas[0m {
+  [90m4 |[0m   prisma: [33mPrismaClient[0m | [36mundefined[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/lib/db.ts
+    ./src/lib/prisma.ts
+    ./src/lib/auth.ts
+    ./src/app/account/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+prisma:error 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findUnique()` invocation in
+C:\MyFiles\DOCUMENT-2026\Nuelo_Poc\NULO-DEV\NESTbyNULOAFRICA\.next\dev\server\chunks\ssr\[root-of-the-server]__0sgb98n._.js:230:156
+
+  227 const store = await cookies();
+  228 const userId = parseSessionValue(store.get(SESSION_COOKIE)?.value);
+  229 if (!userId) return null;
+→ 230 const user = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findUnique(
+Can't reach database server at `aws-1-eu-west-1.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-eu-west-1.pooler.supabase.com:6543`.
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `{imported module ./src/lib/prisma.ts}["prisma"].user.findUnique()` invocation in
+C:\MyFiles\DOCUMENT-2026\Nuelo_Poc\NULO-DEV\NESTbyNULOAFRICA\.next\dev\server\chunks\ssr\[root-of-the-server]__0sgb98n._.js:230:156
+
+  227 const store = await cookies();
+  228 const userId = parseSessionValue(store.get(SESSION_COOKIE)?.value);
+  229 if (!userId) return null;
+→ 230 const user = await {imported module ./src/lib/prisma.ts}["prisma"].user.findUnique(
+Can't reach database server at `aws-1-eu-west-1.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-eu-west-1.pooler.supabase.com:6543`.
+    at <unknown> (src\lib\auth.ts:183:34)
+    at async getCurrentUser (src\lib\auth.ts:183:16)
+    at async AccountPage (src\app\account\page.tsx:12:16)
+  181 |   const userId = parseSessionValue(store.get(SESSION_COOKIE)?.value);
+  182 |   if (!userId) return null;
+> 183 |   const user = await prisma.user.findUnique({
+      |                                  ^
+  184 |     where: { id: userId },
+  185 |     include: { wallet: true },
+  186 |   }); {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '1807154471'
+}
+ GET /account 500 in 3.1s (next.js: 15ms, application-code: 3.1s)
