@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Wallet as WalletIcon,
@@ -75,7 +75,35 @@ const typeIcons: Record<string, { icon: React.ReactNode; color: string }> = {
 };
 
 export default function WalletView() {
-  const [balance] = useState(3_250_000);
+  // ── dev_gstack merge (Feature #3): ledger-backed balance + history ──
+  // Replaced a hard-coded 3,250,000 and 12 invented transactions. Balance is
+  // SUM(credits) − SUM(debits) over the append-only ledger.
+  const [balance, setBalance] = useState(0);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [totals, setTotals] = useState({ credited: 0, debited: 0, entries: 0 });
+  const [verification, setVerification] = useState('');
+  const [walletNote, setWalletNote] = useState('');
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/wallet')
+      .then(async (res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!active || !data) return;
+        setBalance(data.balance);
+        setTransactions(data.transactions ?? []);
+        setTotals(data.totals ?? { credited: 0, debited: 0, entries: 0 });
+        setVerification(data.verificationStatus ?? '');
+        setWalletNote(data.ledgerNote ?? '');
+      })
+      .catch(() => {
+        // Signed out or offline: render zeroed real data, never mock money.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const [depositDialogOpen, setDepositDialogOpen] = useState(false);
   const [withdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
   const [transferDialogOpen, setTransferDialogOpen] = useState(false);
@@ -96,6 +124,28 @@ export default function WalletView() {
       >
         <h1 className="text-2xl sm:text-3xl font-bold mb-1">Wallet</h1>
         <p className="text-sm text-muted-foreground">Manage your funds and transactions</p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-red-300 bg-red-100 px-2.5 py-1 text-[10px] font-bold uppercase text-red-700">
+            Test mode — demo funds only
+          </span>
+          {verification && (
+            <span
+              className={cn(
+                'rounded-full border px-2.5 py-1 text-[10px] font-bold',
+                verification === 'VERIFIED'
+                  ? 'border-green-300 bg-green-50 text-green-800'
+                  : verification === 'REJECTED'
+                    ? 'border-red-300 bg-red-50 text-red-800'
+                    : 'border-amber-300 bg-amber-50 text-amber-800'
+              )}
+            >
+              {verification}
+            </span>
+          )}
+        </div>
+        {walletNote && (
+          <p className="mt-2 text-xs text-muted-foreground">{walletNote}</p>
+        )}
       </motion.div>
 
       {/* Balance Card */}
@@ -291,16 +341,16 @@ export default function WalletView() {
         className="grid grid-cols-3 gap-3 mb-6"
       >
         <Card className="p-3 gap-0 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Deposits</p>
-          <p className="text-sm font-bold mt-0.5">{formatNairaFull(18_750_000)}</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Credited</p>
+          <p className="text-sm font-bold mt-0.5">{formatNairaFull(totals.credited)}</p>
         </Card>
         <Card className="p-3 gap-0 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Spent</p>
-          <p className="text-sm font-bold mt-0.5">{formatNairaFull(15_750_000)}</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Debited</p>
+          <p className="text-sm font-bold mt-0.5">{formatNairaFull(totals.debited)}</p>
         </Card>
         <Card className="p-3 gap-0 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Transactions</p>
-          <p className="text-sm font-bold mt-0.5">47</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Ledger Entries</p>
+          <p className="text-sm font-bold mt-0.5">{totals.entries}</p>
         </Card>
       </motion.div>
 
@@ -318,7 +368,13 @@ export default function WalletView() {
             </div>
           </div>
           <div className="space-y-0">
-            {mockTransactions.map((txn, i) => {
+            {transactions.length === 0 && (
+              <p className="py-6 text-center text-xs text-muted-foreground">
+                No ledger entries yet. Sign in as a verified investor and ask an
+                admin for a DEMO CREDIT to populate this history.
+              </p>
+            )}
+            {transactions.map((txn, i) => {
               const typeInfo = typeIcons[txn.type] || typeIcons.credit;
               const statusInfo = statusConfig[txn.status] || statusConfig.completed;
 

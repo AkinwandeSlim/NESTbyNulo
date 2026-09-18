@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { MapPin, Building2, TrendingUp, Clock, BadgeCheck } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { MapPin, Building2, TrendingUp, Clock, BadgeCheck, LogIn } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,9 @@ export interface PropertyCardData {
   shortDescription?: string;
   totalValue: number;
   minInvestment: number;
+  // dev_gstack merge: the real Property model carries maxInvestment; the
+  // checkout reads it to clamp the amount slider.
+  maxInvestment?: number | null;
   rentalYield: number | null;
   expectedIRR: number | null;
   riskRating: string;
@@ -67,6 +71,32 @@ export default function PropertyCard({
 }: PropertyCardProps) {
   const { setView, selectProperty } = useNestStore();
   const progress = property.fundingProgress ?? Math.round((property.fundingRaised / property.fundingTarget) * 100);
+  
+  // Authentication state
+  const [session, setSession] = useState<{
+    firstName: string;
+    lastName: string | null;
+    email: string;
+    status: string;
+    role: string;
+  } | null>(null);
+
+  // Fetch authentication state
+  useEffect(() => {
+    let active = true;
+    fetch('/api/auth/me')
+      .then(async (res) => {
+        const data = await res.json();
+        if (!active) return;
+        setSession(res.ok ? data.user : null);
+      })
+      .catch(() => {
+        if (active) setSession(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleCardClick = () => {
     selectProperty(property.slug);
@@ -75,6 +105,20 @@ export default function PropertyCard({
 
   const handleInvestClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
+    
+    if (!session) {
+      // Not signed in - redirect to sign-in
+      window.location.href = '/sign-in';
+      return;
+    }
+    
+    if (session.status !== 'VERIFIED') {
+      // Signed in but not verified - show message
+      alert('Your account is under verification. Please wait for admin approval before investing.');
+      return;
+    }
+    
+    // Signed in and verified - proceed to invest
     selectProperty(property.slug);
     setView('invest');
   };
@@ -178,7 +222,12 @@ export default function PropertyCard({
                 className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white"
                 size="sm"
               >
-                Invest Now
+                {session ? 'Invest Now' : (
+                  <>
+                    <LogIn className="size-3 mr-1.5" />
+                    Sign in to Invest
+                  </>
+                )}
               </Button>
             </div>
           </div>
@@ -294,7 +343,12 @@ export default function PropertyCard({
               className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white text-xs"
               size="sm"
             >
-              Invest Now
+              {session ? 'Invest Now' : (
+                <>
+                  <LogIn className="size-3 mr-1.5" />
+                  Sign in to Invest
+                </>
+              )}
             </Button>
           </div>
         </Card>

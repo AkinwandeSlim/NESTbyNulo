@@ -28,6 +28,20 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  // ── dev_gstack merge (Feature #1/#2): auth + verification ──
+  // "CLERK" | "DEV_FALLBACK" — how the account was provisioned
+  authSource      String   @default("DEV_FALLBACK")
+  clerkId         String?  @unique
+  passwordHash    String?
+  // PENDING | VERIFIED | REJECTED — server-side gate for investor features
+  status          String   @default("PENDING")
+  verifiedAt      DateTime?
+  verifiedBy      String?
+  // Rejection audit trail (Feature #2)
+  rejectionReason String?
+  rejectedAt      DateTime?
+  rejectedBy      String?
+
   investorProfile    InvestorProfile?
   developerProfile   DeveloperProfile?
   propertyManagerProfile PropertyManagerProfile?
@@ -141,6 +155,14 @@ model Property {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  // ── dev_gstack merge (Features #4/#5): BigInt kobo money fields ──
+  // valuationKobo mirrors totalValue; targetKobo/fundedKobo drive the
+  // atomic investment route and remaining-funding guard.
+  valuationKobo     BigInt   @default(0)
+  targetKobo        BigInt   @default(0)
+  fundedKobo        BigInt   @default(0)
+  minInvestmentKobo BigInt   @default(0)
+
   developer       DeveloperProfile?     @relation(fields: [developerId], references: [id])
   propertyManager PropertyManagerProfile? @relation(fields: [propertyManagerId], references: [id])
   spv             SPV?                   @relation(fields: [spvId], references: [id])
@@ -224,12 +246,12 @@ model Investment {
   id              String   @id @default(cuid())
   userId          String
   propertyId      String
-  amount          Float
+  amount          Float?
   units           Float    @default(0)
   status          String   @default("pending")
   paymentMethod   String?
   paymentRef      String?  @unique
-  investedAt      DateTime?
+  investedAt      DateTime @default(now())
   confirmedAt     DateTime?
   certificateNo   String?  @unique
   rentalYield     Float?
@@ -237,9 +259,14 @@ model Investment {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // ── dev_gstack merge (Features #3/#4/#5) ──
+  amountKobo      BigInt   @default(0)
+  ownershipPct    Float    @default(0)
+  // Idempotency dedup key (Feature #5): unique per investment
+  idempotencyKey  String   @unique
+
   user     User     @relation(fields: [userId], references: [id])
   property Property @relation(fields: [propertyId], references: [id])
-  transactions Transaction[]
 
   @@index([userId])
   @@index([propertyId])
@@ -257,30 +284,38 @@ model Wallet {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  // ── dev_gstack merge (Feature #3): BigInt kobo mirror of the ledger SUM ──
+  // Authoritative balance = SUM(Transaction rows); this column is a cache.
+  balanceKobo   BigInt   @default(0)
+
   user User @relation(fields: [userId], references: [id])
 }
 
-// ─── TRANSACTIONS ───
+// ── TRANSACTIONS (Feature #3: append-only immutable ledger) ──
+// Every money movement writes one row; balance = SUM(CREDIT) - SUM(DEBIT).
+// Legacy Float fields were dropped in the dev_gstack merge (DB re-seeded).
 
 model Transaction {
   id           String   @id @default(cuid())
   userId       String
+  // CREDIT | DEBIT
   type         String
-  amount       Float
-  status       String   @default("pending")
-  reference    String   @unique
-  description  String?
-  metadata     String?
-  investmentId String?
+  // kobo (1 naira = 100 kobo). BigInt for exact arithmetic.
+  amountKobo   BigInt
+  // DEMO_CREDIT | INVESTMENT | DISTRIBUTION | WITHDRAWAL
+  category     String
+  description  String   @default("")
+  // Related entity: Investment id, Property id, admin id, etc.
+  refType      String?
+  refId        String?
+  // Running balance AFTER this transaction (kobo), for audit/reconciliation
+  balanceKobo  BigInt
   createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
 
-  user       User        @relation(fields: [userId], references: [id])
-  investment Investment? @relation(fields: [investmentId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
-  @@index([type])
-  @@index([status])
+  @@index([category])
   @@index([createdAt])
 }
 

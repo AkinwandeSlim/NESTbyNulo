@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Screen Specification - NEST by Nulo Africa</title><style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:960px;margin:0 auto;padding:24px;color:#1a1a2e;background:#f8f9fa;line-height:1.6}
+h1{color:#16213e;border-bottom:2px solid #0f3460;padding-bottom:8px}
+h2{color:#16213e;border-bottom:1px solid #dee2e6;padding-bottom:4px;margin-top:32px}
+h3{color:#1a1a2e;margin-top:24px}h4{color:#495057;margin-top:16px}
+table{border-collapse:collapse;width:100%;margin:16px 0}
+th{background:#0f3460;color:white;padding:8px 12px;text-align:left}
+td{border:1px solid #dee2e6;padding:8px 12px}
+tr:nth-child(even){background:#f1f3f5}
+code{background:#e9ecef;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:.9em}
+pre{background:#1a1a2e;color:#a8d8ea;padding:16px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word}
+pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:4px solid #0f3460;margin:8px 0;padding:8px 16px;background:#e8f0fe;border-radius:0 4px 4px 0}
+hr{border:none;border-top:1px solid #dee2e6;margin:24px 0}
+a{color:#0f3460}ul,ol{padding-left:24px}li{margin:4px 0}
+.banner{background:#dc3545;color:white;text-align:center;padding:10px;font-weight:bold;font-size:1.1em;border-radius:4px;margin-bottom:16px}
+.meta{color:#6c757d;font-size:.9em;margin-bottom:16px}
+</style></head><body><div class="banner">NEST Documentation - TEST MODE BUILD - NOT A LIVE INVESTMENT OFFERING</div><div class="meta">NEST by Nulo Africa | September 17, 2026 | Source of Truth: requirements.md v2.0</div><h1>NEST by Nulo Africa — Screen Specification</h1>
+
+<strong>Version:</strong> 2.1
+<strong>Date:</strong> September 17, 2026
+<strong>Status:</strong> Updated — Reduced to 6 core demo screens (achievable 24-hour scope)
+<strong>Source of Truth:</strong> <code>docs_gstack/requirements.md</code> v2.0
+
+<hr/>
+<h2>Scope Reduction Note</h2>
+
+Version 2.0 specified 12 screens. For a single developer with ~24 effective hours, 12 screens is not achievable without sacrificing code quality on the core features. This version reduces to <strong>6 core screens</strong> by:
+
+- Combining Admin verification + demo credit + investment viewer into one Admin Panel screen
+- Merging amount input and review/consent into one Investment screen (two logical steps, one page)
+- Removing the separate Success and Transaction History screens (redirect to Portfolio with receipt shown inline)
+- Removing the separate Verification Status screen (inline state on Portfolio/Wallet)
+- Removing the separate Sign In / Sign Up screen (Clerk hosted — no NEST spec needed)
+
+All other requirements (authorization, TEST MODE labels, mandatory checkboxes, mobile constraints) remain exactly as specified.
+
+<hr/>
+<h2>Screen Map (6 Core Screens)</h2>
+
+<table><tr><th>#</th><th>Screen</th><th>Route</th><th>Auth</th><th>FR</th><th>---</th><th>---</th><th>---</th><th>---</th><th>---</th><th>1</th><th>Property Data Room</th><th><code>/properties/[id]</code></th><th>None (public)</th><th>FR-001</th><th>2</th><th>Wallet + Verification Status</th><th><code>/wallet</code></th><th>Authenticated (any)</th><th>FR-002, FR-003</th><th>3</th><th>Investment (Amount + Review + Consent)</th><th><code>/properties/[id]/invest</code></th><th>VERIFIED only</th><th>FR-004</th><th>4</th><th>Portfolio</th><th><code>/portfolio</code></th><th>Authenticated (any)</th><th>FR-005</th><th>5</th><th>Admin Panel</th><th><code>/admin</code></th><th>ADMIN only</th><th>FR-002, FR-003, FR-005, FR-006</th><th>6</th><th>Admin Distribution</th><th><code>/admin/distributions</code></th><th>ADMIN only</th><th>FR-007 (Should-have)</th><th><strong>Clerk sign-in/sign-up:</strong> Clerk-hosted — no NEST-owned screen required.
+
+<hr/>
+<h2>Screen 1: Property Data Room</h2>
+
+<strong>Route:</strong> <code>/properties/[id]</code>
+<strong>Auth:</strong> None (public)
+<strong>FR:</strong> FR-001
+
+<h3>Required Content</h3>
+
+<strong>Page Header (always visible):</strong>
+- Banner (red, prominent): <strong>"⚠ TEST MODE — NOT A LIVE OFFERING OR PAYMENT"</strong>
+- Property name (from DB)
+- City and property type (from DB)
+- Status badge: FUNDING / FUNDED / ACTIVE (from DB enum)
+
+<strong>Funding Progress:</strong>
+- Total target: ₦100,000,000 (from <code>fundingTargetKobo</code>)
+- Raised: ₦X,XXX,XXX (from <code>fundingRaisedKobo</code>)
+- Remaining: calculated
+- Progress bar (%)
+
+<strong>Investment Terms (all from DB — no hardcoded values):</strong>
+- Minimum: ₦500,000</th><th>Maximum: ₦10,000,000
+- Platform fee: 2% of investment principal (added on top; shown as a line item at investment)
+- Management fee: up to 8% of rent collected (not % of AUM)
+- Legal/SPV costs: actual costs with pre-agreed cap (disclosed in deal memo)
+- Lock-up: 24 months from acquisition (planning default — counsel confirmation required)
+- Distributions: quarterly from actual rent collected
+
+<strong>Return Projection (DB-derived, mandatory labels):</strong>
+- Projected annual yield: 7–9% of investment principal
+- <strong>"PROJECTION ONLY — NOT GUARANTEED"</strong> label — always visible
+- <strong>"Past performance does not predict future results"</strong> label — always visible
+- <strong>"Depends on actual rent, vacancies, maintenance, and costs"</strong> label — always visible
+
+<strong>Risk Disclosure (always visible — not behind a click):</strong>
+- Risk rating: MEDIUM (from DB)
+- Risks listed: Vacancy, Tenant Default, Property Depreciation, Maintenance Costs, Regulatory Risk, Illiquidity (24-month lock-up, no secondary market), Capital Loss, Platform Risk
+
+<strong>Liquidity Policy (mandatory, prominent):</strong>
+- "There is no secondary market for this investment."
+- "After the 24-month lock-up: exit through property sale, refinancing/buyback (if available), or permitted replacement investor transfer only."
+
+<strong>Call to Action:</strong>
+- Status FUNDING + VERIFIED user → "Invest Now" button (active)
+- Status FUNDING + PENDING user → "Account pending verification — contact admin" (disabled button with message)
+- Status FUNDING + anonymous user → "Sign In to Invest" → triggers Clerk sign-in, returns to this page
+- Status FUNDED → "Fully Funded — No New Investments" (disabled)
+- Status ACTIVE → "Currently Active — Property Acquired"
+
+<strong>Error/Loading States:</strong>
+- Loading: skeleton card
+- Property not found: "This property is unavailable."
+- Missing DB values: show intentional unavailable state — never fabricate a value
+
+<hr/>
+<h2>Screen 2: Wallet + Verification Status</h2>
+
+<strong>Route:</strong> <code>/wallet</code>
+<strong>Auth:</strong> Authenticated (any — pending or verified)
+<strong>FR:</strong> FR-002, FR-003
+
+<h3>Required Content</h3>
+
+<strong>Page Header:</strong>
+- Banner: <strong>"TEST MODE — NOT A LIVE OFFERING OR PAYMENT"</strong>
+- <strong>"Balances shown are illustrative demo credits — NOT real money"</strong> (always visible)
+
+<strong>Verification Status (inline — replaces separate /verify screen):</strong>
+- PENDING: "⏳ Account Verification Pending — A NEST administrator will review your account. Once verified, you can invest. In a live pilot, this would involve identity verification by a licensed KYC provider."
+- VERIFIED: "✅ Account Verified (Demo State Only — not real KYC)"
+- REJECTED: "❌ Account Rejected — contact admin"
+
+<strong>Wallet Balance:</strong>
+- "Available Balance: ₦X,XXX,XXX" (from ledger SUM — never hardcoded)
+
+<strong>Transaction History (last 10, newest first):</strong>
+- Each row: date</th><th>type label</th><th>description</th><th>± amount
+- DEMO_CREDIT entries show: <strong>"DEMO CREDIT — NOT A PAYMENT"</strong> label
+- "No transactions yet" empty state
+
+<strong>Fund Wallet Note:</strong>
+- "Your demo wallet is funded by a NEST administrator. This is not a real payment or deposit."
+
+<hr/>
+<h2>Screen 3: Investment — Amount, Review, and Consent (Single Screen, Two Logical Steps)</h2>
+
+<strong>Route:</strong> <code>/properties/[id]/invest</code>
+<strong>Auth:</strong> VERIFIED investor only (server enforces 403 for PENDING, 401 for anonymous)
+<strong>FR:</strong> FR-004
+
+<blockquote><strong>Single-screen, two-step implementation.</strong> Step 1 (amount entry) and Step 2 (review + consent) are rendered on the same page. When the user enters a valid amount, the review panel updates live below. Confirm is blocked until all checkboxes are checked.</blockquote>
+
+<strong>Page Header:</strong>
+- Banner: <strong>"INVEST — TEST MODE"</strong>
+- Property name
+
+<h3>Step 1: Amount Entry (top of screen)</h3>
+
+<strong>Investment Amount Field:</strong>
+- Label: "Investment Principal (₦)"
+- Input placeholder text: "min ₦500,000 / max ₦10,000,000"
+- Client-side validation on blur:
+  - Below ₦500,000: "Minimum investment is ₦500,000"
+  - Above ₦10,000,000: "Maximum investment is ₦10,000,000"
+  - Exceeds wallet balance (after adding fee): "Your wallet balance of ₦X,XXX,XXX is insufficient (need ₦Y,YYY,YYY including the 2% fee)"
+  - Exceeds remaining capacity: "Only ₦X,XXX,XXX of capacity remains"
+
+<h3>Step 2: Review Panel (updates live as amount changes)</h3>
+
+<strong>Investment Summary (shown when a valid amount is entered):</strong>
+- Investment principal: ₦X,XXX,XXX
+- Platform fee (2% — added on top): ₦X,XXX
+- <strong>Total debited from wallet: ₦X,XXX,XXX</strong>
+- Your ownership stake: X.XX% of illustrative property
+- Projected annual distribution: ₦XXX,XXX – ₦XXX,XXX
+  - <strong>(7–9% of your investment principal — PROJECTION ONLY, NOT GUARANTEED)</strong>
+- Lock-up: 24 months from acquisition
+- Exit: no secondary market — see property page
+
+<strong>Mandatory Risk Consent Checkboxes (all 6 required; Confirm is DISABLED until all checked):</strong>
+- ☐ I understand this is TEST MODE — no real money is involved in this demo
+- ☐ I understand the 24-month lock-up period from property acquisition completion
+- ☐ I understand there is no secondary market — I cannot sell or transfer during lock-up
+- ☐ I understand projected returns (7–9% of principal) are estimates only, not guaranteed
+- ☐ I understand I could lose some or all of my invested capital in a live investment
+- ☐ I have read and understood the risk factors on the property page
+
+<strong>Terms Acknowledgement Note:</strong>
+- "By confirming, you acknowledge these disclosures. The system will record your consent version and timestamp server-side."
+
+<strong>Confirm Investment Button:</strong>
+- Disabled (greyed) until all 6 checkboxes are checked AND a valid amount is entered
+- Active state: "Confirm Investment — ₦X,XXX,XXX total debit"
+- Loading after click: "Processing…" (disabled; spinner; no double-submit)
+
+<strong>On Success:</strong>
+- Redirect to <code>/portfolio</code> with a success toast: "Investment confirmed ✅ — Receipt: INV-YYYYMMDD-XXX — ₦X,XXX,XXX (₦Y,YYY,YYY principal + ₦Z,ZZZ fee)"
+- <em>No separate success screen needed — portfolio shows the confirmed holding immediately</em>
+
+<strong>On Error:</strong>
+- Error shown below the Confirm button: "Investment failed: [server error message]"
+- Checkboxes remain checked; user can adjust amount and retry
+
+<hr/>
+<h2>Screen 4: Portfolio</h2>
+
+<strong>Route:</strong> <code>/portfolio</code>
+<strong>Auth:</strong> Authenticated (any)
+<strong>FR:</strong> FR-005
+
+<h3>Required Content</h3>
+
+<strong>Page Header:</strong>
+- Banner: <strong>"TEST MODE — NOT A REAL BALANCE OR PORTFOLIO"</strong>
+
+<strong>Wallet Balance Card:</strong>
+- "Available Balance: ₦X,XXX,XXX" (from ledger SUM — never hardcoded)
+- Link to <code>/wallet</code> for full transaction history + verification status
+
+<strong>Holdings Section:</strong>
+- For each CONFIRMED investment:
+  - Property name + (DEMO) label
+  - Principal invested: ₦X,XXX,XXX
+  - Platform fee paid: ₦X,XXX
+  - Ownership stake: X.XX%
+  - Status: CONFIRMED
+  - Projected annual dist: ₦XXX,XXX – ₦XXX,XXX (PROJECTION ONLY)
+  - Date confirmed
+- <strong>Empty state:</strong> "No investments yet. Browse available properties." + link
+
+<strong>Recent Transactions (last 5, all DB-derived):</strong>
+- Date</th><th>Type</th><th>Description</th><th>Amount
+- DEMO_CREDIT: "Demo Credit — NOT A PAYMENT: +₦5,000,000"
+- INVESTMENT_DEBIT: "Investment principal — [property]: -₦5,000,000"
+- PLATFORM_FEE: "Platform fee (2%) — [property]: -₦100,000"
+- DISTRIBUTION_CREDIT: "Rental Distribution Q4 2026 Demo: +₦55,200"
+- <strong>Empty state:</strong> "No transactions yet"
+
+<hr/>
+<h2>Screen 5: Admin Panel</h2>
+
+<strong>Route:</strong> <code>/admin</code>
+<strong>Auth:</strong> ADMIN only (403 for non-admin, 401 for anonymous)
+<strong>FR:</strong> FR-002, FR-003, FR-005, FR-006
+
+<blockquote><strong>Combined single admin screen</strong> covering user management, demo credits, and investment viewer. No separate sub-pages needed for the 3-day demo.</blockquote>
+
+<strong>Page Header:</strong>
+- "Admin Panel — TEST MODE"
+
+<h3>Section A: User Management</h3></th><th>Column</th><th>Value</th><th>---</th><th>---</th><th>Name</th><th>Fictional name (from DB)</th><th>Email</th><th>Demo email</th><th>KYC Status</th><th>PENDING / VERIFIED / REJECTED badge</th><th>Wallet Balance</th><th>From ledger SUM</th><th>Actions</th><th>Verify / Reject (with confirm dialog)</th><th>- Each Verify/Reject action: writes AuditLog entry + creates Notification
+- Filter by: ALL / PENDING only
+
+<h3>Section B: Issue Demo Credit</h3>
+
+- Select Investor: dropdown of INVESTOR accounts
+- Amount (₦): input field
+- Reference: auto-generated (idempotent)
+- Preview: "Credit ₦X,XXX,XXX to [name] — DEMO CREDIT — NOT A PAYMENT"
+- "Issue Demo Credit" button
+- Success: reference shown; balance updated in Section A table
+
+<h3>Section C: Investment Registry</h3>
+
+- Table of all CONFIRMED investments
+- Columns: Receipt No</th><th>Investor</th><th>Principal</th><th>Fee</th><th>Total Debit</th><th>Ownership %</th><th>Date
+- All values from DB — no hardcoded numbers
+- AuditLog: last 10 entries with action, actor, entity, timestamp
+
+<hr/>
+<h2>Screen 6: Admin Distribution Panel (Should-Have)</h2>
+
+<strong>Route:</strong> <code>/admin/distributions</code>
+<strong>Auth:</strong> ADMIN only
+<strong>FR:</strong> FR-007
+
+<blockquote><em>Only build this if all 5 Must-have screens are complete and passing before end of Day 2.</em></blockquote>
+
+<strong>Page Header:</strong>
+- "Admin Distribution — TEST MODE"
+
+<strong>Configuration:</strong>
+- Select Property: dropdown of FUNDING/ACTIVE demo properties
+- Distribution Period: text input (e.g., "Q4-2026-DEMO")
+- Total Rent Collected (₦): number input
+- Auto-calculated:
+  - Management fee (8% of rent): ₦X,XXX
+  - Net to distribute: ₦X,XXX,XXX
+
+<strong>Preview (after "Calculate" button):</strong>
+- Table: Investor</th><th>Principal</th><th>Ownership %</th><th>Allocation</th><th>Wallet Balance After
+- Unfunded reserve: shown as "Unfunded X.X% — ₦X,XXX,XXX held in reserve (not credited)"
+- Accounting check: sum of all investor allocations + unfunded reserve = net to distribute ✓
+
+<strong>Idempotency Guard:</strong>
+- "Executing the same period twice is blocked (409 error). Check before executing."
+
+<strong>"Execute Distribution — TEST MODE" button:</strong>
+- Requires preview first
+- Confirmation modal: "Credit ₦X,XXX,XXX to [N] investor wallets — TEST MODE. Cannot be undone."
+- On success: summary table with all credits + reserve amount
+
+<strong>API Contract:</strong>
+- <code>POST /api/admin/distributions</code> — single endpoint. Request body includes <code>action: &quot;preview&quot;</code> or <code>action: &quot;execute&quot;</code>. This unifies the contract with the architecture specification.
+
+<hr/>
+<h2>Mobile Requirements (All 6 Screens)</h2>
+
+- Primary build viewport: <strong>360px</strong>
+- Verify at: 390px, 768px, 1280px
+- No horizontal scrolling on any screen
+- Minimum <strong>44px × 44px</strong> touch targets for all interactive elements
+- Investment Confirm button: <strong>sticky bottom, safe-area-inset-aware</strong>, does not cover the amount, balance, or checkboxes
+- Dense data tables → labeled stacked cards at ≤ 768px
+- Loading: centered spinner with accessible text
+- Error messages: appear below the triggering element (not in a toast alone)
+
+<hr/>
+<h2>Hour Estimate (6 Screens, Solo Builder)</h2></th><th>Screen</th><th>Estimated Hours</th></tr><tr><td>Screen 1: Property Data Room</td><td>5–6 h</td></tr><tr><td>Screen 2: Wallet + Verification Status</td><td>3–4 h</td></tr><tr><td>Screen 3: Investment (combined)</td><td>6–7 h</td></tr><tr><td>Screen 4: Portfolio</td><td>4–5 h</td></tr><tr><td>Screen 5: Admin Panel</td><td>5–6 h</td></tr><tr><td><strong>Must-have total (Screens 1–5)</strong></td><td><strong>23–28 h</strong></td></tr><tr><td>Screen 6: Admin Distribution (Should)</td><td>4–5 h</td></tr></table>
+<blockquote>This is still a stretch for 24 hours. Screen 5 (Admin) can be simplified to API-call-only verification (no UI) during the demo if necessary, saving 3–4 hours.</blockquote>
+
+<hr/>
+<strong>Document Status:</strong> Approved for Solo-Builder Demo Scope (6 screens)
+<strong>Source of Truth:</strong> requirements.md v2.0
+<strong>Last Updated:</strong> September 17, 2026
+</body></html>

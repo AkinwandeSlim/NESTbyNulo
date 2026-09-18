@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import {
   GraduationCap,
   BookOpen,
@@ -25,7 +25,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/nest-utils';
 
 type ContentCategory = 'articles' | 'videos' | 'webinars' | 'reports';
-type ContentLevel = 'beginner' | 'intermediate' | 'advanced';
+// 'all levels' is a display value for content that suits every skill level
+// (e.g. live Q&A webinars); the badge renders it verbatim.
+type ContentLevel = 'beginner' | 'intermediate' | 'advanced' | 'all levels';
 
 interface AcademyContent {
   id: string;
@@ -185,9 +187,11 @@ const levelColors: Record<string, string> = {
   beginner: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300',
   intermediate: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
   advanced: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
+  'all levels': 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
 };
 
-const stagger = {
+// Variants typed for the same framer-motion reason as BrowseView.
+const stagger: Variants = {
   animate: { transition: { staggerChildren: 0.06 } },
 };
 

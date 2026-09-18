@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEST by Nulo Africa â€” Pitch Deck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0a0a1a;
+    color: #e8e8f0;
+    line-height: 1.7;
+  }
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .slide:nth-child(odd) { background: #0a0a1a; }
+  .slide:nth-child(even) { background: #0d0d22; }
+  .slide-number {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.25);
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  h1 {
+    font-size: 3.2em;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .subtitle {
+    font-size: 1.3em;
+    color: rgba(255,255,255,0.5);
+    font-weight: 400;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, #6366f1, #a855f7) 1;
+    display: inline-block;
+  }
+  ul { list-style: none; padding: 0; }
+  ul li {
+    font-size: 1.15em;
+    margin-bottom: 20px;
+    padding-left: 28px;
+    position: relative;
+    color: rgba(255,255,255,0.85);
+  }
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+  }
+  .warning {
+    background: rgba(251, 191, 36, 0.1);
+    border-left: 4px solid #fbbf24;
+    padding: 12px 18px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 8px;
+    font-size: 0.95em;
+    color: #fbbf24;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 16px;
+  }
+  .stat-card {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+  }
+  .stat-card .number {
+    font-size: 2em;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat-card .label {
+    font-size: 0.9em;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+  }
+  strong { color: #a78bfa; font-weight: 600; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(99, 102, 241, 0.15);
+    color: #a78bfa;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.7);
+  }
+  .demo-step {
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .demo-step .step-title {
+    color: #a78bfa;
+    font-weight: 700;
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+  .demo-step .step-desc {
+    color: rgba(255,255,255,0.75);
+    font-size: 1em;
+  }
+  .source-section {
+    padding: 40px 80px;
+    background: #080816;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.85em;
+  }
+  @media (max-width: 768px) {
+    .slide { padding: 40px 24px; }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.5em; }
+    ul li { font-size: 1em; }
+    .source-section { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TITLE -->
+<div class="slide" style="text-align:center;">
+  <div class="slide-number">NEST</div>
+  <h1>NEST</h1>
+  <p class="subtitle">Fractional Real Estate Investment for Nigeria's Missing Middle</p>
+  <p style="color:rgba(255,255,255,0.35); font-size:0.9em; margin-top:40px;">by Nulo Africa &middot; September 2026</p>
+</div>
+
+<!-- SLIDE 1: PROBLEM -->
+<div class="slide">
+  <div class="slide-number">01 / 08</div>
+  <h2>The Problem</h2>
+  <ul>
+    <li>Middle-income professionals in Nigeria (earning &#8358;500K&ndash;&#8358;1M/month) cannot access quality income-producing real estate &mdash; entry prices for Abuja residential property are <strong>&#8358;50M&ndash;&#8358;150M</strong></li>
+    <li>Their savings lose <strong>10&ndash;15% real purchasing power per year</strong> in fixed deposits while inflation runs at 25&ndash;30%</li>
+    <li>Informal pooling (ajo/esusu) works for small groups but breaks down at &#8358;50M+ deals: trust does not scale, legal structure is absent, and there is <strong>no exit mechanism</strong></li>
+  </ul>
+</div>
+
+<!-- SLIDE 2: SOLUTION -->
+<div class="slide">
+  <div class="slide-number">02 / 08</div>
+  <h2>The Solution</h2>
+  <ul>
+    <li><strong>NEST</strong> enables a defined group of pre-screened investors to co-own a single, named, income-producing Abuja property &mdash; starting from <strong>&#8358;500,000</strong></li>
+    <li>Every fee is disclosed as a line item before investment. Every risk factor is shown. Projected yield (7&ndash;9%) is labelled <strong>&ldquo;PROJECTION ONLY &mdash; NOT GUARANTEED&rdquo;</strong></li>
+    <li>The platform enforces: server-side authorization, atomic transactions with an immutable BigInt kobo ledger, mandatory 6-checkbox risk consent, and a hard stop at the &#8358;100M funding target</li>
+  </ul>
+</div>
+
+<!-- SLIDE 3: LIVE DEMO -->
+<div class="slide">
+  <div class="slide-number">03 / 08</div>
+  <h2>Live Demo</h2>
+  <div class="demo-step">
+    <div class="step-title">Property Data Room</div>
+    <div class="step-desc">&#8358;100M target, funding progress bar, all fees as line items, risk disclosures, yield labelled PROJECTION ONLY, TEST MODE banner</div>
+  </div>
+  <div class="demo-step">
+    <div class="step-title">Authorization Block</div>
+    <div class="step-desc">Pending investor clicks &ldquo;Invest&rdquo; &rarr; server-side 403 rejection. &ldquo;Control is real, not cosmetic.&rdquo;</div>
+  </div>
+  <div class="demo-step">
+    <div class="step-title">Investment Flow</div>
+    <div class="step-desc">Verified investor enters &#8358;2M &rarr; fee &#8358;40K, total &#8358;2.04M, ownership 2.0%, yield &#8358;140K&ndash;&#8358;180K/yr &rarr; 6 consent boxes &rarr; Confirm &rarr; atomic post</div>
+  </div>
+  <div class="demo-step">
+    <div class="step-title">Persistence Proof</div>
+    <div class="step-desc">Page reload: portfolio shows &#8358;2M investment, wallet balance matches ledger SUM (not hardcoded)</div>
+  </div>
+  <div class="demo-step">
+    <div class="step-title">Admin Distribution (if time permits)</div>
+    <div class="step-desc">&#8358;1.2M rent &rarr; 8% mgmt fee deducted &rarr; pro-rata allocation to funded positions &rarr; investor wallet credited</div>
+  </div>
+</div>
+
+<!-- SLIDE 4: MARKET SIZE -->
+<div class="slide">
+  <div class="slide-number">04 / 08</div>
+  <h2>Market Size</h2>
+  <ul>
+    <li><strong>Target segment:</strong> Nigerian professionals earning &#8358;500K&ndash;&#8358;1M/month with &#8358;1M&ndash;&#8358;5M in liquid savings, locked out of &#8358;50M&ndash;&#8358;150M property entry prices</li>
+    <li><strong>Pilot scope:</strong> One named Abuja residential property, &#8358;100M target, invitation-only &mdash; a controlled pilot, not a public marketplace</li>
+  </ul>
+  <div class="warning">&#9888; TAM/SAM/SOM figures are not yet quantified in current documentation. These require independent market research before investor presentation.</div>
+</div>
+
+<!-- SLIDE 5: BUSINESS MODEL -->
+<div class="slide">
+  <div class="slide-number">05 / 08</div>
+  <h2>Business Model</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">2%</div>
+      <div class="label">Platform fee (one-time, at investment)</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">8%</div>
+      <div class="label">of rent collected (management fee)</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">At cost</div>
+      <div class="label">Legal/SPV costs (capped, pass-through)</div>
+    </div>
+  </div>
+  <ul style="margin-top:32px;">
+    <li>Revenue scales with total capital deployed and rent collected &mdash; both are real, auditable numbers</li>
+    <li>Example: &#8358;2M investment = &#8358;40K platform fee; &#8358;1.2M quarterly rent = &#8358;96K management fee</li>
+  </ul>
+</div>
+
+<!-- SLIDE 6: TRACTION -->
+<div class="slide">
+  <div class="slide-number">06 / 08</div>
+  <h2>Traction</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">7</div>
+      <div class="label">Investors signed EOIs &amp; subscription agreements</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">&#8358;15M</div>
+      <div class="label">Total received</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">&#8358;500K</div>
+      <div class="label">Minimum confirmed ticket</div>
+    </div>
+  </div>
+  <div class="warning" style="margin-top:24px;">&#9888; No user-test-notes.md file exists. If user testing has been conducted, results should be documented and added before the pitch.</div>
+</div>
+
+<!-- SLIDE 7: ROADMAP -->
+<div class="slide">
+  <div class="slide-number">07 / 08</div>
+  <h2>What's Next</h2>
+  <ul>
+    <li><strong>Immediate (pre-live):</strong> SEC counsel opinion, SPV formation, dedicated SPV bank account, independent property valuation, KYC provider, subscription agreement review</li>
+    <li><strong>Post-demo:</strong> Real payment integration (Paystack/Flutterwave), BVN/NIN KYC, deal memo distribution, full audit trail and PDF receipts</li>
+    <li><strong>6+ months:</strong> PropFlow integration for automated rent collection, multi-property architecture, AI-assisted KYC and investor deal-room assistant (after regulatory clearance)</li>
+  </ul>
+</div>
+
+<!-- SLIDE 8: THE ASK -->
+<div class="slide">
+  <div class="slide-number">08 / 08</div>
+  <h2>The Ask</h2>
+  <ul>
+    <li><strong>Feedback:</strong> Is the controlled-pilot approach (one property, invitation-only, full disclosure) the right entry strategy for Nigerian fractional real estate?</li>
+    <li><strong>Pilot users:</strong> Introductions to qualified professionals with &#8358;500K&ndash;&#8358;5M savings seeking transparent, managed property exposure</li>
+    <li><strong>Advisory:</strong> Connections to Nigerian securities/property counsel experienced with ISA 2025, CIS classification, and REIS rules</li>
+    <li><strong>Funding:</strong> Seed capital for legal/regulatory costs, real KYC integration, SPV setup, and first property acquisition gap funding</li>
+  </ul>
+</div>
+
+<!-- SOURCE -->
+<div class="source-section">
+  <p><strong style="color:rgba(255,255,255,0.5);">Source files:</strong> requirements.md, user-flow.md, screen-specification.md, final-feature-list.md, COMPETITION_DEMO_DATA.md</p>
+  <p><strong style="color:#fbbf24;">Missing files:</strong> user-test-notes.md, business-model.md, landing-page.md</p>
+  <p style="margin-top:8px;">Generated September 17, 2026</p>
+</div>
+
+</body>
+</html>

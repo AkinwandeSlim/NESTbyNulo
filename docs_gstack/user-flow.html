@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>User Flow - NEST by Nulo Africa</title><style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:960px;margin:0 auto;padding:24px;color:#1a1a2e;background:#f8f9fa;line-height:1.6}
+h1{color:#16213e;border-bottom:2px solid #0f3460;padding-bottom:8px}
+h2{color:#16213e;border-bottom:1px solid #dee2e6;padding-bottom:4px;margin-top:32px}
+h3{color:#1a1a2e;margin-top:24px}h4{color:#495057;margin-top:16px}
+table{border-collapse:collapse;width:100%;margin:16px 0}
+th{background:#0f3460;color:white;padding:8px 12px;text-align:left}
+td{border:1px solid #dee2e6;padding:8px 12px}
+tr:nth-child(even){background:#f1f3f5}
+code{background:#e9ecef;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:.9em}
+pre{background:#1a1a2e;color:#a8d8ea;padding:16px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word}
+pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:4px solid #0f3460;margin:8px 0;padding:8px 16px;background:#e8f0fe;border-radius:0 4px 4px 0}
+hr{border:none;border-top:1px solid #dee2e6;margin:24px 0}
+a{color:#0f3460}ul,ol{padding-left:24px}li{margin:4px 0}
+.banner{background:#dc3545;color:white;text-align:center;padding:10px;font-weight:bold;font-size:1.1em;border-radius:4px;margin-bottom:16px}
+.meta{color:#6c757d;font-size:.9em;margin-bottom:16px}
+</style></head><body><div class="banner">NEST Documentation - TEST MODE BUILD - NOT A LIVE INVESTMENT OFFERING</div><div class="meta">NEST by Nulo Africa | September 17, 2026 | Source of Truth: requirements.md v2.0</div><h1>NEST by Nulo Africa — User Flow</h1>
+
+<strong>Version:</strong> 2.0
+<strong>Date:</strong> September 17, 2026
+<strong>Status:</strong> Updated — Demo Scope Only
+<strong>Source of Truth:</strong> <code>docs_gstack/requirements.md</code> v2.0
+
+<hr/>
+<h2>Scope Note</h2>
+
+This user flow covers the <strong>solo-builder, test-mode demo</strong> only. The following are explicitly out of scope for this flow:
+- Live payment processing (Paystack live mode)
+- Real KYC / BVN / NIN collection
+- Wallet withdrawal
+- Secondary market or share transfers
+- SMS / email notifications
+- Open public onboarding / investor acquisition
+- Automatic real rental distributions
+- Anything requiring the real ₦15,000,000 or real 7 investor identities
+
+The real ₦15,000,000 and real investors have a <strong>separate, non-platform onboarding process</strong> that requires deal memo, counsel-reviewed subscription agreements, and individual consent per requirements.md Section 6.4. This platform flow is for demo purposes.
+
+<hr/>
+<h2>Primary User Flow — Demo Investor</h2>
+
+<h3>PHASE 1: Property Discovery (Unauthenticated)</h3>
+
+<strong>Goal:</strong> Visitor evaluates the demo property and decides to invest.
+
+<strong>1. User opens the demo platform</strong>
+- Lands on the demo property listing or property detail page directly
+- Sees "TEST MODE — NOT A LIVE OFFERING OR PAYMENT" banner
+
+<strong>2. User views the Property Data Room</strong>
+- Property name: "Illustrative Abuja Residential Apartment (DEMO)"
+- City: Abuja, FCT
+- Status badge: FUNDING
+- Funding progress: ₦5,000,000 / ₦100,000,000 (5.0% — Fatima's pre-seeded investment only)
+- Projected annual yield: 7–9% (labelled PROJECTION ONLY — NOT GUARANTEED)
+- Lock-up: 24 months from acquisition completion
+- Fee structure (visible as line items):
+  - Platform / arrangement fee: 2% of investment amount (one-time)
+  - Property management fee: up to 8% of rent collected (not AUM)
+- Risk rating: MEDIUM
+- Risk factors: vacancy, depreciation, market risk, illiquidity, platform risk, capital loss
+- Invest button: "Invest Now" → triggers sign-in flow if unauthenticated
+
+<strong>3. Unauthenticated user clicks "Invest Now"</strong>
+- System redirects to Clerk sign-in page
+- After sign-in/sign-up, system returns user to the property page
+
+<hr/>
+<h3>PHASE 2: Authentication and Verification State</h3>
+
+<strong>Goal:</strong> User creates an account and understands verification requirement.
+
+<strong>4. New user registers via Clerk</strong>
+- Clerk handles email/password or OAuth (no BVN/NIN/liveness in demo)
+- NEST creates local User record with role=INVESTOR, kycStatus=PENDING
+- NEST creates Wallet with availableBalanceKobo=0
+
+<strong>5. Pending user tries to invest</strong>
+- User clicks "Invest Now" on the property page
+- System shows: "Your account is pending verification. A NEST admin will review your demo account. Once verified, you can invest."
+- Invest button is disabled in the UI
+- If pending user hits POST /api/investments directly: server returns 403 (not just a UI block)
+
+<strong>6. Admin verifies the pending user (admin flow — background)</strong>
+- Admin logs into admin panel
+- Admin sees list of pending users (fictional names only in demo)
+- Admin clicks "Verify" for the user
+- Server updates kycStatus: PENDING → VERIFIED
+- Server inserts AuditLog entry: action=USER_VERIFIED
+- Server inserts Notification for user: "Your account has been verified. You can now invest."
+
+<strong>7. Verified user returns to property page</strong>
+- Status badge: VERIFIED
+- "Invest Now" button is now active
+
+<hr/>
+<h3>PHASE 3: Demo Wallet Funding</h3>
+
+<strong>Goal:</strong> Admin credits a demo wallet so the investor can test the investment flow.
+
+<strong>8. Admin credits demo wallet (admin panel)</strong>
+- Admin selects demo investor from dropdown
+- Admin enters credit amount (e.g., ₦5,000,000)
+- Admin clicks "Credit Demo Wallet"
+- Server validates: requireAdmin; unique reference check (idempotency)
+- Server inserts LedgerEntry:
+  - amountKobo: +500000000n (₦5M)
+  - type: DEMO_CREDIT
+  - reference: "DEMO-CREDIT-[USER]-[DATE]-001"
+  - label: "DEMO CREDIT — NOT A PAYMENT"
+- Server updates Wallet.availableBalanceKobo within same transaction
+- UI shows success: "Demo credit issued: ₦5,000,000 (TEST MODE)"
+
+<strong>9. Investor checks wallet</strong>
+- Wallet balance: ₦5,000,000
+- Transaction history shows: "DEMO CREDIT — NOT A PAYMENT: +₦5,000,000"
+- Test mode label prominent on wallet screen
+
+<hr/>
+<h3>PHASE 4: Investment Execution</h3>
+
+<strong>Goal:</strong> Verified investor invests in the demo property.
+
+<strong>10. User clicks "Invest Now" on property page</strong>
+- System shows Investment Amount input
+- Min: ₦500,000 <table><tr><th>Max: ₦10,000,000 (or remaining capacity, whichever is lower)
+- Client-side validation shows errors as user types
+
+<strong>11. User enters investment amount: ₦2,000,000</strong>
+- System calculates and displays immediately (no API call yet):
+  - Platform fee (2% of principal, added on top): ₦40,000
+  - Total debited from wallet: ₦2,040,000
+  - Ownership stake: 2.0% (principal ₦2M ÷ ₦100M target)
+  - Projected annual distribution: ₦140,000 – ₦180,000 (7–9% of ₦2M principal — PROJECTION ONLY)
+  - Available wallet balance: ₦5,000,000
+  - Remaining after investment: ₦2,960,000
+
+<strong>12. User clicks "Continue to Review"</strong>
+- System shows Investment Confirmation screen with:
+  - Property: Illustrative Abuja Residential Apartment (DEMO)
+  - Investment amount: ₦2,000,000
+  - Platform fee (2% of principal, added on top): ₦40,000
+  - Total debited from wallet: ₦2,040,000
+  - Ownership stake: 2.0% (principal ÷ target)
+  - Projected yield: 7–9% of ₦2M principal / year (PROJECTION ONLY — NOT GUARANTEED)
+  - Lock-up: 24 months from acquisition
+  - No secondary market (exit paths explained)
+  - TEST MODE banner
+
+<strong>13. User reviews mandatory risk consent checkboxes</strong>
+  All boxes must be checked before Confirm button is enabled:
+  - ☐ I understand this is TEST MODE — no real money involved
+  - ☐ I understand the 24-month lock-up from acquisition completion
+  - ☐ I understand there is no secondary market or guaranteed liquidity
+  - ☐ I understand projected returns (7–9%) are estimates only, not guaranteed
+  - ☐ I understand I could lose some or all of my invested capital in a live investment
+
+<strong>14. User checks all boxes → Confirm button becomes active</strong>
+
+<strong>15. User clicks "Confirm Investment"</strong>
+- Client generates idempotencyKey (UUID)
+- Client sends POST /api/investments: { propertyId, amountKobo: 200000000n, idempotencyKey }
+- Server processes atomic transaction (see data-structure.md Section 6 for full transaction detail)
+- Server returns 201 Created: { investmentId, receiptNumber, ownershipPercent, status: CONFIRMED }
+
+<strong>16. System shows Investment Success</strong>
+- Receipt number: "INV-20260916-001"
+- Property: Illustrative Abuja Residential Apartment (DEMO)
+- Amount invested: ₦2,000,000
+- Platform fee: ₦40,000
+- Ownership stake: 2.0% (principal ÷ target)
+- Projected distribution: ₦140,000–₦180,000/year (7–9% of ₦2M principal — PROJECTION ONLY)
+- "TEST MODE — NOT A LIVE INVESTMENT"
+- Button: "View My Portfolio"
+
+<hr/>
+<h3>PHASE 5: Portfolio Management</h3>
+
+<strong>Goal:</strong> User views and verifies their confirmed investment.
+
+<strong>17. User navigates to Portfolio</strong>
+- System fetches GET /api/portfolio (requireAuth)
+- Portfolio shows (all DB-derived, zero hardcoded):
+  - Wallet balance: ₦2,960,000 (from ledger SUM: 5M − 2M − 40K = ₦2.96M)
+  - Holdings section:
+    - Illustrative Abuja Residential Apartment (DEMO)
+    - Investment amount: ₦2,000,000
+    - Ownership stake: 2.0%
+    - Status: CONFIRMED
+    - Projected annual income: ₦140,000–₦180,000 (7–9% of principal — PROJECTION ONLY)
+  - Recent transactions (last 5):
+    - "DEMO CREDIT — NOT A PAYMENT": +₦5,000,000
+    - "Investment principal — Illustrative Property (DEMO)": -₦2,000,000
+    - "Platform fee (2%) — Illustrative Property (DEMO)": -₦40,000
+
+<strong>18. User reloads the page</strong>
+- System re-fetches from database
+- Same data appears (proves persistence)
+- No hardcoded values — all from DB
+
+<hr/>
+<h3>PHASE 6: Demo Distribution (If FR-007 built)</h3>
+
+<strong>Goal:</strong> Admin executes a demo quarterly distribution; investor sees income credited.
+
+<strong>19. Admin opens distribution panel</strong>
+- Admin selects demo property
+- Admin selects period: "Q4 2026 Demo"
+- Admin enters total rent collected: ₦1,200,000 (illustrative)
+- System calculates:
+  - Management fee (8% of rent): ₦96,000
+  - Net to distribute: ₦1,104,000
+- Admin clicks "Calculate Pro-rata"
+
+<strong>20. System shows distribution preview</strong>
+- Table of all investors with CONFIRMED investments
+- Fatima: 5.0% ownership → ₦55,200 (₦1,104,000 × 5.0%)
+- Adaeze: 2.0% ownership → ₦22,080 (₦1,104,000 × 2.0%) — only if she has invested by this point
+- Unfunded 93.0%: ₦1,026,720 held in reserve (not credited)
+- Total: ₦55,200 + ₦22,080 + ₦1,026,720 = ₦1,104,000 ✓
+
+<strong>21. Admin clicks "Execute Distribution"</strong>
+- System shows confirmation modal: "Credit ₦1,104,000 to [N] investor wallets — TEST MODE?"
+- Admin confirms
+- Server processes atomic transaction:
+  - For each investor: INSERT LedgerEntry (DISTRIBUTION_CREDIT), UPDATE Wallet balance
+  - INSERT Distribution record (idempotent: Q4-2026-DEMO cannot be re-executed for same property)
+  - INSERT Notification for each investor
+  - INSERT AuditLog
+- Server returns 200 OK
+
+<strong>22. Investor checks wallet</strong>
+- Wallet balance increased by ₦22,080 (Adaeze's share — only if she invested before this distribution)
+- Transaction history shows: "Rental Distribution — Q4 2026 Demo: +₦22,080 (TEST MODE)"
+
+<hr/>
+<h2>Secondary Flow — Admin Operations</h2>
+
+<h3>Admin Daily Operations (Demo)</h3>
+
+<strong>A1. Admin logs in</strong>
+- Navigates to admin panel (/admin)
+- Only accessible to users with role=ADMIN (403 for others)
+
+<strong>A2. Admin views pending users</strong>
+- Table of PENDING investor accounts (fictional names and emails)
+- Actions: "Verify" or "Reject" per user
+- Each action writes AuditLog entry
+
+<strong>A3. Admin credits demo wallets</strong>
+- Selects investor from dropdown
+- Enters amount
+- Clicks "Credit Demo Wallet"
+- Label "DEMO CREDIT — NOT A PAYMENT" applied automatically
+- Reference auto-generated (idempotent)
+
+<strong>A4. Admin monitors investments</strong>
+- Views all CONFIRMED investment records
+- Sees property funding progress
+- All amounts from DB — no hardcoded values
+
+<strong>A5. Admin executes demo distribution</strong> (if FR-007 built)
+- Steps 19–21 above
+
+<hr/>
+<h2>Edge Cases and Error Flows</h2>
+
+<h3>E1. Investment Exceeds Wallet Balance</h3>
+- User enters: ₦4,000,000
+- Wallet balance: ₦2,960,000
+- Server returns 400: "Insufficient wallet balance. Available: ₦2,960,000"
+- Wallet not modified; no ledger entries created
+
+<h3>E2. Investment Below Minimum</h3>
+- User enters: ₦400,000
+- Client-side validation shows error immediately: "Minimum investment is ₦500,000"
+- Server validates independently and returns 400 if client is bypassed
+
+<h3>E3. Investment Above Maximum</h3>
+- User enters: ₦12,000,000
+- Client-side validation: "Maximum investment is ₦10,000,000"
+- Server validates and returns 400 if client is bypassed
+
+<h3>E4. Property Fully Funded During Investment</h3>
+- User confirms ₦3,000,000 investment
+- Concurrent request fills last ₦2,000,000 of capacity just before this request commits
+- Server returns 400: "Insufficient funding capacity. Remaining: ₦2,000,000"
+- Wallet not modified
+
+<h3>E5. PENDING Investor Attempts Investment</h3>
+- PENDING user hits "Invest Now"
+- UI shows: "Account pending verification. You cannot invest yet."
+- If they bypass UI and hit POST /api/investments: server returns 403
+  - Message: "Account not verified. Contact admin to request verification."
+
+<h3>E6. Duplicate Investment (Same idempotencyKey)</h3>
+- Network failure causes client to retry with same idempotencyKey
+- Server detects existing investment with that key
+- Returns 200 (or 201) with the existing investment record — no duplicate created
+
+<h3>E7. Admin Attempts Duplicate Distribution</h3>
+- Admin tries to execute Q4-2026-DEMO distribution again for same property
+- Server returns 409: "Distribution for Q4-2026-DEMO already executed for this property"
+- No ledger entries created; no wallets modified
+
+<hr/>
+<h2>Summary Timeline (Demo Flow)</h2></th><th>Phase</th><th>Duration</th><th>Key Milestone</th></tr><tr><td>Property Discovery</td><td>2–5 minutes</td><td>User reads property details</td></tr><tr><td>Registration + Verification Wait</td><td>5–60 minutes</td><td>Admin verifies demo account</td></tr><tr><td>Demo Wallet Funding</td><td>2 minutes</td><td>Admin credits demo wallet</td></tr><tr><td>Investment Execution</td><td>3–5 minutes</td><td>Investment confirmed and receipted</td></tr><tr><td>Portfolio Check</td><td>1 minute</td><td>Holdings visible; persists after reload</td></tr><tr><td>Demo Distribution</td><td>3–5 minutes (admin)</td><td>Distribution credited to wallet</td></tr></table>
+<strong>Total demo time (all phases):</strong> ~20–30 minutes end-to-end for a single user
+<strong>Competition demo (scripted):</strong> 3 minutes (pre-seeded accounts, scripted path)
+
+<hr/>
+<strong>Document Status:</strong> Complete — Demo Scope
+<strong>Source of Truth:</strong> requirements.md v2.0
+<strong>Last Updated:</strong> September 16, 2026
+
+</body></html>

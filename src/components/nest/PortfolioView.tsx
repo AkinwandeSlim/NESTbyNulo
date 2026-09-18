@@ -8,6 +8,7 @@ import {
   DollarSign,
   ArrowUpRight,
   Building2,
+  Briefcase,
   ArrowRight,
   Clock,
 } from 'lucide-react';
@@ -76,16 +77,31 @@ export default function PortfolioView() {
   const { setView, selectProperty } = useNestStore();
   const [data, setData] = useState<PortfolioData | null>(null);
   const [loading, setLoading] = useState(true);
+  // True when /api/portfolio answered 401: the visitor is not signed in, so we
+  // show a friendly empty state instead of the (formerly crashing) dashboard.
+  const [signedOut, setSignedOut] = useState(false);
 
+  // ── dev_gstack merge fix: never accept an error body as portfolio data ──
+  // /api/portfolio 401s for anonymous visitors (it is per-user, ledger-derived
+  // data). Previously `setData(json)` stored the error object verbatim, and
+  // `data.propertyAllocation.map` crashed the whole SPA view.
   useEffect(() => {
     async function fetchPortfolio() {
       try {
         setLoading(true);
         const res = await fetch('/api/portfolio');
         const json = await res.json();
-        setData(json);
+        // A valid portfolio payload always carries totalInvested.
+        if (res.ok && typeof json?.totalInvested === 'number') {
+          setData(json);
+          setSignedOut(false);
+        } else {
+          setData(null);
+          setSignedOut(res.status === 401);
+        }
       } catch {
-        // silent
+        setData(null);
+        setSignedOut(false);
       } finally {
         setLoading(false);
       }
@@ -93,10 +109,10 @@ export default function PortfolioView() {
     fetchPortfolio();
   }, []);
 
-  const pieData = data?.propertyAllocation.map((p) => ({
+  const pieData = (data?.propertyAllocation ?? []).map((p) => ({
     name: p.name,
     value: p.value,
-  })) || [];
+  }));
 
   const handleViewProperty = (name: string) => {
     // Navigate to a property (mock - just go to browse)
@@ -115,6 +131,44 @@ export default function PortfolioView() {
         </div>
         <Skeleton className="h-72 rounded-xl mb-8" />
         <Skeleton className="h-72 rounded-xl" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-lg mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl border border-border bg-card p-8"
+        >
+          <Briefcase className="mx-auto mb-4 size-10 text-muted-foreground" />
+          <h1 className="text-xl font-bold mb-2">
+            {signedOut ? 'Sign in to view your portfolio' : 'Portfolio unavailable'}
+          </h1>
+          <p className="text-sm text-muted-foreground mb-6">
+            {signedOut
+              ? 'Your portfolio is derived from your own investments and wallet ledger, so it needs a session.'
+              : 'Your portfolio data could not be loaded. Try again shortly.'}
+          </p>
+          <div className="flex gap-3 justify-center">
+            {signedOut && (
+              <a
+                href="/sign-in"
+                className="inline-flex h-10 items-center rounded-lg bg-nest-primary px-4 text-sm font-semibold text-white hover:bg-nest-primary/90"
+              >
+                Sign in
+              </a>
+            )}
+            <Button variant="outline" onClick={() => window.location.reload()}>
+              Retry
+            </Button>
+            <Button variant="outline" onClick={() => setView('browse')}>
+              Browse properties
+            </Button>
+          </div>
+        </motion.div>
       </div>
     );
   }

@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Locked Scope - Solo Builder Demo - NEST by Nulo Africa</title><style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:960px;margin:0 auto;padding:24px;color:#1a1a2e;background:#f8f9fa;line-height:1.6}
+h1{color:#16213e;border-bottom:2px solid #0f3460;padding-bottom:8px}
+h2{color:#16213e;border-bottom:1px solid #dee2e6;padding-bottom:4px;margin-top:32px}
+h3{color:#1a1a2e;margin-top:24px}h4{color:#495057;margin-top:16px}
+table{border-collapse:collapse;width:100%;margin:16px 0}
+th{background:#0f3460;color:white;padding:8px 12px;text-align:left}
+td{border:1px solid #dee2e6;padding:8px 12px}
+tr:nth-child(even){background:#f1f3f5}
+code{background:#e9ecef;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:.9em}
+pre{background:#1a1a2e;color:#a8d8ea;padding:16px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word}
+pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:4px solid #0f3460;margin:8px 0;padding:8px 16px;background:#e8f0fe;border-radius:0 4px 4px 0}
+hr{border:none;border-top:1px solid #dee2e6;margin:24px 0}
+a{color:#0f3460}ul,ol{padding-left:24px}li{margin:4px 0}
+.banner{background:#dc3545;color:white;text-align:center;padding:10px;font-weight:bold;font-size:1.1em;border-radius:4px;margin-bottom:16px}
+.meta{color:#6c757d;font-size:.9em;margin-bottom:16px}
+</style></head><body><div class="banner">NEST Documentation - TEST MODE BUILD - NOT A LIVE INVESTMENT OFFERING</div><div class="meta">NEST by Nulo Africa | September 17, 2026 | Source of Truth: requirements.md v2.0</div><h1>NEST by Nulo Africa — Locked Scope (Demo Build)</h1>
+
+<strong>Date:</strong> September 17, 2026
+<strong>Status:</strong> LOCKED for Solo-Builder Demo Build
+<strong>Builder:</strong> One solo developer
+<strong>Build window:</strong> 3 working days (approx. 24 effective development hours)
+<strong>Demo date target:</strong> September 19, 2026
+
+<blockquote><strong>Locked scope for demo: no additions after Day 1 without removing something of equal size.</strong></blockquote>
+<blockquote>This document locks Must-have features only. Should-have and Could-have features are optional and attempted only if all 5 Must-haves are complete and passing before end of Day 2.</blockquote>
+
+<hr/>
+<h2>Must-Have Features for 3-Day Solo Demo Build</h2>
+
+Without all 5, the demo cannot show the core investment cycle end-to-end.
+
+<table><tr><th>Feature</th><th>Description</th><th>FR Ref</th><th>Estimated Hours</th><th>---</th><th>---</th><th>---</th><th>---</th><th><strong>Single Property Data Room</strong></th><th>Illustrative test property display: ₦100M funding target, current funding progress, risk disclosures, fee line items (2% of principal as platform fee, added on top + up to 8% of rent collected as management fee), projected yield (7–9%, labelled as projection only), lock-up terms, property status (FUNDING/FUNDED/ACTIVE). All values from DB seed. No hardcoded UI values. "TEST MODE — NOT A LIVE OFFERING OR PAYMENT" label visible.</th><th>FR-001</th><th>6–8 hours</th><th><strong>Seeded Demo Roles + Server-Side Authorization</strong></th><th>Pre-created demo accounts seeded: ADMIN, VERIFIED investor, PENDING investor. Server enforces: PENDING → 403 on /api/investments; non-ADMIN → 403 on /api/admin/*; anonymous → 401 on wallet/portfolio. Authorization checked server-side only.</th><th>FR-002</th><th>4–5 hours</th><th><strong>Immutable Demo Ledger + Admin Demo Credit</strong></th><th>Append-only ledger table (BigInt kobo). Wallet balance = SUM(POSTED entries). Admin-only endpoint: POST /api/admin/wallet/credit — labels credit "DEMO CREDIT — NOT A PAYMENT" in both ledger and UI. Idempotent: same reference cannot post twice.</th><th>FR-003</th><th>5–6 hours</th><th><strong>Atomic Demo Investment</strong></th><th>Two-step flow: (1) Investment summary with fee line items and mandatory risk consent checkboxes — Confirm disabled until all checked; (2) Atomic transaction: SELECT wallet FOR UPDATE, validate verified/min/max/balance/capacity, INSERT ledger debit + fee entries, INSERT investment record, UPDATE property fundingRaisedKobo, INSERT AuditLog, COMMIT. Hard stop at ₦100M. Idempotent idempotencyKey.</th><th>FR-004</th><th>8–10 hours</th><th><strong>Persisted Portfolio + Audit Trail</strong></th><th>Portfolio screen: wallet balance from ledger SUM, confirmed holdings (property, amount, ownership %, status), last 5–10 transactions. All values DB-derived. Persists after page reload. Admin panel: view all investments and AuditLog entries.</th><th>FR-005</th><th>5–6 hours</th><th><strong>TOTAL</strong></th><th><strong>22–28 hours</strong> (backend services + 5 Must-have screens)</th><th><hr/>
+<h2>Money Integrity Rules (Non-Negotiable)</h2>
+
+These rules apply to every line of code written during this demo build:
+
+1. <strong>All currency in BigInt kobo</strong> — never float or <code>number</code> for persisted money
+2. <strong>Wallet balance never stored independently</strong> — always calculated as <code>SUM(POSTED ledger entries)</code>
+3. <strong>Transactional read model permitted</strong> — <code>availableBalanceKobo</code> on the Wallet row may be updated within the same transaction as ledger posting for read performance, but it must always equal the ledger SUM
+4. <strong>All money moves through ledger service</strong> — no component or route handler writes the wallet directly
+5. <strong>Investment transaction is atomic</strong> — all-or-nothing, no partial failures
+6. <strong>Idempotency on all mutations</strong> — same reference/idempotencyKey cannot post twice
+7. <strong>Hard stop at ₦100M</strong> — no oversubscription under any concurrent request pattern
+
+<hr/>
+<h2>Authorization Matrix (Non-Negotiable)</h2></th><th>Endpoint</th><th>Anonymous</th><th>PENDING Investor</th><th>VERIFIED Investor</th><th>Admin</th></tr><tr><td>GET /api/properties/*</td><td>✅ 200</td><td>✅ 200</td><td>✅ 200</td><td>✅ 200</td></tr><tr><td>GET /api/wallet</td><td>❌ 401</td><td>✅ 200</td><td>✅ 200</td><td>✅ 200</td></tr><tr><td>POST /api/investments</td><td>❌ 401</td><td>❌ 403</td><td>✅ 201</td><td>✅ 201</td></tr><tr><td>GET /api/portfolio</td><td>❌ 401</td><td>✅ 200</td><td>✅ 200</td><td>✅ 200</td></tr><tr><td>POST /api/admin/*</td><td>❌ 401</td><td>❌ 403</td><td>❌ 403</td><td>✅ 200/201</td></tr></table>
+<hr/>
+<h2>Day-by-Day Breakdown (Solo Builder)</h2>
+
+<h3>Day 1 — Foundation</h3>
+1. Database schema: migrate to Postgres (Neon), BigInt kobo fields, deterministic seed script
+2. Seed script: create ADMIN, VERIFIED, and PENDING demo accounts + wallets; create illustrative test property (₦100M target, ₦0 raised initially)
+3. Ledger service: <code>credit()</code>, <code>debit()</code>, balance calculation, duplicate reference test
+4. Authorization middleware: requireAuth, requireVerified, requireAdmin
+5. Admin demo credit endpoint: POST /api/admin/wallet/credit with idempotency and demo label
+
+<strong>End-of-Day-1 Check:</strong> Anonymous cannot hit /api/investments. PENDING investor gets 403. Admin gets 200 on /api/admin/*. Seed runs twice without errors.
+
+<h3>Day 2 — Investment + Portfolio + Wallet Screens (Target: 8 h)</h3>
+
+1. <strong>Investment API</strong> — <code>POST /api/investments</code>: atomic transaction with all validation (fee model: principal + 2% fee added on top = total wallet debit; ownership = principal ÷ target)
+2. <strong>Screen 3: Investment</strong> — Combined amount + review + consent on one page; live fee/ownership calculation; 6 mandatory checkboxes; Confirm disabled until all checked; redirects to Portfolio with toast on success
+3. <strong>Portfolio API</strong> — <code>GET /api/portfolio</code>: wallet balance from ledger SUM + confirmed holdings + last 10 transactions (all DB-derived)
+4. <strong>Screen 4: Portfolio</strong> — Render holdings, wallet balance, recent transactions
+5. <strong>Screen 2: Wallet + Verification Status</strong> — Available balance from ledger SUM; inline verification state; transaction history (last 10); DEMO CREDIT labelling
+
+<strong>End-of-Day-2 Checks:</strong>
+- Verified investor can invest from demo wallet ✓
+- Investment survives page reload ✓
+- Concurrent requests do not oversubscribe ₦100M ✓
+- Ledger SUM = wallet balance after every operation ✓
+- PENDING investor gets 403 on investment API ✓
+- Wallet balance on portfolio matches wallet screen ✓
+- TEST MODE labels visible on investment flow, wallet, and portfolio ✓
+
+<h3>Day 3 — Admin Panel + Should-Haves + Demo Prep (Target: 8 h)</h3>
+
+<strong>Only begin Should-have Screen 6 if all Day 2 checks pass.</strong>
+
+1. <strong>Screen 5: Admin Panel</strong> — Combined user management (verify/reject), demo credit issuing, investment registry view. If time is critically short, skip the verify UI and use direct API calls for the demo.
+2. <strong>Screen 6: Admin Distribution</strong> (Should-have; only if Screens 1–5 are passing) — Preview + execute via single <code>POST /api/admin/distributions</code> endpoint
+3. <strong>Demo polish:</strong>
+   - TEST MODE labels verified on all 5–6 screens
+   - Risk consent checkboxes block Confirm until all 6 are checked
+   - Loading, error, and empty states on all async operations
+   - Fee line items visible before investment confirmation
+4. <strong>Mobile check</strong> — 360px viewport: no horizontal scroll, 44px touch targets, sticky Confirm button
+5. <strong>Golden path E2E</strong> — twice from clean seed
+6. <strong>Deploy</strong> to Vercel preview; test with fresh preview URL
+
+<strong>End-of-Day-3 Checks:</strong>
+- Golden path E2E passes twice from clean seed ✓
+- Authorization matrix: 401/403 correct for all roles ✓
+- Ledger integrity: SUM = wallet balance after all operations ✓
+- No oversubscription under concurrent requests ✓
+- All money screens show TEST MODE label ✓
+- Yield figures labelled PROJECTION ONLY ✓
+- Risk disclosures shown; 6 checkboxes required ✓
+- Fee line items visible before investment ✓
+- Mobile screens functional at 360px ✓
+- No real investor data in seed ✓
+- Vercel preview deployed and accessible ✓
+
+<hr/>
+<h2>Stop Conditions (If Behind Schedule)</h2>
+
+If the Day 2 end-of-day check is not passing by end of Day 2:
+- Do NOT start Should-have features
+- Spend Day 3 exclusively on getting all 5 Must-haves working and tested
+- Accept a simpler demo (no distribution) rather than a broken one
+
+If any Must-have has a critical bug at end of Day 3:
+- Do NOT add new features
+- Fix the bug; do not ship broken core functionality
+
+<hr/>
+<h2>What is Explicitly Locked OUT</h2>
+
+These items must not be started during the 3-day build:
+
+- Live payment integration (Paystack production)
+- Real KYC / BVN / NIN collection
+- Wallet withdrawal
+- Secondary market or share transfers
+- Public onboarding or open solicitation
+- SMS / email notifications
+- Native mobile apps
+- Real investor data in seed scripts
+- Any use of the real ₦15,000,000 or real 7 investors as demo data
+- Any claim of SEC registration or approval
+- Any guarantee of investment returns
+
+<hr/>
+<h2>Demo Safety Requirements</h2>
+
+Before sharing the Vercel preview link:
+
+- [ ] "TEST MODE — NOT A LIVE OFFERING OR PAYMENT" visible on: Property Data Room, Investment flow, Wallet screen, Portfolio screen
+- [ ] All yield figures labelled "Projected — not guaranteed"
+- [ ] Risk disclosures visible before investment confirmation, with checkboxes required
+- [ ] All fee line items (platform fee, management fee) shown before investment confirmation
+- [ ] No real investor data in seed (fictional names, illustrative amounts only)
+- [ ] Admin demo credit labelled "DEMO CREDIT — NOT A PAYMENT" in UI and ledger
+- [ ] AuditLog records exist for all admin actions and investments
+
+<hr/>
+<strong>Changes Allowed:</strong> None to Must-have scope until post-demo (September 20, 2026)
+<strong>Source of Truth:</strong> Requirements.md v2.0
+<strong>Last Updated:</strong> September 16, 2026
+
+</body></html>

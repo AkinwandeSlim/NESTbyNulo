@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
+import { jsonSafe } from '@/lib/json-safe';
 
 export async function GET(
   _request: Request,
@@ -110,13 +111,17 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({
-      property: formattedProperty,
-      similarProperties: similarProperties.map((p) => ({
-        ...p,
-        fundingProgress: Math.round((p.fundingRaised / p.fundingTarget) * 100),
-      })),
-    });
+    // jsonSafe: `formattedProperty` spreads the raw row, which carries BigInt
+    // kobo columns (valuationKobo/targetKobo/fundedKobo/minInvestmentKobo).
+    return NextResponse.json(
+      jsonSafe({
+        property: formattedProperty,
+        similarProperties: similarProperties.map((p) => ({
+          ...p,
+          fundingProgress: Math.round((p.fundingRaised / p.fundingTarget) * 100),
+        })),
+      })
+    );
   } catch (error) {
     console.error('Error fetching property:', error);
     return NextResponse.json(

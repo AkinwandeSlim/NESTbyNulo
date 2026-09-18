@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import {
   Search,
   TrendingUp,
@@ -25,6 +25,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import PropertyCard, { type PropertyCardData } from './PropertyCard';
+import DeveloperMarquee from './DeveloperMarquee';
+import {
+  DEMO_PROPERTIES,
+  DEMO_PROPERTIES_FALLBACK,
+} from '@/lib/nest-demo-properties';
 import { cn } from '@/lib/nest-utils';
 
 type CategoryFilter = 'all' | 'completed_rental' | 'off_plan' | 'commercial' | 'student_housing' | 'mixed_use' | 'affordable_housing';
@@ -39,13 +44,15 @@ const categories: { value: CategoryFilter; label: string }[] = [
   { value: 'affordable_housing', label: 'Affordable' },
 ];
 
-const stagger = {
+// Variants must be explicitly typed: an untyped const widens `ease` to
+// number[], which framer-motion v12 rejects (Easing wants a 4-tuple).
+const stagger: Variants = {
   animate: {
     transition: { staggerChildren: 0.08 },
   },
 };
 
-const fadeInUp = {
+const fadeInUp: Variants = {
   initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
@@ -60,6 +67,9 @@ export default function BrowseView() {
   const [sortBy, setSortBy] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
   const featuredScrollRef = useRef<HTMLDivElement>(null);
+  // True when the real API returned nothing and the static demo mirror is
+  // being displayed instead (see the fetch below).
+  const [usingDemoData, setUsingDemoData] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -74,9 +84,26 @@ export default function BrowseView() {
         const featData = await featuredRes.json();
         const trendData = await trendingRes.json();
 
-        setProperties(allData.properties || []);
-        setFeatured(featData.properties || []);
-        setTrending(trendData.properties || []);
+        const all = (allData.properties ?? []) as PropertyCardData[];
+
+        // PLUG-AND-PLAY DEMO FALLBACK: when the real API yields no properties
+        // (empty DB, wiped data, /api/properties erroring), fall back to the
+        // static demo mirror in src/lib/nest-demo-properties.ts so the landing
+        // page always has something to demo. The API always wins when it has
+        // data — the fallback never masks a populated database.
+        const fallback = DEMO_PROPERTIES_FALLBACK && all.length === 0;
+        setUsingDemoData(fallback);
+        setProperties(fallback ? DEMO_PROPERTIES : all);
+        setFeatured(
+          fallback
+            ? DEMO_PROPERTIES.filter((p) => p.featured).slice(0, 5)
+            : featData.properties || []
+        );
+        setTrending(
+          fallback
+            ? DEMO_PROPERTIES.filter((p) => p.trending).slice(0, 5)
+            : trendData.properties || []
+        );
       } catch {
         // silent fail
       } finally {
@@ -147,6 +174,11 @@ export default function BrowseView() {
               <Badge className="bg-white/10 text-white/90 border-white/20 backdrop-blur-sm px-3 py-1 text-xs font-medium">
                 <span className="mr-1">🇳🇬</span> Trusted by 2,500+ investors across Africa
               </Badge>
+              {usingDemoData && (
+                <Badge className="ml-2 bg-amber-500/15 text-amber-200 border-amber-400/30 backdrop-blur-sm px-3 py-1 text-xs font-medium">
+                  Demo dataset — live listings return when the database has data
+                </Badge>
+              )}
             </motion.div>
 
             <motion.h1
@@ -155,14 +187,13 @@ export default function BrowseView() {
             >
               Become a{' '}
               <span className="bg-gradient-to-r from-nest-accent to-orange-300 bg-clip-text text-transparent">Landlord</span>
-              {' '}Today
             </motion.h1>
 
             <motion.p
               variants={fadeInUp}
               className="text-base sm:text-lg text-white/70 max-w-xl"
             >
-              Invest from ₦500,000 in professionally managed real estate across Africa. Earn rental income and build generational wealth.
+              Fractional ownership of professionally managed Nigerian property from ₦500,000. Join the waitlist for early access.
             </motion.p>
 
             {/* Search Bar */}
@@ -184,10 +215,10 @@ export default function BrowseView() {
               className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 mt-4"
             >
               {[
-                { icon: <Users className="size-4" />, value: '2,500+', label: 'Investors' },
-                { icon: <Banknote className="size-4" />, value: '₦1.52B', label: 'Raised' },
-                { icon: <TrendingUp className="size-4" />, value: '8.5%', label: 'Avg Yield' },
-                { icon: <Building2 className="size-4" />, value: '12', label: 'Properties' },
+                { icon: <Users className="size-4" />, value: '7', label: 'Investors' },
+                { icon: <Banknote className="size-4" />, value: '₦15M', label: 'of ₦100M target' },
+                { icon: <TrendingUp className="size-4" />, value: '7–9%', label: 'projected yield' },
+                { icon: <Building2 className="size-4" />, value: '6', label: 'Properties' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="flex items-center justify-center gap-1.5 text-white/50 text-xs mb-1">
@@ -202,31 +233,16 @@ export default function BrowseView() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12 pb-20">
-        {/* ─── CATEGORY FILTERS ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
-            {categories.map((cat) => (
-              <button
-                key={cat.value}
-                onClick={() => setActiveCategory(cat.value)}
-                className={cn(
-                  'flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap',
-                  activeCategory === cat.value
-                    ? 'bg-nest-primary text-white shadow-md shadow-nest-primary/25'
-                    : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80'
-                )}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </motion.div>
+      {/* ─── DEVELOPER MARQUEE ─── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35 }}
+      >
+        <DeveloperMarquee />
+      </motion.div>
 
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12 pb-20">
         {/* ─── FEATURED OPPORTUNITIES ─── */}
         {featured.length > 0 && (
           <motion.section
@@ -282,6 +298,30 @@ export default function BrowseView() {
             </div>
           </motion.section>
         )}
+
+        {/* ─── CATEGORY FILTERS ─── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+            {categories.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => setActiveCategory(cat.value)}
+                className={cn(
+                  'flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap',
+                  activeCategory === cat.value
+                    ? 'bg-nest-primary text-white shadow-md shadow-nest-primary/25'
+                    : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80'
+                )}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </motion.div>
 
         {/* ─── ALL PROPERTIES ─── */}
         <motion.section

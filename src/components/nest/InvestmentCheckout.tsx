@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -34,6 +34,33 @@ interface InvestmentCheckoutProps {
 }
 
 const presetAmounts = [500_000, 1_000_000, 2_000_000, 5_000_000, 10_000_000];
+
+/**
+ * Six mandatory consents (dev_gstack merge, Feature #4).
+ * The confirm button stays disabled until every one is checked, and the API
+ * itself refuses to debit without an authenticated, VERIFIED investor — the UI
+ * gate is convenience, the server gate is the control.
+ */
+const CONSENT_ITEMS = [
+  'I have read the Investment Memorandum for this property.',
+  'I understand that projected yields and IRR are PROJECTIONS ONLY and are not guaranteed.',
+  'I accept the risk of capital loss; this investment is illiquid with no guaranteed early exit.',
+  'I understand fractional ownership does not give me day-to-day control of the property.',
+  'I understand this build uses DEMO FUNDS ONLY — no live payment is processed and no real money moves.',
+  'I confirm the information I provided is accurate and I am eligible to invest.',
+];
+
+/** Shape of the real POST /api/investments response we keep for the receipt. */
+type InvestmentResult = {
+  id: string;
+  amountKobo: number;
+  ownershipPct: number;
+  status: string;
+  investedAt: string;
+  newBalanceNaira: number;
+  fundedPct: number;
+  idempotentReplay: boolean;
+};
 
 const paymentMethods = [
   {
@@ -82,10 +109,62 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
   const [direction, setDirection] = useState(0);
   const [amount, setAmount] = useState(1_000_000);
   const [paymentMethod, setPaymentMethod] = useState('wallet');
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [consents, setConsents] = useState<boolean[]>(
+    CONSENT_ITEMS.map(() => false)
+  );
+  const allConsented = consents.every(Boolean);
   const [confirmed, setConfirmed] = useState(false);
+  // ── dev_gstack merge (Features #4/#5): real execution state ──
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState('');
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [result, setResult] = useState<InvestmentResult | null>(null);
+  // Minted once per confirmation attempt and REUSED on retry, so a retry after
+  // a timeout replays the original result instead of charging the wallet twice.
+  const idemKeyRef = useRef<string | null>(null);
+  
+  // Authentication state
+  const [session, setSession] = useState<{
+    firstName: string;
+    lastName: string | null;
+    email: string;
+    status: string;
+    role: string;
+  } | null>(null);
 
   const slug = propertySlug || selectedPropertySlug;
+
+  // Fetch authentication state
+  useEffect(() => {
+    let active = true;
+    fetch('/api/auth/me')
+      .then(async (res) => {
+        const data = await res.json();
+        if (!active) return;
+        setSession(res.ok ? data.user : null);
+      })
+      .catch(() => {
+        if (active) setSession(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Redirect if not authenticated or not verified
+  useEffect(() => {
+    if (session === null) return; // Still loading
+    if (!session) {
+      window.location.href = '/sign-in';
+      return;
+    }
+    if (session.status !== 'VERIFIED') {
+      alert('Your account is under verification. Please wait for admin approval before investing.');
+      setView('browse');
+      return;
+    }
+  }, [session, setView]);
 
   useEffect(() => {
     if (!slug) return;
@@ -112,8 +191,79 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
     setStep(next);
   };
 
+  // A new amount (or property) means a different payload — a previously minted
+  // key must not be reused for it, or the API would answer 409
+  // IDEMPOTENCY_CONFLICT by design.
+  useEffect(() => {
+    idemKeyRef.current = null;
+  }, [amount, slug]);
+
   const handleConfirm = () => {
-    setConfirmed(true);
+    void submitInvestment();
+  };
+
+  /**
+   * Executes the investment against the real atomic API.
+   *
+   * The server owns every business rule (VERIFIED status, min amount, remaining
+   * funding, sufficient balance) and performs the wallet debit, the investment
+   * row, the property funding update and the audit entry in ONE transaction.
+   */
+  const submitInvestment = async () => {
+    if (!property || submitting) return;
+    setSubmitting(true);
+    setError(null);
+    setErrorCode('');
+    setRejectionReason('');
+
+    if (!idemKeyRef.current) {
+      idemKeyRef.current =
+        typeof crypto !== 'undefined' && 'randomUUID' in crypto
+          ? crypto.randomUUID()
+          : `inv-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+
+    try {
+      const res = await fetch('/api/investments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': idemKeyRef.current,
+        },
+        body: JSON.stringify({
+          propertyId: property.id,
+          amountKobo: Math.round(amount * 100),
+        }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(
+          data?.message || data?.error || `Investment failed (${res.status})`
+        );
+        setErrorCode(typeof data?.code === 'string' ? data.code : '');
+        setRejectionReason(typeof data?.reason === 'string' ? data.reason : '');
+        return;
+      }
+
+      setResult({
+        id: data.investment.id,
+        amountKobo: data.investment.amountKobo,
+        ownershipPct: data.investment.ownershipPct,
+        status: data.investment.status,
+        investedAt: data.investment.investedAt,
+        newBalanceNaira: data.newBalanceNaira,
+        fundedPct: data.property.fundedPct,
+        idempotentReplay: Boolean(data.idempotentReplay),
+      });
+      setConfirmed(true);
+    } catch {
+      setError(
+        'Network error — nothing was charged. Press Confirm again to retry safely: the same idempotency key is reused, so a replay cannot debit twice.'
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleBack = () => {
@@ -165,9 +315,18 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
             transition={{ delay: 0.4 }}
           >
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Investment Successful!</h1>
-            <p className="text-muted-foreground mb-8">
-              Your investment has been confirmed. A certificate of ownership will be generated shortly.
+            <p className="text-muted-foreground mb-4">
+              Your investment was executed against your wallet in a single atomic
+              transaction and written to the immutable ledger.
             </p>
+            {result?.idempotentReplay && (
+              <p className="mb-4 inline-flex rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
+                Replay of your original confirmation — no second debit was made.
+              </p>
+            )}
+            <span className="mb-8 inline-flex rounded-full border border-red-300 bg-red-100 px-3 py-1 text-[10px] font-bold uppercase text-red-700">
+              Test mode — demo funds only
+            </span>
           </motion.div>
 
           {/* Certificate */}
@@ -187,28 +346,52 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
               <Separator className="mb-4" />
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Certificate No.</span>
-                  <span className="font-mono font-medium">NEST-2024-{Math.floor(Math.random() * 9000 + 1000)}</span>
+                  <span className="text-muted-foreground">Investment ID</span>
+                  <span className="font-mono font-medium">
+                    {result ? result.id.slice(-8).toUpperCase() : '—'}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Property</span>
                   <span className="font-medium">{property?.title || 'Property'}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Amount</span>
-                  <span className="font-bold text-nest-primary">{formatNairaFull(amount)}</span>
+                  <span className="text-muted-foreground">Amount debited</span>
+                  <span className="font-bold text-nest-primary">
+                    {formatNairaFull(result ? result.amountKobo / 100 : amount)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Units</span>
-                  <span className="font-medium">{(amount / (property?.minInvestment || 500_000)).toFixed(2)}</span>
+                  <span className="text-muted-foreground">Ownership</span>
+                  <span className="font-medium">
+                    {result ? `${result.ownershipPct.toFixed(4)}%` : '—'}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Expected Yield</span>
-                  <span className="font-medium">{property?.rentalYield != null ? formatPercent(property.rentalYield) : '—'}</span>
+                  <span className="text-muted-foreground">Status</span>
+                  <span className="font-medium">{result?.status ?? '—'}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Wallet balance (ledger)</span>
+                  <span className="font-medium">
+                    {result ? formatNairaFull(result.newBalanceNaira) : '—'}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Property funded</span>
+                  <span className="font-medium">
+                    {result ? `${result.fundedPct.toFixed(1)}%` : '—'}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Date</span>
-                  <span className="font-medium">{new Date().toLocaleDateString('en-NG', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                  <span className="font-medium">
+                    {new Date(result?.investedAt ?? Date.now()).toLocaleDateString('en-NG', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </span>
                 </div>
               </div>
             </Card>
@@ -223,7 +406,15 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
             <Button
               variant="outline"
               className="flex-1"
-              onClick={() => { setConfirmed(false); setStep(1); setAmount(1_000_000); setTermsAccepted(false); }}
+              onClick={() => {
+                setConfirmed(false);
+                setStep(1);
+                setAmount(1_000_000);
+                setConsents(CONSENT_ITEMS.map(() => false));
+                setResult(null);
+                setError(null);
+                idemKeyRef.current = null;
+              }}
             >
               Invest Again
             </Button>
@@ -479,34 +670,78 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                   <Separator />
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Platform Fee</span>
-                    <span className="font-medium">Free</span>
+                    <span className="font-medium">₦0 — no fee is charged in this build</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-semibold">Total</span>
+                    <span className="font-semibold">Total debited from wallet</span>
                     <span className="font-bold text-lg">{formatNairaFull(amount)}</span>
                   </div>
                 </div>
 
                 <Separator />
 
-                {/* Terms */}
+                {/* Six mandatory consents (Feature #4). Confirm stays disabled
+                    until every consent is given; the API enforces the rest. */}
                 <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      id="terms"
-                      checked={termsAccepted}
-                      onChange={(e) => setTermsAccepted(e.target.checked)}
-                      className="mt-1 rounded border-border"
-                    />
-                    <label htmlFor="terms" className="text-xs text-muted-foreground leading-relaxed">
-                      I have read and agree to the Investment Terms & Conditions, Risk Disclosure Statement, 
-                      and understand that my investment is subject to the risks outlined in the Investment Memorandum. 
-                      I confirm that all information provided is accurate.
-                    </label>
-                  </div>
+                  <p className="text-sm font-semibold">
+                    Mandatory consents ({consents.filter(Boolean).length}/{CONSENT_ITEMS.length})
+                  </p>
+                  {CONSENT_ITEMS.map((item, i) => (
+                    <div key={item} className="flex items-start gap-3">
+                      <input
+                        type="checkbox"
+                        id={`consent-${i}`}
+                        checked={consents[i]}
+                        onChange={(e) => {
+                          const next = [...consents];
+                          next[i] = e.target.checked;
+                          setConsents(next);
+                        }}
+                        className="mt-1 rounded border-border"
+                      />
+                      <label
+                        htmlFor={`consent-${i}`}
+                        className="text-xs text-muted-foreground leading-relaxed"
+                      >
+                        {item}
+                      </label>
+                    </div>
+                  ))}
                 </div>
               </Card>
+
+              {/* Server-side failures: verification gate, funds, funding limit */}
+              {error && (
+                <div
+                  role="alert"
+                  className="flex items-start gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800"
+                >
+                  <AlertCircle className="size-4 text-red-600 mt-0.5 flex-shrink-0" />
+                  <div className="text-xs text-red-800 dark:text-red-200">
+                    <p className="font-semibold">{error}</p>
+                    {errorCode && (
+                      <p className="mt-1 font-mono text-[10px] opacity-80">
+                        code: {errorCode}
+                        {rejectionReason ? ` · reason: ${rejectionReason}` : ''}
+                      </p>
+                    )}
+                    {(errorCode === 'ACCOUNT_PENDING' ||
+                      errorCode === 'ACCOUNT_REJECTED' ||
+                      errorCode === 'UNAUTHENTICATED') && (
+                      <p className="mt-2">
+                        <a
+                          href={errorCode === 'UNAUTHENTICATED' ? '/sign-in' : '/account'}
+                          className="font-semibold underline"
+                        >
+                          {errorCode === 'UNAUTHENTICATED'
+                            ? 'Sign in / create an account'
+                            : 'View verification status'}
+                        </a>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Warning */}
               <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
@@ -524,11 +759,11 @@ export default function InvestmentCheckout({ propertySlug }: InvestmentCheckoutP
                 </Button>
                 <Button
                   onClick={handleConfirm}
-                  disabled={!termsAccepted}
+                  disabled={!allConsented || submitting}
                   className="flex-1 bg-nest-primary hover:bg-nest-primary/90 text-white disabled:opacity-50"
                 >
                   <Shield className="size-4 mr-1" />
-                  Confirm Investment
+                  {submitting ? 'Processing…' : 'Confirm Investment'}
                 </Button>
               </div>
             </div>

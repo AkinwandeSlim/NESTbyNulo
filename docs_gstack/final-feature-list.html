@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Final Feature List - NEST by Nulo Africa</title><style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:960px;margin:0 auto;padding:24px;color:#1a1a2e;background:#f8f9fa;line-height:1.6}
+h1{color:#16213e;border-bottom:2px solid #0f3460;padding-bottom:8px}
+h2{color:#16213e;border-bottom:1px solid #dee2e6;padding-bottom:4px;margin-top:32px}
+h3{color:#1a1a2e;margin-top:24px}h4{color:#495057;margin-top:16px}
+table{border-collapse:collapse;width:100%;margin:16px 0}
+th{background:#0f3460;color:white;padding:8px 12px;text-align:left}
+td{border:1px solid #dee2e6;padding:8px 12px}
+tr:nth-child(even){background:#f1f3f5}
+code{background:#e9ecef;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:.9em}
+pre{background:#1a1a2e;color:#a8d8ea;padding:16px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word}
+pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:4px solid #0f3460;margin:8px 0;padding:8px 16px;background:#e8f0fe;border-radius:0 4px 4px 0}
+hr{border:none;border-top:1px solid #dee2e6;margin:24px 0}
+a{color:#0f3460}ul,ol{padding-left:24px}li{margin:4px 0}
+.banner{background:#dc3545;color:white;text-align:center;padding:10px;font-weight:bold;font-size:1.1em;border-radius:4px;margin-bottom:16px}
+.meta{color:#6c757d;font-size:.9em;margin-bottom:16px}
+</style></head><body><div class="banner">NEST Documentation - TEST MODE BUILD - NOT A LIVE INVESTMENT OFFERING</div><div class="meta">NEST by Nulo Africa | September 17, 2026 | Source of Truth: requirements.md v2.0</div><h1>NEST by Nulo Africa — Final Feature List (MoSCoW)</h1>
+
+<strong>Version:</strong> 2.1
+<strong>Date:</strong> September 17, 2026
+<strong>Status:</strong> Updated — Solo-Builder Demo Scope
+<strong>Supersedes:</strong> final-feature-list.md v1.0 (September 15, 2026)
+<strong>Source of Truth:</strong> This document aligns with <code>docs_gstack/requirements.md</code> v2.0.
+
+<blockquote><strong>IMPORTANT: This document is not labelled "Final and Approved."</strong> The Must-have list is approved for a solo-builder, 3-day, test-mode demo only. Feature scope must be reviewed and re-approved before any live pilot build begins.</blockquote>
+
+<hr/>
+<h2>Demo Context</h2>
+
+- <strong>Build scope:</strong> Test-mode competition demo only
+- <strong>Builder:</strong> Solo developer (one person)
+- <strong>Timeline:</strong> 3 working days (~24 hours of development time)
+- <strong>Goal:</strong> Prove the core investment cycle end-to-end on seeded demo data
+- <strong>NOT:</strong> A live investment platform, a regulated offering, or a production system
+
+<hr/>
+<h2>Must-Have Features (5 — Capped for Solo Builder)</h2>
+
+<blockquote>Without all 5, the demo is broken or the core investment story cannot be shown.</blockquote>
+
+<table><tr><th>Feature</th><th>Description</th><th>MoSCoW</th><th>Reason</th><th>FR Ref</th><th>---</th><th>---</th><th>---</th><th>---</th><th>---</th><th><strong>Single Property Data Room (Demo)</strong></th><th>Display illustrative test property with ₦100M target, funding progress, risk disclosures, all fees (2% platform + up to 8% of rent management), projected yield (7–9%, labelled projection only), and lock-up terms. All values from DB seed — no hardcoded UI values. Status: FUNDING/FUNDED/ACTIVE.</th><th><strong>Must</strong></th><th>Without this, there is nothing to invest in. The property display is the core trust proposition.</th><th>FR-001</th><th><strong>Seeded Demo Roles + Server-Side Authorization</strong></th><th>Pre-created ADMIN, VERIFIED, and PENDING demo accounts. Server enforces: PENDING → 403 on /api/investments; non-ADMIN → 403 on /api/admin/*; anonymous → 401 on wallet/portfolio. Authorization is server-side only — never trust client-provided role or KYC state.</th><th><strong>Must</strong></th><th>Without proper authorization, the demo cannot prove that controls are real and non-bypassable.</th><th>FR-002</th><th><strong>Immutable Demo Ledger + Admin Demo Credit</strong></th><th>Append-only ledger in BigInt kobo. Wallet balance = SUM(POSTED entries). Admin-only endpoint to credit a demo wallet, labelled "DEMO CREDIT — NOT A PAYMENT" in both the ledger record and the UI. Idempotent: same reference cannot post twice.</th><th><strong>Must</strong></th><th>Without a working ledger, the investment flow has no money integrity. Demo credit is the only way to fund the demo wallet in the absence of live payment rails.</th><th>FR-003</th><th><strong>Atomic Demo Investment</strong></th><th>Two-step: (1) Fee/ownership summary + risk consent checkboxes (all mandatory before Confirm enabled); (2) Atomic transaction: verify status, validate ₦500K min/₦10M max/balance/capacity, debit via ledger, create investment record, update property fundingRaisedKobo, write AuditLog, COMMIT. Hard stop at ₦100M; SELECT FOR UPDATE for concurrency; idempotent idempotencyKey.</th><th><strong>Must</strong></th><th>Without this, the demo cannot show an investor actually acquiring a fractional stake. This is the product's core value action.</th><th>FR-004</th><th><strong>Persisted Portfolio + Audit Trail</strong></th><th>Portfolio: wallet balance (from ledger SUM), confirmed holdings (property, amount, ownership %, status), recent transactions (5–10 entries). All DB-derived — zero hardcoded values. Survives page reload. Admin can view investment records and AuditLog.</th><th><strong>Must</strong></th><th>Without portfolio persistence, the demo cannot prove data integrity. A judge reloading the page must see the same numbers.</th><th>FR-005</th><th><strong>Must-Have Count: 5</strong> — within the solo-builder cap.
+
+<hr/>
+<h2>Should-Have Features (Implement If Core Is Complete)</h2>
+
+These are important to a compelling demo but the core story works without them. Implement in this priority order only after all 5 Must-haves are passing and tested.</th><th>Feature</th><th>Description</th><th>MoSCoW</th><th>Priority</th><th>Estimated Time</th><th>FR Ref</th><th>---</th><th>---</th><th>---</th><th>---</th><th>---</th><th>---</th><th><strong>Admin Distribution Panel</strong></th><th>Admin enters rent collected for a period; system calculates management fee (up to 8% of rent), previews pro-rata allocation per investor (unfunded portion held in reserve); admin confirms; system credits all investor wallets atomically; idempotent (property+period cannot post twice).</th><th><strong>Should</strong></th><th>1st (shows full income cycle — highest demo value)</th><th>4–5 hours</th><th>FR-007</th><th><strong>Full Transaction History View</strong></th><th>Paginated full transaction history for investor wallet, filterable by type and with pagination.</th><th><strong>Should</strong></th><th>2nd (portfolio recent-transactions view covers the core use case; this adds pagination)</th><th>3–4 hours</th><th>FR-009</th><th><hr/>
+<h2>Could-Have Features (Only If Significantly Ahead of Schedule)</h2></th><th>Feature</th><th>Description</th><th>MoSCoW</th><th>Reason</th><th>---</th><th>---</th><th>---</th><th>---</th><th>Document Repository (Seeded Links)</th><th>Verified-only page with seeded links to illustrative documents (valuation summary, SPV structure diagram). Labelled illustrative.</th><th><strong>Could</strong></th><th>Adds trust credibility in demo but is not testable functionality.</th><th>Multi-Property Architecture</th><th>DB/API supports multiple properties; single property shown.</th><th><strong>Could</strong></th><th>Forward-compatibility; not demo-visible.</th><th><hr/>
+<h2>Won't-Have (This Demo Build — Explicitly Out of Scope)</h2></th><th>Feature</th><th>MoSCoW</th><th>Reason</th><th>---</th><th>---</th><th>---</th><th>Real Payment Gateway (Paystack/Flutterwave live mode)</th><th><strong>Won't</strong></th><th>Requires compliance review, real KYC, production credentials.</th><th>Real KYC (BVN/NIN, liveness, identity documents)</th><th><strong>Won't</strong></th><th>Requires licensed KYC provider. Demo uses admin-controlled verification state.</th><th>Secondary Market / Share Trading</th><th><strong>Won't</strong></th><th>Not offered in pilot. Must not be promised. See requirements.md Section 6.3.</th><th>Wallet Withdrawal</th><th><strong>Won't</strong></th><th>Requires payment rails and compliance review.</th><th>Public Marketplace / Open Solicitation</th><th><strong>Won't</strong></th><th>Contradicts closed pilot boundaries.</th><th>SMS / Email Notifications</th><th><strong>Won't</strong></th><th>Not a demo blocker. In-app notifications only if time allows.</th><th>Native Mobile Apps</th><th><strong>Won't</strong></th><th>Web-responsive sufficient for demo.</th><th>Cryptocurrency Integration</th><th><strong>Won't</strong></th><th>Contradicts naira-based pilot.</th><th>Live PropFlow Integration</th><th><strong>Won't</strong></th><th>6-month post-pilot project.</th><th>Automated Rent Collection and Distribution</th><th><strong>Won't</strong></th><th>Post-acquisition; PropFlow integration.</th><th>PDF Certificates</th><th><strong>Won't</strong></th><th>Post-demo.</th><th>Property CRUD / Developer CRUD</th><th><strong>Won't</strong></th><th>Seeded data only for demo.</th><th>Referral Program</th><th><strong>Won't</strong></th><th>Growth feature; no open acquisition in pilot.</th><th>Advanced Analytics / Charts</th><th><strong>Won't</strong></th><th>Insufficient data for meaningful charts in demo.</th><th><hr/>
+<h2>Cut Order (If Behind Schedule)</h2>
+
+If development is running late, cut in this exact order (cut from the bottom up):
+
+1. <strong>Cut first:</strong> Full Transaction History View (FR-009) — portfolio recent-transactions covers the core
+2. <strong>Cut second:</strong> Investment Confirmation Screen (FR-008) — redirect to portfolio with toast is acceptable
+3. <strong>Cut third:</strong> Admin Verification UI (FR-006) — admin can verify via API call or DB update for demo
+4. <strong>Cut last:</strong> Admin Distribution Panel (FR-007) — significant demo value; only cut if Must-haves are at risk
+
+<strong>Never cut any of the 5 Must-have features.</strong> Without all 5, the demo is broken.
+
+<hr/>
+<h2>Solo-Builder Estimated Hours (6-Screen Scope)</h2>
+
+Hour estimates are grouped by backend service (shared across screens) and screen UI.
+
+<h3>Backend Services (Shared)</h3></th><th>Service</th><th>Estimated Hours</th><th>Notes</th><th>---</th><th>---</th><th>---</th><th>Postgres migration + BigInt fields + seed script</th><th>3–4 h</th><th>Foundation for everything; reuses existing schema</th><th>Authorization middleware (requireAuth, requireVerified, requireAdmin)</th><th>2–3 h</th><th>Includes Clerk integration</th><th>Ledger service (credit, debit, balance, idempotency)</th><th>3–4 h</th><th>Core money integrity</th><th>Investment service (atomic transaction)</th><th>4–5 h</th><th>Most complex; includes concurrency/idempotency</th><th><strong>Backend total</strong></th><th><strong>12–16 h</strong></th><th><h3>Screen UI (6 Screens)</h3></th><th>Screen</th><th>Estimated Hours</th><th>Notes</th><th>---</th><th>---</th><th>---</th><th>Screen 1: Property Data Room</th><th>3–4 h</th><th>DB-backed display; no write operations</th><th>Screen 2: Wallet + Verification Status</th><th>2–3 h</th><th>Read-only; inline verification state</th><th>Screen 3: Investment (combined amount + review + consent)</th><th>4–5 h</th><th>Highest complexity — live calculation + checkboxes + POST</th><th>Screen 4: Portfolio</th><th>3–4 h</th><th>Read-only; DB-derived</th><th>Screen 5: Admin Panel (combined)</th><th>3–4 h</th><th>User mgmt + demo credit + investment viewer in one page</th><th>Screen 6: Admin Distribution (Should-have)</th><th>4–5 h</th><th>Only if Screens 1–5 are complete before end of Day 2</th><th><strong>Screen total (Must-have: 1–5)</strong></th><th><strong>15–20 h</strong></th><th><strong>Screen total (Should-have: 6)</strong></th><th><strong>4–5 h</strong></th><th><h3>Combined Estimate</h3></th><th>Scope</th><th>Total Hours</th><th>Fits 24h?</th></tr><tr><td>Backend + Screens 1–5 (Must-have)</td><td>~22–28 h</td><td>Tight but achievable with minimal CSS polish</td></tr><tr><td>+ Screen 6 (Should-have)</td><td>~26–33 h</td><td>Only if Must-haves are done by end of Day 2</td></tr></table>
+<strong>Solo-builder capacity (3 days × 8 hours/day):</strong> ~24 effective development hours
+
+<blockquote>The scope is now achievable for a single developer if: (a) the backend services are built first (Day 1) and screens are wired to them quickly (Day 2), (b) CSS polish is deferred until the golden path works, and (c) Admin Panel (Screen 5) is simplified to API-call verification if time is short (saves 2–3 h).</blockquote>
+
+<hr/>
+<strong>Document Status:</strong> Approved for Solo-Builder Demo Scope
+<strong>Source of Truth:</strong> Requirements.md v2.0
+<strong>Last Updated:</strong> September 16, 2026
+
+</body></html>

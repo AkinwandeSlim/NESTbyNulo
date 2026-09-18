@@ -24,6 +24,7 @@ import {
   Star,
   Phone,
   Mail,
+  LogIn,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -46,6 +47,7 @@ import {
   cn,
 } from '@/lib/nest-utils';
 import PropertyCard, { type PropertyCardData } from './PropertyCard';
+import Link from 'next/link';
 
 interface PropertyDetail {
   id: string;
@@ -135,6 +137,15 @@ export default function PropertyDetailView() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState('overview');
+  
+  // Authentication state
+  const [session, setSession] = useState<{
+    firstName: string;
+    lastName: string | null;
+    email: string;
+    status: string;
+    role: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!selectedPropertySlug) return;
@@ -154,12 +165,42 @@ export default function PropertyDetailView() {
     fetchProperty();
   }, [selectedPropertySlug]);
 
+  // Fetch authentication state
+  useEffect(() => {
+    let active = true;
+    fetch('/api/auth/me')
+      .then(async (res) => {
+        const data = await res.json();
+        if (!active) return;
+        setSession(res.ok ? data.user : null);
+      })
+      .catch(() => {
+        if (active) setSession(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const handleBack = () => {
     selectProperty(null);
     setView('browse');
   };
 
   const handleInvest = () => {
+    if (!session) {
+      // Not signed in - redirect to sign-in
+      window.location.href = '/sign-in';
+      return;
+    }
+    
+    if (session.status !== 'VERIFIED') {
+      // Signed in but not verified - show message
+      alert('Your account is under verification. Please wait for admin approval before investing.');
+      return;
+    }
+    
+    // Signed in and verified - proceed to invest
     setView('invest');
   };
 
@@ -624,8 +665,17 @@ export default function PropertyDetailView() {
                 onClick={handleInvest}
                 className="w-full bg-nest-primary hover:bg-nest-primary/90 text-white h-12 text-base font-semibold"
               >
-                Invest in This Property
-                <ChevronRight className="size-4 ml-1" />
+                {session ? (
+                  <>
+                    Invest in This Property
+                    <ChevronRight className="size-4 ml-1" />
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="size-4 mr-2" />
+                    Sign in to Invest
+                  </>
+                )}
               </Button>
             </Card>
 

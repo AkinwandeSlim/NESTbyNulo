@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
+import { jsonSafe } from '@/lib/json-safe';
 
 export async function GET(request: Request) {
   try {
@@ -38,7 +39,9 @@ export async function GET(request: Request) {
     };
 
     const orderByField = orderByMap[sort] || 'createdAt';
-    // @ts-expect-error dynamic orderBy
+    // Computed-key object: accepted by the client's PropertyOrderBy union, so
+    // no @ts-expect-error is needed (the old directive had become unused and
+    // made tsc fail with TS2578).
     const orderBy = { [orderByField]: order === 'asc' ? 'asc' : 'desc' };
 
     // Fetch with pagination
@@ -85,23 +88,27 @@ export async function GET(request: Request) {
       fundingRemaining: property.fundingTarget - property.fundingRaised,
     }));
 
-    return NextResponse.json({
-      properties: formattedProperties,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
-      filters: {
-        type,
-        city,
-        featured,
-        trending,
-        status,
-        riskRating,
-      },
-    });
+    // jsonSafe: the spread rows carry BigInt kobo columns, which
+    // JSON.stringify cannot serialize (it would 500 the whole listing).
+    return NextResponse.json(
+      jsonSafe({
+        properties: formattedProperties,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+        },
+        filters: {
+          type,
+          city,
+          featured,
+          trending,
+          status,
+          riskRating,
+        },
+      })
+    );
   } catch (error) {
     console.error('Error fetching properties:', error);
     return NextResponse.json(

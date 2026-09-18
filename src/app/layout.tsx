@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-const geistSans = Geist({
+// Fallback system fonts (no external fetch required)
+const geistSans = {
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+  style: { fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" },
+};
 
-const geistMono = Geist_Mono({
+const geistMono = {
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  style: { fontFamily: "ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace" },
+};
 
 export const metadata: Metadata = {
   title: "NEST by Nulo Africa — Fractional Real Estate Investment",

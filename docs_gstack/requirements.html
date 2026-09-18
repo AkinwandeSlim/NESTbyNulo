@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Requirements - Source of Truth - NEST by Nulo Africa</title><style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:960px;margin:0 auto;padding:24px;color:#1a1a2e;background:#f8f9fa;line-height:1.6}
+h1{color:#16213e;border-bottom:2px solid #0f3460;padding-bottom:8px}
+h2{color:#16213e;border-bottom:1px solid #dee2e6;padding-bottom:4px;margin-top:32px}
+h3{color:#1a1a2e;margin-top:24px}h4{color:#495057;margin-top:16px}
+table{border-collapse:collapse;width:100%;margin:16px 0}
+th{background:#0f3460;color:white;padding:8px 12px;text-align:left}
+td{border:1px solid #dee2e6;padding:8px 12px}
+tr:nth-child(even){background:#f1f3f5}
+code{background:#e9ecef;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:.9em}
+pre{background:#1a1a2e;color:#a8d8ea;padding:16px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word}
+pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:4px solid #0f3460;margin:8px 0;padding:8px 16px;background:#e8f0fe;border-radius:0 4px 4px 0}
+hr{border:none;border-top:1px solid #dee2e6;margin:24px 0}
+a{color:#0f3460}ul,ol{padding-left:24px}li{margin:4px 0}
+.banner{background:#dc3545;color:white;text-align:center;padding:10px;font-weight:bold;font-size:1.1em;border-radius:4px;margin-bottom:16px}
+.meta{color:#6c757d;font-size:.9em;margin-bottom:16px}
+</style></head><body><div class="banner">NEST Documentation - TEST MODE BUILD - NOT A LIVE INVESTMENT OFFERING</div><div class="meta">NEST by Nulo Africa | September 17, 2026 | Source of Truth: requirements.md v2.0</div><h1>NEST by Nulo Africa — Product Requirements Document</h1>
+
+<strong>Version:</strong> 2.0
+<strong>Date:</strong> September 16, 2026
+<strong>Status:</strong> Active — Canonical Source of Truth
+<strong>Owner:</strong> NEST Team / NuloAfrica
+
+<hr/>
+<h2>Source of Truth Declaration</h2>
+
+This document is the <strong>single source of truth</strong> for the NEST platform. All other documents in <code>docs_gstack/</code> must align with this document. Where any other document contradicts this one, this document governs. Any change to product scope, financial figures, fees, investor protections, or legal framing must be recorded here first, dated, and attributed to a named decision-maker before it is propagated to other documents.
+
+<strong>Backup of previous version:</strong> <code>requirements_backup_20260915_134622.md</code> — preserved as archive; do not modify.
+
+<hr/>
+<h2>1. Problem Statement</h2>
+
+Financially capable middle-income professionals in Nigeria — earning ₦500,000–₦1,000,000 monthly with ₦1,000,000–₦5,000,000 in liquid savings — cannot access specific, professionally managed, income-producing real estate investments. Entry prices for quality Abuja residential property are ₦50,000,000–₦150,000,000. Their savings lose real purchasing power at an estimated 10–15% per year in fixed deposits while nominal inflation runs at 25–30%. Informal pooling (ajo/esusu) works at the scale of trusted friend groups but breaks down for ₦50,000,000+ property deals: trust does not scale, legal structure is absent, professional management does not exist, and there is no orderly exit mechanism.
+
+NEST addresses a specific, controlled version of this problem: a <strong>single named income-producing property in Abuja</strong>, offered to a <strong>defined, pre-screened group of investors</strong>, with <strong>complete fee disclosure, risk disclosure, and documented investor protections</strong>. This is not a public marketplace, a mass-market financial-inclusion product, or a general investment platform. It is a controlled pilot designed to prove one complete, transparent, professionally managed property investment cycle.
+
+<hr/>
+<h2>2. Pilot Boundaries</h2>
+
+<table><tr><th>Dimension</th><th>Pilot Constraint</th><th>---</th><th>---</th><th>Geography</th><th>One property in Abuja, Nigeria only</th><th>Number of properties</th><th>One (1) for this pilot</th><th>Investor pool</th><th>Pre-screened, identified investors; no open public solicitation</th><th>Capital target</th><th>₦100,000,000</th><th>Existing commitments</th><th>7 investors; ₦15,000,000 already received (real funds — not demo data)</th><th>Platform type</th><th>Closed, invitation-only — NOT a public marketplace</th><th>Demo mode</th><th>Test-mode demo only; all demo data labelled; no real investor records used as demo data</th><th>Regulation</th><th><strong>Requires Nigerian securities and property counsel confirmation before any live capital activity. See Section 8.</strong></th><th><hr/>
+<h2>3. Target User</h2>
+
+<h3>Illustrative Demo Persona ("Adaeze")</h3>
+
+<blockquote>This is a composite illustrative persona for design and demo purposes only. Real investor data must not appear in repository documents.</blockquote>
+
+- <strong>Age:</strong> 32–42, professional (civil servant, NGO officer, corporate manager)
+- <strong>Location:</strong> Abuja (FCT)
+- <strong>Income:</strong> ₦600,000–₦1,200,000/month
+- <strong>Savings:</strong> ₦1,000,000–₦5,000,000 in fixed deposit or money market
+
+<strong>Pain Points:</strong> Cannot access income-generating property; savings losing real value to inflation; ajo/esusu does not scale to ₦50M+ deals; does not trust unregulated fractional platforms; REITs are illiquid and opaque.
+
+<strong>Goals:</strong> Earn projected 7–9% net annual yield from rent on a specific named property; invest ₦500,000–₦10,000,000; receive quarterly income; full transparency on property performance and costs; understand lock-up period and exit paths.
+
+<strong>What This User Is NOT:</strong> A financial-inclusion beneficiary, a youth banking customer, a user seeking a public marketplace, or a user who has been promised guaranteed returns.
+
+<hr/>
+<h2>4. Functional Requirements</h2>
+
+<blockquote><strong>Solo-builder constraint:</strong> Must-have features are capped at 5. The demo is built by a single developer in 3 days. Any Must-have a single developer cannot complete in 3 days is automatically deferred.</blockquote></th><th>ID</th><th>Feature</th><th>Description</th><th>Priority</th><th>----</th><th>---------</th><th>-------------</th><th>----------</th><th><strong>FR-001</strong></th><th>Single Property Data Room</th><th>Illustrative test property display: name, city, illustrative valuation basis, ₦100M funding target, current funding progress, risk disclosures, fee structure (2% platform fee + up to 8% of rent management fee), lock-up terms, projected yield (7–9%, labelled projection only). Status: FUNDING → FUNDED → ACTIVE. All values from DB seed only — no hardcoded UI values.</th><th><strong>Must</strong></th><th><strong>FR-002</strong></th><th>Seeded Demo Roles and Server-Side Authorization</th><th>Pre-created demo accounts: ADMIN, VERIFIED investor, PENDING investor. Server enforces: PENDING → 403 on investment API; non-ADMIN → 403 on /api/admin/*; anonymous → 401 on wallet/investment/portfolio APIs. Authorization is server-side only.</th><th><strong>Must</strong></th><th><strong>FR-003</strong></th><th>Immutable Demo Ledger and Labelled Admin Demo Credit</th><th>Append-only ledger (BigInt kobo). Balance = SUM(POSTED ledger entries). Admin-only demo credit endpoint; credit labelled "DEMO CREDIT — NOT A PAYMENT" in ledger and UI. Idempotent: same reference cannot post twice. No self-service credit for investors.</th><th><strong>Must</strong></th><th><strong>FR-004</strong></th><th>Atomic Demo Investment</th><th>Two-step: (1) Summary with fee line items, ownership %, mandatory risk consent checkboxes (all required before Confirm enabled); (2) Atomic transaction: verify VERIFIED status, validate ₦500K min / ₦10M max / balance / funding capacity, debit via ledger, create investment, update fundingRaisedKobo, write AuditLog, COMMIT. Hard stop at ₦100M. Idempotent idempotencyKey. SELECT FOR UPDATE for concurrency.</th><th><strong>Must</strong></th><th><strong>FR-005</strong></th><th>Persisted Portfolio and Audit Trail</th><th>Wallet balance from ledger SUM. Holdings: property, amount, ownership %, status. Recent transactions (last 5–10 ledger entries). All DB-derived — zero hardcoded. Persists after reload. Admin can view all investment records and AuditLog.</th><th><strong>Must</strong></th><th>FR-006</th><th>Admin Verification UI</th><th>Admin verifies pending demo user; server-side status update with AuditLog entry and notification.</th><th>Should</th><th>FR-007</th><th>Admin Distribution Panel</th><th>Admin selects property+period, enters rent collected, system calculates management fee and net amount, previews pro-rata allocation, admin confirms, system credits all investor wallets via ledger entries, creates distribution record (idempotent: property+period cannot post twice).</th><th>Should</th><th>FR-008</th><th>Investment Receipt / Confirmation Screen</th><th>After successful investment: receipt number, property, amount, platform fee, ownership %, date.</th><th>Should</th><th>FR-009</th><th>Full Transaction History View</th><th>Paginated investor wallet transaction history, filterable by type.</th><th>Should</th><th>FR-010</th><th>Document Repository (Seeded Links)</th><th>Verified-only page; seeded links to illustrative property documents (valuation summary, SPV structure diagram, illustrative title confirmation). Labelled as illustrative demo documents.</th><th>Should</th><th>FR-011</th><th>Multi-Property Architecture</th><th>DB and API designed for multiple properties; single property in demo.</th><th>Could</th><th>FR-012</th><th>Real Payment Gateway Integration</th><th>Paystack/Flutterwave live integration. Requires compliance review.</th><th>Won't (demo)</th><th>FR-013</th><th>Real KYC</th><th>BVN/NIN, liveness checks, identity-document upload.</th><th>Won't (demo)</th><th>FR-014</th><th>Secondary Market</th><th>Not offered in pilot. Must not be promised.</th><th>Won't</th><th>FR-015</th><th>Wallet Withdrawal</th><th>Requires payment rails and compliance review.</th><th>Won't (demo)</th><th>FR-016</th><th>Public Marketplace / Open Solicitation</th><th>Contradicts pilot boundaries.</th><th>Won't</th><th>FR-017</th><th>SMS / Email Notifications</th><th>In-app notifications only for demo.</th><th>Won't (demo)</th><th>FR-018</th><th>Native Mobile Apps</th><th>Web-responsive only for demo.</th><th>Won't</th><th><hr/>
+<h2>5. Financial Model and Disclosures</h2>
+
+<blockquote><strong>IMPORTANT:</strong> All figures are planning assumptions only. Not confirmed by independent valuer, legal counsel, or auditor. Final disclosed figures must be reviewed by Nigerian securities/property counsel before use with real investors.</blockquote>
+
+<h3>Investment Terms (Planning Defaults — Require Counsel Confirmation)</h3></th><th>Term</th><th>Planning Default</th><th>Status</th><th>---</th><th>---</th><th>---</th><th>Minimum ticket</th><th>₦500,000</th><th><strong>Confirmed founder decision</strong></th><th>Maximum ticket</th><th>₦10,000,000 (or 10% of ₦100M target)</th><th>Planning default — <strong>requires founder/counsel confirmation</strong></th><th>Funding target</th><th>₦100,000,000</th><th><strong>Confirmed founder decision</strong></th><th>Lock-up</th><th>24 months from property acquisition completion</th><th><strong>Planning default — requires founder/counsel confirmation</strong></th><th>Distribution frequency</th><th>Quarterly, from actual rent collected after approved expenses and reserves</th><th><strong>Confirmed founder decision</strong></th><th>Projected annual yield</th><th>7–9% net of management fee, before investor tax</th><th><strong>Projection only — not guaranteed — must be modelled</strong></th><th><h3>Fee Structure (Planning Defaults — Require Counsel Confirmation)</h3>
+
+<blockquote><strong>Removed and prohibited:</strong> 8% fee on AUM. On ₦100M, this = ₦8,000,000/year and can consume most rental income. Must not appear in any investor-facing document.</blockquote></th><th>Fee</th><th>Planning Default</th><th>---</th><th>---</th><th>Platform / arrangement fee</th><th>2% of investment amount, one-time at investment, transparently disclosed</th><th>Property management fee</th><th>Up to 8% of rent actually collected (not % of asset value)</th><th>Legal / SPV costs</th><th>Actual documented costs with a disclosed pre-agreed cap — not a flat percentage</th><th><h3>Return Illustration (Illustrative Only — Not a Promise)</h3></th><th>Investment Principal</th><th>Platform Fee (2%)</th><th>Total Wallet Debit</th><th>Ownership %</th><th>Projected Annual Dist. (7–9% of Principal)</th><th>---</th><th>---</th><th>---</th><th>---</th><th>---</th><th>₦500,000</th><th>₦10,000</th><th>₦510,000</th><th>0.5%</th><th>₦35,000–₦45,000</th><th>₦2,000,000</th><th>₦40,000</th><th>₦2,040,000</th><th>2.0%</th><th>₦140,000–₦180,000</th><th>₦5,000,000</th><th>₦100,000</th><th>₦5,100,000</th><th>5.0%</th><th>₦350,000–₦450,000</th><th>₦10,000,000</th><th>₦200,000</th><th>₦10,200,000</th><th>10.0%</th><th>₦700,000–₦900,000</th><th><blockquote>Ownership % = principal ÷ ₦100,000,000. Yield projection is on the investment principal, not the post-fee amount (the platform fee goes to the platform and does not generate returns). Actual distributions depend on rent collected, vacancy, maintenance and reserve costs, management fees, legal costs, and applicable tax. <strong>These are projections, not guaranteed returns.</strong></blockquote>
+
+<hr/>
+<h2>6. Investor Protections and Funds Governance</h2>
+
+<blockquote>All items below represent founder's intended protections. Precise legal form and enforceability require Nigerian securities/property counsel confirmation.</blockquote>
+
+<h3>6.1 Funds Governance Gate</h3>
+
+No real investor funds may be deployed toward property acquisition until ALL of the following are met:
+
+1. SEC counsel opinion received (written, from Nigerian securities counsel)
+2. SPV properly established (dedicated, ring-fenced legal entity separate from NuloAfrica operating business)
+3. Investor funds transferred to dedicated SPV account (as of this document, this transfer is not confirmed — do not state it has occurred without written evidence)
+4. Subscription agreements for each participating investor reviewed by counsel and containing the agreed fallback/refund terms (UI-05 — currently unconfirmed)
+5. Independent property valuation completed (current, from independent valuer)
+6. Full deal memo distributed and acknowledged by each investor
+
+<h3>6.2 Deal Memo Requirements</h3>
+
+Before any investor confirms or reconfirms, they must receive a full deal memo including: property address and legal description; independent valuation basis and date; full fee schedule (all as line items); SPV legal structure; projected yield range and assumptions; all material risk factors; lock-up period and exact terms; available exit paths after lock-up; fallback process if target is not reached; refund terms and timeline; subscription agreement reference.
+
+<h3>6.3 Liquidity and Exit Policy</h3>
+
+<strong>There is no secondary market.</strong> NEST does not offer, imply, or promise the ability to sell, transfer, or trade investment stakes.
+
+After the 24-month lock-up, available exit paths: sale of the property (mechanism defined in SPV agreement, confirmed by counsel); refinancing/buyback if available and agreed; permitted transfer to a qualified replacement investor subject to NEST approval and legal compliance.
+
+<strong>"Secondary market" must not appear as a promised or planned feature in any investor communication or product document.</strong>
+
+<h3>6.4 Fallback: Funding Shortfall and Consent Process</h3>
+
+If the ₦100,000,000 target is not raised within the agreed window, each affected investor must individually choose:
+1. <strong>Replacement property</strong> — only after receiving its full new deal memo and providing individual written consent; OR
+2. <strong>Full refund</strong>
+
+<strong>A majority investor vote or unilateral NuloAfrica/admin decision is not sufficient to substitute one property for another.</strong> Each investor must consent individually in writing.
+
+<strong>Proposed refund timing:</strong> Within 10 business days of investor's written decision, subject to executed agreement terms and counsel review.
+
+<h3>6.5 Existing Investor Status (Aggregate — No Personal Data)</h3>
+
+- 7 investors have signed EOIs and subscription agreements
+- Total received: ₦15,000,000
+- Funds location: NuloAfrica business account (SPV transfer required before any deployment)
+- Wait time as of this document: approximately 2 months
+- <strong>These 7 investors and their funds must never be represented as demo seed data</strong>
+
+<hr/>
+<h2>7. Regulatory Context</h2>
+
+<blockquote><strong>MANDATORY DISCLAIMER:</strong> The following is informational context only. Nothing here constitutes legal advice, a legal opinion, a claim of SEC approval, or a claim that any exemption applies to NEST. Every item marked ⚠️ COUNSEL REQUIRED must be confirmed by a qualified Nigerian securities and property law practitioner before any live capital activity.</blockquote>
+
+<h3>Applicable Framework</h3>
+
+Nigeria's primary capital markets law is the <strong>Investment and Securities Act (ISA) 2025</strong>, which replaced the ISA 2007 in March 2025. Administered by <strong>SEC Nigeria</strong>. Primary source: [https://www.sec.gov.ng](https://www.sec.gov.ng)
+
+<h3>Key Regulatory Considerations</h3></th><th>Issue</th><th>Context</th><th>Status</th><th>---</th><th>---</th><th>---</th><th>Collective Investment Schemes (CIS)</th><th>Schemes pooling investor funds for real estate are regulated as CIS under ISA 2025. Registration may be required.</th><th>⚠️ COUNSEL REQUIRED</th><th>Real Estate Investment Schemes (REIS)</th><th>SEC has specific rules for REIS. No blanket private-placement exemption for pooled real estate schemes.</th><th>⚠️ COUNSEL REQUIRED</th><th>SPV structure</th><th>A properly structured SPV does not by itself resolve SEC registration requirements.</th><th>⚠️ COUNSEL REQUIRED</th><th>ISA 2025 expanded definitions</th><th>Fractional property interests may constitute "securities" or "investment contracts" under the expanded ISA 2025 definitions.</th><th>⚠️ COUNSEL REQUIRED</th><th>Crowdfunding Rules 2021</th><th>If NEST facilitates securities offerings via platform, it may require SEC registration as a crowdfunding intermediary.</th><th>⚠️ COUNSEL REQUIRED</th><th>No SEC approval claimed</th><th>NEST does not claim SEC registration or approval. Demo is test-mode only.</th><th>Non-negotiable</th><th><h3>Pre-Live Requirements</h3>
+
+1. Retain Nigerian securities/property counsel
+2. Obtain written legal opinion on CIS classification, registration pathway, and required investor protections under ISA 2025
+3. Counsel sign-off on subscription agreement and deal memo templates
+4. Confirm SPV formation, KYC/AML compliance plan, funds governance structure
+5. Engage real KYC provider
+6. Establish dedicated SPV bank account
+7. Confirm regulatory status of any planned exit mechanism
+
+<hr/>
+<h2>8. Founder Decisions Log</h2>
+
+<strong>Date:</strong> September 16, 2026 — supersedes all prior drafts.</th><th>#</th><th>Decision</th><th>Value</th><th>Applies To</th><th>---</th><th>---</th><th>---</th><th>---</th><th>1</th><th>Minimum ticket</th><th>₦500,000</th><th>FR-004, all financial illustrations</th><th>2</th><th>Maximum ticket</th><th>₦10,000,000 (or 10% of target) — planning default; requires founder/counsel confirmation</th><th>FR-004, all financial illustrations</th><th>3</th><th>Funding target</th><th>₦100,000,000</th><th>FR-001, all financial models</th><th>4</th><th>Platform/arrangement fee</th><th>2% one-time at investment</th><th>FR-003, FR-004, Section 5</th><th>5</th><th>Management fee</th><th>Up to 8% of rent collected (not AUM)</th><th>Section 5</th><th>6</th><th>8% AUM fee</th><th>REMOVED — must not appear anywhere</th><th>All documents</th><th>7</th><th>Lock-up period</th><th>24 months from acquisition completion — planning default; requires founder/counsel confirmation</th><th>FR-001, Section 6.3</th><th>8</th><th>Distribution frequency</th><th>Quarterly from actual rent collected</th><th>FR-007, Section 5</th><th>9</th><th>Secondary market</th><th>Not offered — must not be promised</th><th>Section 6.3, FR-014</th><th>10</th><th>Real investor data as demo seed</th><th>Forbidden</th><th>COMPETITION_DEMO_DATA.md</th><th>11</th><th>Yield projection</th><th>7–9%/year, projection only, not guaranteed</th><th>Section 5</th><th>12</th><th>Demo wallet credit method</th><th>Admin-only; labelled DEMO CREDIT — NOT A PAYMENT</th><th>FR-003</th><th>13</th><th>Oversubscription</th><th>Hard stop at ₦100M; SELECT FOR UPDATE for concurrency</th><th>FR-004</th><th>14</th><th>Investment confirmation</th><th>Two-step: risk/fee summary with mandatory consent checkboxes → Confirm</th><th>FR-004</th><th>15</th><th>Refund timing</th><th>Within 10 business days of investor decision (planning default — requires counsel confirmation of executability)</th><th>Section 6.4</th><th>16</th><th>Fallback process</th><th>Each investor chooses individually — no majority vote</th><th>Section 6.4</th><th>17</th><th>Funds governance gate</th><th>SPV transfer required before any deployment</th><th>Section 6.1</th><th><hr/>
+<h2>9. Unclear or Missing Information (Open Items — Do Not Assume)</h2></th><th>#</th><th>Item</th><th>Blocking What</th><th>Owner</th><th>---</th><th>---</th><th>---</th><th>---</th><th>UI-01</th><th>What exactly was promised to the 7 investors (return %, timeline, specific property)?</th><th>Investor communication; retention test</th><th>Founder</th><th>UI-02</th><th>Has ₦15M been transferred to a dedicated SPV account?</th><th>Section 6.1 gate</th><th>Founder</th><th>UI-03</th><th>SEC counsel opinion — retained? Received?</th><th>All live capital activity</th><th>Founder / Counsel</th><th>UI-04</th><th>Independent property valuation — commissioned? Received?</th><th>Deal memo, FR-001 data</th><th>Founder</th><th>UI-05</th><th>Subscription agreements: have signed agreements been reviewed by counsel and do they include the agreed fallback and refund terms?</th><th>Investor protections; fallback process enforceability</th><th>Founder / Counsel</th><th>UI-06</th><th>What is the fundraising window deadline before fallback triggers?</th><th>Section 6.4 process</th><th>Founder</th><th>UI-07</th><th>PropFlow integration scope and timeline (currently 6-month estimate, unconfirmed)</th><th>Post-acquisition management</th><th>Founder / Technical</th><th>UI-08</th><th>Real KYC vendor — selected? Integrated?</th><th>Live investor onboarding</th><th>Founder / Technical</th><th>UI-09</th><th>Is 7–9% yield projection supported by a detailed model after all costs, reserves, vacancy, tax, and fees?</th><th>Financial disclosures</th><th>Founder / Advisor</th><th>UI-10</th><th>Why would target investors choose NEST's 7–9% over 18–20% T-bill yield?</th><th>Investor pitch credibility</th><th>Founder</th><th><hr/>
+<h2>10. Out of Scope for Demo Build</h2></th><th>Item</th><th>Reason</th></tr><tr><td>Live payments</td><td>Requires compliance review and production credentials</td></tr><tr><td>Real KYC / BVN / NIN</td><td>Requires licensed KYC provider</td></tr><tr><td>Wallet withdrawal</td><td>Requires payment rails and compliance</td></tr><tr><td>Secondary market</td><td>Not offered in pilot; must not be promised</td></tr><tr><td>Public marketplace / open solicitation</td><td>Contradicts pilot boundaries</td></tr><tr><td>SMS / email notifications</td><td>Not a demo blocker</td></tr><tr><td>Native mobile apps</td><td>Web-responsive sufficient</td></tr><tr><td>Cryptocurrency</td><td>Contradicts naira pilot</td></tr><tr><td>Live PropFlow integration</td><td>6-month post-pilot project</td></tr><tr><td>PDF certificate generation</td><td>Post-demo</td></tr><tr><td>Automated rent collection and distribution</td><td>Post-acquisition</td></tr></table>
+<hr/>
+<h2>11. Non-Functional Requirements</h2>
+
+- <strong>Mobile-first:</strong> 360px viewport primary; 44px minimum touch targets; no horizontal scroll
+- <strong>Performance:</strong> < 3s page load on 3G; < 2s investment transaction; < 100ms DB queries
+- <strong>Security:</strong> Server-side auth/authorization; idempotency keys; AuditLog; no PII in logs
+- <strong>Reliability:</strong> Atomic transactions; ledger invariant enforced; oversubscription impossible
+- <strong>Test-mode labels:</strong> "TEST MODE — NOT A LIVE OFFERING OR PAYMENT" visible on all money screens
+
+<hr/>
+<strong>Document Status:</strong> Active — Canonical Source of Truth
+<strong>Next Action Required:</strong> Founder to resolve UI-01 through UI-10 before investor communication or live capital activity
+<strong>Last Updated:</strong> September 16, 2026
+
+</body></html>

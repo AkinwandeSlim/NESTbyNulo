@@ -1,4 +1,21 @@
-import { db } from '../src/lib/db';
+// MERGE NOTE: explicit .ts extensions keep `node prisma/seed.ts` (Node 24
+// native type-stripping, ESM) working without a bundler/ts-node. Node resolves
+// extensionless specifiers only for CommonJS; TS files run as ESM here.
+import { db } from '../src/lib/db.ts';
+import { hashPassword } from '../src/lib/password.ts';
+
+/**
+ * MERGE NOTE (dev_gstack backend merge, Features #1-#5):
+ * This seed now provisions a demo-ready dataset for the merged app:
+ *  - users carry the authorization columns (role INVESTOR/ADMIN uppercase,
+ *    status VERIFIED/PENDING, passwordHash) that requireInvestor/requireAdmin
+ *    check, so the seeded accounts can actually sign in via /api/auth/login;
+ *  - every money figure exists twice: the legacy Float columns the existing UI
+ *    reads, and the BigInt kobo columns the ledger/investment engine uses
+ *    (amountKobo / balanceKobo / fundedKobo / targetKobo / valuationKobo);
+ *  - the investor's wallet history is written as a real append-only ledger
+ *    (CREDIT/DEBIT rows), so SUM(credits) - SUM(debits) === Wallet.balanceKobo.
+ */
 
 async function seed() {
   console.log('🌱 Seeding NEST by Nulo Africa database...\n');
@@ -43,14 +60,20 @@ async function seed() {
       phone: '+234 801 000 0001',
       firstName: 'Adebayo',
       lastName: 'Ogunlesi',
-      role: 'admin',
+      // Uppercase + status are what requireAdmin()/requireInvestor() compare.
+      role: 'ADMIN',
+      status: 'VERIFIED',
+      authSource: 'DEV_FALLBACK',
+      passwordHash: hashPassword('Admin@12345'),
+      verifiedAt: new Date('2024-01-15'),
+      verifiedBy: 'seed',
       kycStatus: 'verified',
       kycVerifiedAt: new Date('2024-01-15'),
       isVerified: true,
       lastLoginAt: new Date(),
     },
   });
-  console.log(`  ✓ Admin: ${admin.firstName} ${admin.lastName} (${admin.email})`);
+  console.log(`  ✓ Admin: ${admin.firstName} ${admin.lastName} (${admin.email}) [Admin@12345]`);
 
   const investorUser = await db.user.create({
     data: {
@@ -58,14 +81,45 @@ async function seed() {
       phone: '+234 802 345 6789',
       firstName: 'Chioma',
       lastName: 'Adewale',
-      role: 'investor',
+      role: 'INVESTOR',
+      status: 'VERIFIED',
+      authSource: 'DEV_FALLBACK',
+      // VERIFIED is required before /api/investments will accept a debit.
+      passwordHash: hashPassword('Investor@12345'),
+      verifiedAt: new Date('2024-03-10'),
+      verifiedBy: 'seed',
       kycStatus: 'verified',
       kycVerifiedAt: new Date('2024-03-10'),
       isVerified: true,
       lastLoginAt: new Date(),
     },
   });
-  console.log(`  ✓ Investor: ${investorUser.firstName} ${investorUser.lastName} (${investorUser.email})`);
+  console.log(`  ✓ Investor: ${investorUser.firstName} ${investorUser.lastName} (${investorUser.email}) [Investor@12345]`);
+
+  // A PENDING investor, so the admin verification queue (Feature #2) has a
+  // realistic row to verify during the demo instead of only VERIFIED users.
+  const pendingInvestor = await db.user.create({
+    data: {
+      email: 'tunde.bakare@example.com',
+      phone: '+234 805 111 2233',
+      firstName: 'Tunde',
+      lastName: 'Bakare',
+      role: 'INVESTOR',
+      status: 'PENDING',
+      authSource: 'DEV_FALLBACK',
+      passwordHash: hashPassword('Investor@12345'),
+      kycStatus: 'pending',
+      wallet: { create: { balance: 0, balanceKobo: 0 } },
+      auditLogs: {
+        create: {
+          action: 'USER_REGISTERED',
+          entity: 'User',
+          details: 'Registered via DEV_FALLBACK auth (seed)',
+        },
+      },
+    },
+  });
+  console.log(`  ✓ Pending investor: ${pendingInvestor.firstName} ${pendingInvestor.lastName} (${pendingInvestor.email})`);
 
   const developerUser = await db.user.create({
     data: {
@@ -73,7 +127,7 @@ async function seed() {
       phone: '+234 803 987 6543',
       firstName: 'Emeka',
       lastName: 'Nwosu',
-      role: 'developer',
+      role: 'DEVELOPER',
       kycStatus: 'verified',
       kycVerifiedAt: new Date('2024-02-20'),
       isVerified: true,
@@ -81,6 +135,141 @@ async function seed() {
     },
   });
   console.log(`  ✓ Developer: ${developerUser.firstName} ${developerUser.lastName} (${developerUser.email})`);
+
+  // Create additional developer users for the marquee
+  const developerUsers = await Promise.all([
+    db.user.create({
+      data: {
+        email: 'contact@juliusberger.ng',
+        phone: '+234 804 111 2222',
+        firstName: 'Julius',
+        lastName: 'Berger',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-01-01'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@costainwestafrica.com',
+        phone: '+234 804 222 3333',
+        firstName: 'Costain',
+        lastName: 'West Africa',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-01-15'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@armpensions.com',
+        phone: '+234 804 333 4444',
+        firstName: 'ARM',
+        lastName: 'Pensions',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-02-01'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@updcplc.com',
+        phone: '+234 804 444 5555',
+        firstName: 'UPDC',
+        lastName: 'PLC',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-02-15'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@glomobile.com',
+        phone: '+234 804 555 6666',
+        firstName: 'Glo',
+        lastName: 'Mobile',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-03-01'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@buacement.com',
+        phone: '+234 804 666 7777',
+        firstName: 'BUA',
+        lastName: 'Cement',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-03-15'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@dangotegroup.com',
+        phone: '+234 804 777 8888',
+        firstName: 'Dangote',
+        lastName: 'Group',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-04-01'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@nigerianlng.com',
+        phone: '+234 804 888 9999',
+        firstName: 'Nigeria',
+        lastName: 'LNG',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-04-15'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@shelterafrique.com',
+        phone: '+234 804 999 0000',
+        firstName: 'Shelter',
+        lastName: 'Afrique',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-05-01'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+    db.user.create({
+      data: {
+        email: 'info@fourpoints.com',
+        phone: '+234 804 000 1111',
+        firstName: 'Four',
+        lastName: 'Points',
+        role: 'DEVELOPER',
+        kycStatus: 'verified',
+        kycVerifiedAt: new Date('2024-05-15'),
+        isVerified: true,
+        lastLoginAt: new Date(),
+      },
+    }),
+  ]);
+  console.log(`  ✓ Created ${developerUsers.length} additional developer users`);
 
   // ─── PROFILES ───
   console.log('\n📋 Creating profiles...');
@@ -122,21 +311,176 @@ async function seed() {
   });
   console.log(`  ✓ Developer Profile: ${developerProfile.companyName}`);
 
+  // Create developer profiles for the additional developers
+  const developerProfiles = await Promise.all([
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[0].id,
+        companyName: 'JULIUS BERGER NIGERIA PLC',
+        registrationNo: 'RC-89123',
+        website: 'https://juliusberger.ng',
+        description: 'Infrastructure & Construction - Building Nigeria since 1950',
+        hqAddress: 'Plot 765, Idu Industrial Area, Abuja, Nigeria',
+        foundedYear: 1950,
+        totalProjects: 500,
+        totalFunding: 500_000_000_000,
+        isVerified: true,
+        rating: 4.9,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[1].id,
+        companyName: 'COSTAIN WEST AFRICA',
+        registrationNo: 'RC-234567',
+        website: 'https://costainwestafrica.com',
+        description: 'Building Excellence Since 1948 - Civil Engineering & Construction',
+        hqAddress: 'Costain House, 22 Awolowo Road, Ikoyi, Lagos',
+        foundedYear: 1948,
+        totalProjects: 350,
+        totalFunding: 200_000_000_000,
+        isVerified: true,
+        rating: 4.7,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[2].id,
+        companyName: 'ARM PENSIONS',
+        registrationNo: 'RC-345678',
+        website: 'https://armpensions.com',
+        description: 'Real Estate Investment - Pension Fund Management',
+        hqAddress: 'ARM Plaza, 14 Akin Adesola Street, Victoria Island, Lagos',
+        foundedYear: 1994,
+        totalProjects: 80,
+        totalFunding: 150_000_000_000,
+        isVerified: true,
+        rating: 4.6,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[3].id,
+        companyName: 'UPDC PLC',
+        registrationNo: 'RC-456789',
+        website: 'https://updcplc.com',
+        description: 'Premium Real Estate Development - UAC Property Development Company',
+        hqAddress: 'UPDC Place, 14 Mobolaji Bank Anthony Way, Ikeja, Lagos',
+        foundedYear: 1997,
+        totalProjects: 120,
+        totalFunding: 180_000_000_000,
+        isVerified: true,
+        rating: 4.8,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[4].id,
+        companyName: 'GLOMOBILE',
+        registrationNo: 'RC-567890',
+        website: 'https://glomobile.com',
+        description: 'Commercial Property Development - Telecommunications Infrastructure',
+        hqAddress: 'Globacom House, 1, Mike Adenuga Close, Victoria Island, Lagos',
+        foundedYear: 2003,
+        totalProjects: 200,
+        totalFunding: 300_000_000_000,
+        isVerified: true,
+        rating: 4.5,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[5].id,
+        companyName: 'BUA CEMENT',
+        registrationNo: 'RC-678901',
+        website: 'https://buacement.com',
+        description: 'Industrial & Residential Projects - Cement Manufacturing & Construction',
+        hqAddress: 'BUA House, 1, Danmole Street, Off Admiralty Way, Lekki Phase 1, Lagos',
+        foundedYear: 1992,
+        totalProjects: 150,
+        totalFunding: 250_000_000_000,
+        isVerified: true,
+        rating: 4.7,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[6].id,
+        companyName: 'DANGOTE GROUP',
+        registrationNo: 'RC-789012',
+        website: 'https://dangotegroup.com',
+        description: 'Mixed-Use Developments - Conglomerate with Real Estate Division',
+        hqAddress: 'Dangote House, 1, Alfred Rewane Road, Ikoyi, Lagos',
+        foundedYear: 1981,
+        totalProjects: 300,
+        totalFunding: 400_000_000_000,
+        isVerified: true,
+        rating: 4.9,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[7].id,
+        companyName: 'NIGERIA LNG',
+        registrationNo: 'RC-890123',
+        website: 'https://nigerianlng.com',
+        description: 'Housing & Infrastructure - Energy Company with Housing Projects',
+        hqAddress: 'NLNG Complex, Bonny Island, Rivers State',
+        foundedYear: 1989,
+        totalProjects: 100,
+        totalFunding: 350_000_000_000,
+        isVerified: true,
+        rating: 4.8,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[8].id,
+        companyName: 'SHELTER AFRIQUE',
+        registrationNo: 'RC-901234',
+        website: 'https://shelterafrique.com',
+        description: 'Affordable Housing Solutions - Pan-African Real Estate Developer',
+        hqAddress: 'Shelter Afrique House, Mombasa Road, Nairobi, Kenya (Nigeria Office: Abuja)',
+        foundedYear: 1982,
+        totalProjects: 250,
+        totalFunding: 120_000_000_000,
+        isVerified: true,
+        rating: 4.4,
+      },
+    }),
+    db.developerProfile.create({
+      data: {
+        userId: developerUsers[9].id,
+        companyName: 'FOUR POINTS',
+        registrationNo: 'RC-012345',
+        website: 'https://fourpoints.com',
+        description: 'Hospitality & Commercial - Hotel & Commercial Property Development',
+        hqAddress: 'Four Points by Sheraton, Plot 123, Cadastral Zone B, Abuja',
+        foundedYear: 1995,
+        totalProjects: 60,
+        totalFunding: 80_000_000_000,
+        isVerified: true,
+        rating: 4.6,
+      },
+    }),
+  ]);
+  console.log(`  ✓ Created ${developerProfiles.length} additional developer profiles`);
+
   // ─── PROPERTIES ───
   console.log('\n🏢 Creating properties...');
 
   const properties = [
     {
-      title: 'The Lekki Residence',
-      slug: 'the-lekki-residence',
+      title: 'The Maitama Residence',
+      slug: 'the-maitama-residence',
       description:
-        'A stunning luxury 4-bedroom detached duplex in the heart of Lekki Phase 1, featuring modern architectural design, premium finishes, and a private garden. This completed property is already generating consistent rental income from a corporate tenant on a 2-year lease. Located on a quiet, paved street with 24/7 security, the property offers an excellent combination of capital appreciation and steady rental returns.',
-      shortDescription: 'Luxury 4-bedroom detached duplex in Lekki Phase 1, already generating rental income.',
+        'A stunning luxury 4-bedroom detached duplex in the heart of Maitama, featuring modern architectural design, premium finishes, and a private garden. This completed property is already generating consistent rental income from a corporate tenant on a 2-year lease. Located on a quiet, paved street with 24/7 security, the property offers an excellent combination of capital appreciation and steady rental returns.',
+      shortDescription: 'Luxury 4-bedroom detached duplex in Maitama, already generating rental income.',
       propertyType: 'completed_rental',
       status: 'published',
-      address: '21A Admiralty Way, Lekki Phase 1',
-      city: 'Lagos',
-      state: 'Lagos',
+      address: '21A Ademola Adetokunbo Crescent, Maitama',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 6.4391,
       longitude: 3.4705,
@@ -161,19 +505,19 @@ async function seed() {
       featured: true,
       trending: true,
       isNew: false,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[0].id, // Julius Berger
     },
     {
       title: 'Azure Heights',
       slug: 'azure-heights',
       description:
-        'Azure Heights is a premium 12-unit apartment complex on Victoria Island, Lagos. Each unit features panoramic lagoon views, contemporary interiors with high-end finishes, and access to shared amenities including a swimming pool, gym, and 24-hour concierge. The building is strategically located near major business districts, making it highly attractive to expatriates and corporate executives.',
-      shortDescription: 'Premium 12-unit apartment complex on Victoria Island with lagoon views.',
+        'Azure Heights is a premium 12-unit apartment complex in Wuse 2, Abuja. Each unit features panoramic city views, contemporary interiors with high-end finishes, and access to shared amenities including a swimming pool, gym, and 24-hour concierge. The building is strategically located near major business districts, making it highly attractive to diplomats and corporate executives.',
+      shortDescription: 'Premium 12-unit apartment complex in Wuse 2 with city views.',
       propertyType: 'completed_rental',
       status: 'published',
-      address: 'Plot 5, Ozumba Mbadiwe Avenue, Victoria Island',
-      city: 'Lagos',
-      state: 'Lagos',
+      address: 'Plot 5, Ibrahim Babangida Boulevard, Wuse 2',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 6.4281,
       longitude: 3.4219,
@@ -198,19 +542,19 @@ async function seed() {
       featured: true,
       trending: false,
       isNew: false,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[1].id, // Costain West Africa
     },
     {
       title: 'Coral Bay Estate',
       slug: 'coral-bay-estate',
       description:
-        'Coral Bay Estate is an ambitious waterfront off-plan development along the Epe expressway. This master-planned community will feature 24 modern townhouses with direct lagoon access, a private jetty, communal gardens, and a clubhouse. Epe is one of Lagos fastest-growing corridors, driven by the new international airport and free trade zone developments, offering exceptional capital growth potential.',
-      shortDescription: 'Off-plan waterfront townhouses in Epe, Lagos — high growth corridor.',
+        'Coral Bay Estate is an ambitious waterfront off-plan development along the Kubwa expressway. This master-planned community will feature 24 modern townhouses with direct lake access, a private jetty, communal gardens, and a clubhouse. Kubwa is one of Abuja fastest-growing corridors, driven by the new airport expansion and infrastructure developments, offering exceptional capital growth potential.',
+      shortDescription: 'Off-plan waterfront townhouses in Kubwa, Abuja — high growth corridor.',
       propertyType: 'off_plan',
       status: 'funding',
-      address: 'Epe Expressway, Before Epe Toll Gate, Epe',
-      city: 'Lagos',
-      state: 'Lagos',
+      address: 'Kubwa Expressway, Before Kubwa Junction, Abuja',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 6.6473,
       longitude: 3.9764,
@@ -225,29 +569,29 @@ async function seed() {
       riskRating: 'high',
       investmentTimeline: '18-24 months',
       images: JSON.stringify([
-        'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=600&fit=crop',
+        '/HOMES/PIX (2).jpg',
+        '/HOMES/PIX (7).jpg',
+        '/HOMES/PIX (13).jpg',
+        '/HOMES/PIX (14).jpg',
+        '/HOMES/modern-villa-bedroom.png',
       ]),
-      coverImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=600&fit=crop',
+      coverImage: '/HOMES/PIX (2).jpg',
       featured: true,
       trending: true,
       isNew: true,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[2].id, // ARM Pensions
     },
     {
       title: 'Greenfield Gardens',
       slug: 'greenfield-gardens',
       description:
-        'Greenfield Gardens is an affordable off-plan housing development in Ibeju-Lekki, designed to meet the growing demand for quality homes in one of Lagos most promising corridors. The development comprises 48 terrace duplexes with modern amenities including a central park, playground, and gated security. With the Lekki Free Trade Zone and Dangote Refinery nearby, this area is poised for significant property value appreciation.',
-      shortDescription: 'Off-plan affordable terrace duplexes in Ibeju-Lekki — strong appreciation potential.',
+        'Greenfield Gardens is an affordable off-plan housing development in Apo, Abuja, designed to meet the growing demand for quality homes in one of Abuja most promising corridors. The development comprises 48 terrace duplexes with modern amenities including a central park, playground, and gated security. With the new airport expansion and infrastructure developments nearby, this area is poised for significant property value appreciation.',
+      shortDescription: 'Off-plan affordable terrace duplexes in Apo, Abuja — strong appreciation potential.',
       propertyType: 'off_plan',
       status: 'funding',
-      address: 'Ibeju-Lekki Expressway, After Eleko Junction, Ibeju-Lekki',
-      city: 'Lagos',
-      state: 'Lagos',
+      address: 'Apo Mechanic Village Road, Apo, Abuja',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 6.4531,
       longitude: 3.9497,
@@ -262,29 +606,29 @@ async function seed() {
       riskRating: 'moderate',
       investmentTimeline: '12-18 months',
       images: JSON.stringify([
-        'https://images.unsplash.com/photo-1631869222989-74c4e5a2a31a?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1600047508988-aa49b384a620?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1588880331179-bc9db93c8c7f?w=800&h=600&fit=crop',
+        '/HOMES/PIX (7).jpg',
+        '/HOMES/PIX (13).jpg',
+        '/HOMES/PIX (14).jpg',
+        '/HOMES/modern-villa-bedroom.png',
+        '/HOMES/modern-villa-nairobi.jpg',
       ]),
-      coverImage: 'https://images.unsplash.com/photo-1631869222989-74c4e5a2a31a?w=800&h=600&fit=crop',
+      coverImage: '/HOMES/PIX (7).jpg',
       featured: false,
       trending: false,
       isNew: true,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[3].id, // UPDC PLC
     },
     {
-      title: 'The Yaba Hub',
-      slug: 'the-yaba-hub',
+      title: 'The Gwarinpa Hub',
+      slug: 'the-gwarinpa-hub',
       description:
-        'The Yaba Hub is a mixed-use development combining modern co-living spaces with ground-floor retail units in Lagos tech district. The property features 8 co-living units, 4 retail spaces, a rooftop lounge, and co-working areas. Located on Herbert Macaulay Way, the property sits in the heart of Yabas booming startup ecosystem, ensuring strong demand from young professionals and tech companies.',
-      shortDescription: 'Mixed-use co-living and retail spaces in Yaba tech district.',
+        'The Gwarinpa Hub is a mixed-use development combining modern co-living spaces with ground-floor retail units in Abuja tech district. The property features 8 co-living units, 4 retail spaces, a rooftop lounge, and co-working areas. Located on Ahmadu Bello Way, the property sits in the heart of Gwarinpas booming startup ecosystem, ensuring strong demand from young professionals and tech companies.',
+      shortDescription: 'Mixed-use co-living and retail spaces in Gwarinpa tech district.',
       propertyType: 'mixed_use',
       status: 'published',
-      address: '45 Herbert Macaulay Way, Yaba',
-      city: 'Lagos',
-      state: 'Lagos',
+      address: '45 Ahmadu Bello Way, Gwarinpa',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 6.5089,
       longitude: 3.3809,
@@ -309,19 +653,19 @@ async function seed() {
       featured: false,
       trending: true,
       isNew: false,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[4].id, // Glomobile
     },
     {
       title: 'Campus Quarters',
       slug: 'campus-quarters',
       description:
-        'Campus Quarters is a purpose-built student housing development located just 500 metres from the Obafemi Awolowo University main campus in Ile-Ife. The property features 32 fully furnished en-suite rooms, common areas, study rooms, high-speed internet, 24-hour security, and laundry facilities. With OAU having over 35,000 students and severe hostel shortages, this property offers reliable year-round rental income.',
-      shortDescription: 'Purpose-built student housing near OAU, Ile-Ife — strong rental demand.',
+        'Campus Quarters is a purpose-built student housing development located just 500 metres from the University of Abuja main campus. The property features 32 fully furnished en-suite rooms, common areas, study rooms, high-speed internet, 24-hour security, and laundry facilities. With UniAbuja having over 35,000 students and severe hostel shortages, this property offers reliable year-round rental income.',
+      shortDescription: 'Purpose-built student housing near UniAbuja — strong rental demand.',
       propertyType: 'student_housing',
       status: 'published',
-      address: 'Campus Road, Adjacent OAU Main Gate, Ile-Ife',
-      city: 'Ile-Ife',
-      state: 'Osun',
+      address: 'Airport Road, Adjacent UniAbuja Main Gate, Abuja',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 7.5186,
       longitude: 4.5241,
@@ -346,19 +690,19 @@ async function seed() {
       featured: false,
       trending: false,
       isNew: false,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[5].id, // BUA Cement
     },
     {
       title: 'Marina Tower',
       slug: 'marina-tower',
       description:
-        'Marina Tower is a Grade A commercial office development on Victoria Island, offering 6 floors of premium office space with cutting-edge facilities. The building features fiber optic internet, backup power generation, advanced HVAC systems, and ample parking. Positioned on the Lagos Marina waterfront, it caters to multinational corporations, financial institutions, and tech companies seeking world-class office accommodation in West Africas commercial capital.',
-      shortDescription: 'Grade A commercial office tower on Victoria Island, Lagos Marina.',
+        'Marina Tower is a Grade A commercial office development in the Central Business District, Abuja, offering 6 floors of premium office space with cutting-edge facilities. The building features fiber optic internet, backup power generation, advanced HVAC systems, and ample parking. Positioned in the heart of Abuja business district, it caters to multinational corporations, financial institutions, and tech companies seeking world-class office accommodation in Nigerias capital.',
+      shortDescription: 'Grade A commercial office tower in Abuja Central Business District.',
       propertyType: 'commercial',
       status: 'published',
-      address: '1A Marina Boulevard, Victoria Island, Lagos',
-      city: 'Lagos',
-      state: 'Lagos',
+      address: '1A Shehu Shagari Way, Central Business District, Abuja',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 6.4235,
       longitude: 3.4145,
@@ -383,19 +727,19 @@ async function seed() {
       featured: false,
       trending: false,
       isNew: true,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[6].id, // Dangote Group
     },
     {
       title: 'Heritage Homes',
       slug: 'heritage-homes',
       description:
-        'Heritage Homes is an affordable housing community in Badagry, designed to provide quality, modern homes for first-time buyers and middle-income families. The development features 36 units of 2-bedroom and 3-bedroom bungalows with shared amenities including a playground, community centre, and green spaces. Badagry is experiencing rapid growth with improved road infrastructure connecting to Lagos mainland.',
-      shortDescription: 'Affordable housing community in Badagry with modern bungalows.',
+        'Heritage Homes is an affordable housing community in Lugbe, Abuja, designed to provide quality, modern homes for first-time buyers and middle-income families. The development features 36 units of 2-bedroom and 3-bedroom bungalows with shared amenities including a playground, community centre, and green spaces. Lugbe is experiencing rapid growth with improved road infrastructure connecting to the city centre.',
+      shortDescription: 'Affordable housing community in Lugbe, Abuja with modern bungalows.',
       propertyType: 'affordable_housing',
       status: 'funding',
-      address: 'Awhanjigben Road, Badagry, Lagos',
-      city: 'Badagry',
-      state: 'Lagos',
+      address: 'Lugbe Estate Road, Lugbe, Abuja',
+      city: 'Abuja',
+      state: 'Federal Capital Territory',
       country: 'Nigeria',
       latitude: 6.4177,
       longitude: 2.8827,
@@ -420,7 +764,7 @@ async function seed() {
       featured: false,
       trending: false,
       isNew: true,
-      developerId: developerProfile.id,
+      developerId: developerProfiles[7].id, // Nigeria LNG
     },
   ];
 
@@ -473,16 +817,37 @@ async function seed() {
     console.log(`  ✓ Opportunity: ${property.title}`);
   }
 
+  // ─── PROPERTY KOBO MIRROR (Features #4/#5) ───
+  // The atomic investment route reads/writes BigInt kobo columns only, while the
+  // existing BrowseView / PropertyCard UI reads the legacy Float columns.
+  // Backfill kobo from the Float data so both representations agree.
+  console.log('\n🔁 Backfilling property kobo fields...');
+  for (const property of createdProperties) {
+    await db.property.update({
+      where: { id: property.id },
+      data: {
+        valuationKobo: BigInt(Math.round(property.totalValue * 100)),
+        targetKobo: BigInt(Math.round(property.fundingTarget * 100)),
+        fundedKobo: BigInt(Math.round(property.fundingRaised * 100)),
+        minInvestmentKobo: BigInt(Math.round(property.minInvestment * 100)),
+      },
+    });
+  }
+  console.log(`  ✓ ${createdProperties.length} properties mirrored to kobo`);
+
   // ─── WALLET FOR INVESTOR ───
+  // Starts at zero: the ledger written below is the ONLY source of truth
+  // (Feature #3 — Wallet.balanceKobo is a cache of SUM(credits) − SUM(debits)).
   console.log('\n💰 Creating wallets...');
   await db.wallet.create({
     data: {
       userId: investorUser.id,
-      balance: 2_500_000,
+      balance: 0,
+      balanceKobo: 0,
       currency: 'NGN',
     },
   });
-  console.log('  ✓ Investor wallet created');
+  console.log('  ✓ Investor wallet created (zeroed — ledger is authoritative)');
 
   // ─── SAMPLE INVESTMENTS ───
   console.log('\n📈 Creating sample investments...');
@@ -500,11 +865,18 @@ async function seed() {
       data: {
         userId: investorUser.id,
         propertyId: property.id,
+        // Legacy Float mirror (still read by the existing portfolio UI shape)
         amount: inv.amount,
         units: inv.amount / 500_000,
         status: inv.status,
         paymentMethod: 'bank_transfer',
         investedAt: new Date(inv.investedAt),
+        // Feature #3/#4/#5 columns required by the merged schema.
+        // idempotencyKey is NOT NULL + UNIQUE — unlike a live request, a seed
+        // row needs no dedup semantics, so a deterministic key is derived.
+        amountKobo: BigInt(Math.round(inv.amount * 100)),
+        ownershipPct: (inv.amount / (property.totalValue || 1)) * 100,
+        idempotencyKey: `seed-inv-${inv.propertyIdx}-${investorUser.id}`,
         confirmedAt: new Date(inv.investedAt),
         certificateNo: `NEST-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
         rentalYield: property.rentalYield,
@@ -514,68 +886,113 @@ async function seed() {
     console.log(`  ✓ Investment: ₦${inv.amount.toLocaleString()} in ${property.title}`);
   }
 
-  // ─── SAMPLE TRANSACTIONS ───
-  console.log('\n💳 Creating sample transactions...');
+  // ─── INVESTOR LEDGER (Feature #3 — append-only, immutable) ───
+  // Every money movement is a row; balance is derived, never authoritative in
+  // Wallet. Written in chronological order so each row's `balanceKobo` is the
+  // true running balance after that movement.
+  console.log('\n💳 Writing investor ledger...');
 
-  await db.transaction.createMany({
-    data: [
-      {
+  async function writeLedgerEntry(entry: {
+    type: 'CREDIT' | 'DEBIT';
+    category: 'DEMO_CREDIT' | 'INVESTMENT' | 'DISTRIBUTION';
+    amountNaira: number;
+    description: string;
+    refType: string;
+    refId: string;
+    createdAt: Date;
+  }) {
+    const amountKobo = BigInt(Math.round(entry.amountNaira * 100));
+
+    // Derive the balance from the immutable rows themselves.
+    const prior = await db.transaction.findMany({
+      where: { userId: investorUser.id },
+      select: { type: true, amountKobo: true },
+    });
+    let balance = BigInt(0);
+    for (const row of prior) {
+      balance += row.type === 'CREDIT' ? row.amountKobo : -row.amountKobo;
+    }
+    const newBalance =
+      entry.type === 'CREDIT' ? balance + amountKobo : balance - amountKobo;
+
+    if (newBalance < BigInt(0)) {
+      throw new Error(
+        `Seed ledger would overdraw the wallet on "${entry.description}" (${newBalance} kobo).`
+      );
+    }
+
+    await db.transaction.create({
+      data: {
         userId: investorUser.id,
-        type: 'credit',
-        amount: 5_000_000,
-        status: 'completed',
-        reference: 'TXN-20240715-001',
-        description: 'Investment in The Lekki Residence',
-        createdAt: new Date('2024-07-15'),
+        type: entry.type,
+        amountKobo,
+        category: entry.category,
+        description: entry.description,
+        refType: entry.refType,
+        refId: entry.refId,
+        balanceKobo: newBalance,
+        createdAt: entry.createdAt,
       },
-      {
-        userId: investorUser.id,
-        type: 'credit',
-        amount: 3_000_000,
-        status: 'completed',
-        reference: 'TXN-20240802-001',
-        description: 'Investment in Azure Heights',
-        createdAt: new Date('2024-08-02'),
-      },
-      {
-        userId: investorUser.id,
-        type: 'credit',
-        amount: 2_500_000,
-        status: 'completed',
-        reference: 'TXN-20240910-001',
-        description: 'Investment in The Yaba Hub',
-        createdAt: new Date('2024-09-10'),
-      },
-      {
-        userId: investorUser.id,
-        type: 'credit',
-        amount: 5_250_000,
-        status: 'completed',
-        reference: 'TXN-20241020-001',
-        description: 'Investment in Campus Quarters',
-        createdAt: new Date('2024-10-20'),
-      },
-      {
-        userId: investorUser.id,
-        type: 'dividend',
-        amount: 187_500,
-        status: 'completed',
-        reference: 'TXN-20241201-001',
-        description: 'Q4 2024 Rental Distribution — The Lekki Residence',
-        createdAt: new Date('2024-12-01'),
-      },
-      {
-        userId: investorUser.id,
-        type: 'dividend',
-        amount: 112_500,
-        status: 'completed',
-        reference: 'TXN-20241201-002',
-        description: 'Q4 2024 Rental Distribution — Azure Heights',
-        createdAt: new Date('2024-12-01'),
-      },
-    ],
+    });
+
+    return newBalance;
+  }
+
+  // Opening DEMO CREDIT — this is the only money "granted" in the seeded data.
+  let runningBalance = await writeLedgerEntry({
+    type: 'CREDIT',
+    category: 'DEMO_CREDIT',
+    amountNaira: 50_000_000,
+    description:
+      'DEMO CREDIT — opening demo funding (seed). Not real customer money.',
+    refType: 'SEED',
+    refId: 'seed-opening-credit',
+    createdAt: new Date('2024-07-01'),
   });
-  console.log('  ✓ 6 transactions created');
+
+  // The four historical investments, as DEBITs against that balance.
+  for (const inv of investmentData) {
+    const property = createdProperties[inv.propertyIdx];
+    runningBalance = await writeLedgerEntry({
+      type: 'DEBIT',
+      category: 'INVESTMENT',
+      amountNaira: inv.amount,
+      description: `Investment in ${property.title}`,
+      refType: 'Property',
+      refId: property.id,
+      createdAt: new Date(inv.investedAt),
+    });
+  }
+
+  // Rental distributions, as CREDITs.
+  for (const dist of [
+    { propertyIdx: 0, amount: 187_500 },
+    { propertyIdx: 1, amount: 112_500 },
+  ]) {
+    const property = createdProperties[dist.propertyIdx];
+    runningBalance = await writeLedgerEntry({
+      type: 'CREDIT',
+      category: 'DISTRIBUTION',
+      amountNaira: dist.amount,
+      description: `Q4 2024 Rental Distribution — ${property.title}`,
+      refType: 'Property',
+      refId: property.id,
+      createdAt: new Date('2024-12-01'),
+    });
+  }
+
+  // Sync the wallet cache to the ledger SUM (Feature #3 invariant).
+  await db.wallet.update({
+    where: { userId: investorUser.id },
+    data: {
+      balanceKobo: runningBalance,
+      // Legacy Float mirror so any not-yet-migrated UI keeps reading a sane number.
+      balance: Number(runningBalance) / 100,
+    },
+  });
+  console.log(
+    `  ✓ Ledger written: 7 entries · wallet cache synced to ₦${(Number(runningBalance) / 100).toLocaleString()}`
+  );
 
   // ─── PROPERTY DOCUMENTS ───
   console.log('\n📄 Creating property documents...');
@@ -622,12 +1039,12 @@ async function seed() {
   console.log('\n' + '='.repeat(60));
   console.log('✅ NEST by Nulo Africa — Seed Complete!');
   console.log('='.repeat(60));
-  console.log(`  👤 Users:              3`);
+  console.log(`  👤 Users:              4 (1 admin, 2 verified/pending investors, 1 developer)`);
   console.log(`  📋 Profiles:           2 (investor + developer)`);
   console.log(`  🏢 Properties:         ${createdProperties.length}`);
   console.log(`  📊 Opportunities:      ${createdProperties.length}`);
   console.log(`  📈 Investments:         ${investmentData.length}`);
-  console.log(`  💳 Transactions:        6`);
+  console.log(`  💳 Ledger entries:      7 (1 DEMO_CREDIT, 4 INVESTMENT, 2 DISTRIBUTION)`);
   console.log(`  📄 Documents:          ${createdProperties.length * documentTypes.length}`);
   console.log(`  🎬 Media:              ${createdProperties.length * 5}`);
   console.log(`  💰 Total Property Value: ₦${(createdProperties.reduce((s, p) => s + p.totalValue, 0) / 1_000_000_000).toFixed(2)}B`);
