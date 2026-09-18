@@ -16,7 +16,8 @@
     "test:e2e:auth": "powershell -ExecutionPolicy Bypass -File scripts/e2e-auth.ps1",
     "test:e2e:admin": "powershell -ExecutionPolicy Bypass -File scripts/e2e-admin.ps1",
     "test:e2e:invest": "powershell -ExecutionPolicy Bypass -File scripts/e2e-investments.ps1",
-    "test:e2e": "npm run test:e2e:auth && npm run test:e2e:admin && npm run test:e2e:invest"
+    "test:e2e": "npm run test:e2e:auth && npm run test:e2e:admin && npm run test:e2e:invest",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
