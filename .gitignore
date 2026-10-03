@@ -27,10 +27,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # vercel
-
-# Remove the duplicate line below - it was causing .env.local to be blocked
-# .env*.local
 .vercel
+
+# local env with real secrets — must NEVER be committed (use .env.local.example as template)
+.env.local
 
 # typescript
 *.tsbuildinfo
