@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import {
-  Home,
   Search,
   Briefcase,
   GraduationCap,
@@ -12,7 +11,6 @@ import {
   Sun,
   Menu,
   User,
-  Settings,
   LogOut,
   Wallet,
   TrendingUp,
@@ -32,12 +30,14 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
   SheetTrigger,
   SheetClose,
 } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import NestBrand from './NestBrand';
 import { useNestStore, type View } from '@/lib/nest-store';
 import { cn } from '@/lib/nest-utils';
 
@@ -54,20 +54,19 @@ const navItems: NavItem[] = [
   { label: 'Academy', view: 'academy', icon: <GraduationCap className="size-4" /> },
 ];
 
+const subscribeToHydration = () => () => {};
+
 export default function InvestorHeader() {
   const { currentView, setView } = useNestStore();
-  const { theme, setTheme } = useTheme();
-  const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme: theme, setTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const mounted = useSyncExternalStore(subscribeToHydration, () => true, () => false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const desktop = window.matchMedia('(min-width: 1280px)');
+    const closeOnDesktop = () => { if (desktop.matches) setMenuOpen(false); };
+    desktop.addEventListener('change', closeOnDesktop);
+    return () => desktop.removeEventListener('change', closeOnDesktop);
   }, []);
 
   // ── dev_gstack merge (Feature #1): real session state ──
@@ -115,64 +114,32 @@ export default function InvestorHeader() {
 
   const handleNav = (view: View) => {
     setView(view);
+    setMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        scrolled
-          ? 'bg-background/90 backdrop-blur-xl border-b border-border shadow-sm'
-          : 'bg-transparent'
-      )}
-    >
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95 text-foreground backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <button
-            onClick={() => handleNav('browse')}
-            className="flex items-center gap-2 group"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 bg-slate-100 dark:bg-nest-primary/20 px-3 py-1.5 rounded-full border border-slate-200 dark:border-nest-primary/30"
-            >
-              <img
-                src="/nuloafrica-newlogo-complete.png"
-                alt="NuloAfrica"
-                className="h-6 w-auto object-contain dark:hidden"
-              />
-              <img
-                src="/nuloafrica-newlightlogo-complete.png"
-                alt="NuloAfrica"
-                className="h-6 w-auto object-contain hidden dark:block"
-              />
-              <span className={cn(
-                'text-lg font-bold tracking-tight',
-                scrolled ? 'text-nest-primary' : 'text-foreground dark:text-white'
-              )}>
-                <span className="text-nest-accent">|</span> NEST
-              </span>
-            </motion.div>
+        <div className="flex h-16 items-center justify-between gap-3">
+          <button onClick={() => handleNav('browse')} aria-label="NEST by Nulo Africa home" className="inline-flex min-h-11 shrink-0 items-center rounded-lg">
+            <NestBrand />
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav aria-label="Main navigation" className="hidden xl:flex items-center gap-1">
             {navItems.map((item) => (
               <motion.button
                 key={item.view}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleNav(item.view)}
+                aria-current={currentView === item.view ? 'page' : undefined}
                 className={cn(
-                  'relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
+                  'relative flex min-h-11 items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                   currentView === item.view
-                    ? scrolled ? 'text-nest-primary' : 'text-white'
-                    : scrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+                    ? 'text-nest-primary-dark dark:text-nest-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
               >
                 {item.icon}
@@ -182,9 +149,9 @@ export default function InvestorHeader() {
                     layoutId="nav-indicator"
                     className={cn(
                       'absolute inset-0 rounded-lg',
-                      scrolled ? 'bg-nest-primary/10' : 'bg-white/15'
+                      'bg-nest-primary/10'
                     )}
-                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                    transition={{ type: 'spring', bounce: 0, duration: 0.2 }}
                   />
                 )}
               </motion.button>
@@ -192,14 +159,12 @@ export default function InvestorHeader() {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {/* TEST MODE label — this build uses demo funds and has no live payments */}
             <span
               className={cn(
-                'hidden lg:inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide',
-                scrolled
-                  ? 'border-red-300 bg-red-50 text-red-700'
-                  : 'border-white/30 bg-white/10 text-white'
+                'hidden xl:inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide',
+                'border-amber-300/50 bg-amber-500/10 text-amber-800 dark:text-amber-200'
               )}
               title={`Auth mode: ${authMode} · demo funds only`}
             >
@@ -210,12 +175,17 @@ export default function InvestorHeader() {
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              aria-label={
+                mounted
+                  ? theme === 'dark'
+                    ? 'Switch to light mode'
+                    : 'Switch to dark mode'
+                  : 'Toggle theme'
+              }
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-lg border transition-colors',
-                scrolled
-                  ? 'border-border bg-background text-muted-foreground hover:text-foreground'
-                  : 'border-white/20 bg-white/10 text-white/80 hover:text-white hover:bg-white/20'
+                'h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground',
+                session ? 'hidden sm:flex' : 'flex'
               )}
             >
               {mounted && (
@@ -252,17 +222,15 @@ export default function InvestorHeader() {
                 <Link
                   href="/sign-in"
                   className={cn(
-                    'hidden sm:inline-flex h-9 items-center rounded-lg px-3 text-sm font-medium transition-colors',
-                    scrolled
-                      ? 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                      : 'text-white/80 hover:text-white hover:bg-white/15'
+                    'hidden sm:inline-flex h-11 items-center rounded-lg px-3 text-sm font-medium transition-colors',
+                    'text-muted-foreground hover:text-foreground hover:bg-muted'
                   )}
                 >
                   Sign in
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="inline-flex h-9 items-center rounded-lg bg-nest-primary px-3 text-sm font-semibold text-white transition-colors hover:bg-nest-primary/90"
+                  className="hidden sm:inline-flex h-11 items-center rounded-lg bg-nest-primary-dark px-3 text-sm font-semibold text-white transition-colors hover:bg-nest-primary/90"
                 >
                   Create account
                 </Link>
@@ -278,8 +246,8 @@ export default function InvestorHeader() {
                 className={cn(
                   'hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                   currentView === 'admin' || currentView.startsWith('admin-')
-                    ? scrolled ? 'text-nest-primary' : 'text-white'
-                    : scrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+                    ? 'text-nest-primary-dark dark:text-nest-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
               >
                 <LayoutDashboard className="size-4" />
@@ -291,7 +259,7 @@ export default function InvestorHeader() {
             {session && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
+                  <Button aria-label="Open account menu" variant="ghost" className="relative h-11 w-11 rounded-full p-0">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src="" alt="User" />
                       <AvatarFallback className="bg-nest-primary/10 text-nest-primary text-sm font-semibold">
@@ -347,54 +315,39 @@ export default function InvestorHeader() {
             )}
 
             {/* Mobile Menu */}
-            <Sheet>
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden h-9 w-9">
+                <Button variant="ghost" size="icon" className="xl:hidden h-11 w-11">
                   <Menu className="size-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-72 p-0">
+              <SheetContent side="right" className="w-[min(22rem,100%)] gap-0 overflow-y-auto p-0 pb-[env(safe-area-inset-bottom)] data-[state=open]:duration-200 data-[state=closed]:duration-150 [&>button]:size-11 [&>button]:grid [&>button]:place-items-center [&>button]:top-2 [&>button]:right-2">
                 <SheetHeader className="p-6 pb-4">
-                  <SheetTitle className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 bg-slate-100 dark:bg-nest-primary/20 px-3 py-1.5 rounded-full border border-slate-200 dark:border-nest-primary/30">
-                      <img
-                        src="/nuloafrica-newlogo-complete.png"
-                        alt="NuloAfrica"
-                        className="h-6 w-auto object-contain dark:hidden"
-                      />
-                      <img
-                        src="/nuloafrica-newlightlogo-complete.png"
-                        alt="NuloAfrica"
-                        className="h-6 w-auto object-contain hidden dark:block"
-                      />
-                      <span className="text-lg font-bold text-foreground dark:text-nest-primary">
-                        <span className="text-nest-accent">|</span> NEST
-                      </span>
-                    </div>
-                  </SheetTitle>
+                  <SheetTitle className="pr-8"><NestBrand /></SheetTitle>
+                  <SheetDescription className="pt-3">Your next step in property ownership.</SheetDescription>
                 </SheetHeader>
                 <Separator />
                 <div className="p-4">
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 mb-4">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src="" alt="User" />
-                      <AvatarFallback className="bg-nest-primary/10 text-nest-primary text-sm font-semibold">
-                        AO
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">Adebayo Ogunlesi</p>
-                      <p className="text-xs text-muted-foreground">Investor</p>
+                  {session ? (
+                    <div className="mb-4 flex items-center gap-3 rounded-xl bg-muted p-3">
+                      <Avatar className="shrink-0"><AvatarFallback>{initials || <User className="size-4" />}</AvatarFallback></Avatar>
+                      <div className="min-w-0"><p className="truncate text-sm font-semibold">{displayName}</p><p className="truncate text-xs text-muted-foreground">{session.email}</p></div>
                     </div>
-                  </div>
-                  <nav className="flex flex-col gap-1">
+                  ) : (
+                    <div className="mb-5 grid grid-cols-2 gap-2">
+                      <SheetClose asChild><Link href="/sign-in" className="flex min-h-11 items-center justify-center rounded-lg border border-border text-sm font-semibold">Sign in</Link></SheetClose>
+                      <SheetClose asChild><Link href="/sign-up" className="flex min-h-11 items-center justify-center rounded-lg bg-nest-primary-dark px-2 text-sm font-semibold text-white">Create account</Link></SheetClose>
+                    </div>
+                  )}
+                  <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
                     {navItems.map((item) => (
                       <SheetClose key={item.view} asChild>
                         <button
                           onClick={() => handleNav(item.view)}
+                aria-current={currentView === item.view ? 'page' : undefined}
                           className={cn(
-                            'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
+                            'flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
                             currentView === item.view
                               ? 'bg-nest-primary/10 text-nest-primary'
                               : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
@@ -413,7 +366,7 @@ export default function InvestorHeader() {
                           <button
                             onClick={() => handleNav('admin')}
                             className={cn(
-                              'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
+                              'flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
                               currentView === 'admin' || currentView.startsWith('admin-')
                                 ? 'bg-nest-primary/10 text-nest-primary'
                                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
@@ -426,12 +379,19 @@ export default function InvestorHeader() {
                       </>
                     )}
                   </nav>
+                  <div className="mt-6 border-t border-border pt-4">
+                    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-muted-foreground hover:bg-muted">
+                      {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+                      {theme === 'dark' ? 'Light appearance' : 'Dark appearance'}
+                    </button>
+                    <p className="px-3 pt-3 text-xs text-muted-foreground">Test mode · Demo funds only</p>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 }

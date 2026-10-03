@@ -279,7 +279,7 @@ export default function PropertyDetailView() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-3 space-y-6"
+            className="min-w-0 lg:col-span-3 space-y-6"
           >
             {/* Image Gallery */}
             <div className="space-y-3">
@@ -302,6 +302,8 @@ export default function PropertyDetailView() {
                   {images.slice(0, 6).map((img, i) => (
                     <button
                       key={i}
+                      aria-label={`View property image ${i + 1}`}
+                      aria-pressed={selectedImage === i}
                       onClick={() => setSelectedImage(i)}
                       className={cn(
                         'flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all',
@@ -338,7 +340,7 @@ export default function PropertyDetailView() {
 
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="w-full justify-start">
+              <TabsList className="h-auto w-full justify-start overflow-x-auto overflow-y-hidden min-h-12 [&>button]:min-h-10 [&>button]:shrink-0 [&>button]:flex-none">
                 <TabsTrigger value="overview" className="gap-1.5">
                   <Info className="size-3.5" />
                   Overview
@@ -429,7 +431,7 @@ export default function PropertyDetailView() {
                         <p className="text-xs text-muted-foreground mt-0.5">
                           {property.propertyManager.managedCount} properties managed
                         </p>
-                        <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-muted-foreground">
                           {property.propertyManager.email && (
                             <span className="flex items-center gap-1"><Mail className="size-3" />{property.propertyManager.email}</span>
                           )}

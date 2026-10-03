@@ -163,20 +163,20 @@ export default function BrowseView() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] via-transparent to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,102,0,0.25),_transparent_55%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.15),_transparent_50%)]" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-36 sm:pb-20">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-36 lg:pb-20">
           <motion.div
             variants={stagger}
             initial="initial"
             animate="animate"
             className="flex flex-col items-center text-center gap-6"
           >
-            <motion.div variants={fadeInUp}>
-              <Badge className="bg-white/10 text-white/90 border-white/20 backdrop-blur-sm px-3 py-1 text-xs font-medium">
+            <motion.div variants={fadeInUp} className="flex max-w-full flex-wrap justify-center gap-2">
+              <Badge className="bg-white/10 text-white/90 border-white/20 backdrop-blur-sm px-3 py-1 text-xs font-medium whitespace-normal text-center">
                 <span className="mr-1">🇳🇬</span> Trusted by 2,500+ investors across Africa
               </Badge>
               {usingDemoData && (
-                <Badge className="ml-2 bg-amber-500/15 text-amber-200 border-amber-400/30 backdrop-blur-sm px-3 py-1 text-xs font-medium">
-                  Demo dataset — live listings return when the database has data
+                <Badge className="bg-amber-500/15 text-amber-200 border-amber-400/30 backdrop-blur-sm px-3 py-1 text-xs font-medium whitespace-normal text-center">
+                  Preview properties · Demo data
                 </Badge>
               )}
             </motion.div>
@@ -201,6 +201,7 @@ export default function BrowseView() {
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 <Input
+                  aria-label="Search properties, cities, or developers"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search properties, cities, or developers..."
@@ -256,10 +257,10 @@ export default function BrowseView() {
                 <p className="text-sm text-muted-foreground mt-0.5">Hand-picked high-yield properties</p>
               </div>
               <div className="hidden sm:flex items-center gap-2">
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg" onClick={() => scrollFeatured('left')}>
+                <Button variant="outline" size="icon" aria-label="Previous featured properties" className="h-11 w-11 rounded-lg" onClick={() => scrollFeatured('left')}>
                   <ChevronRight className="size-4 rotate-180" />
                 </Button>
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg" onClick={() => scrollFeatured('right')}>
+                <Button variant="outline" size="icon" aria-label="Next featured properties" className="h-11 w-11 rounded-lg" onClick={() => scrollFeatured('right')}>
                   <ChevronRight className="size-4" />
                 </Button>
               </div>
@@ -310,8 +311,9 @@ export default function BrowseView() {
               <button
                 key={cat.value}
                 onClick={() => setActiveCategory(cat.value)}
+                aria-pressed={activeCategory === cat.value}
                 className={cn(
-                  'flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap',
+                  'flex-shrink-0 min-h-11 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap',
                   activeCategory === cat.value
                     ? 'bg-nest-primary text-white shadow-md shadow-nest-primary/25'
                     : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80'
@@ -338,7 +340,7 @@ export default function BrowseView() {
             </div>
             <div className="flex items-center gap-2">
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[130px] h-9 text-xs">
+                <SelectTrigger aria-label="Sort properties" className="w-[160px] min-h-11 text-sm">
                   <SlidersHorizontal className="size-3 mr-1.5" />
                   <SelectValue />
                 </SelectTrigger>
@@ -352,7 +354,7 @@ export default function BrowseView() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9"
+                className="h-11"
                 onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
               >
                 <ArrowUpDown className="size-3 mr-1.5" />

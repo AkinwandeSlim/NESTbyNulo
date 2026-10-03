@@ -338,7 +338,7 @@ export default function WalletView() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="grid grid-cols-3 gap-3 mb-6"
+        className="grid grid-cols-1 min-[400px]:grid-cols-3 gap-3 mb-6"
       >
         <Card className="p-3 gap-0 text-center">
           <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Credited</p>
@@ -381,7 +381,7 @@ export default function WalletView() {
               return (
                 <div key={txn.id}>
                   {i > 0 && <Separator />}
-                  <div className="flex items-center justify-between py-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3 py-3">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg flex-shrink-0', typeInfo.color)}>
                         {typeInfo.icon}

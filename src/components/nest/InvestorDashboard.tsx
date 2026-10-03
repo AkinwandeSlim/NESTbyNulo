@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, MotionConfig } from 'framer-motion';
+import NestBrand from './NestBrand';
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import {
   LayoutDashboard,
   Briefcase,
@@ -64,6 +66,12 @@ export default function InvestorDashboard({ user }: InvestorDashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const closeOnDesktop = () => { if (desktop.matches) setSidebarOpen(false); };
+    desktop.addEventListener('change', closeOnDesktop);
+    return () => desktop.removeEventListener('change', closeOnDesktop);
+  }, []);
 
   const handleNav = (view: InvestorView) => {
     setCurrentView(view);
@@ -91,31 +99,7 @@ export default function InvestorDashboard({ user }: InvestorDashboardProps) {
           mobile ? 'mb-6' : 'mb-8 pt-6'
         )}
       >
-        <div className="flex items-center gap-2 bg-slate-100 dark:bg-nest-primary/20 px-3 py-1.5 rounded-full border border-slate-200 dark:border-nest-primary/30">
-          <img
-            src="/nuloafrica-newlogo-complete.png"
-            alt="NuloAfrica"
-            className="h-6 w-auto object-contain dark:hidden"
-          />
-          <img
-            src="/nuloafrica-newlightlogo-complete.png"
-            alt="NuloAfrica"
-            className="h-6 w-auto object-contain hidden dark:block"
-          />
-          <span className="text-lg font-bold text-foreground dark:text-nest-primary">
-            <span className="text-nest-accent">|</span> NEST
-          </span>
-        </div>
-        {mobile && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="ml-auto h-8 w-8"
-            onClick={toggleSidebar}
-          >
-            <ChevronRight className="size-4" />
-          </Button>
-        )}
+        <NestBrand />
       </a>
 
       <Separator className="opacity-50" />
@@ -206,50 +190,36 @@ export default function InvestorDashboard({ user }: InvestorDashboardProps) {
   );
 
   return (
-    <div className="min-h-screen">
+    <MotionConfig reducedMotion="user"><div className="min-h-screen">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-[260px] lg:flex-col bg-card border-r border-border z-40">
+      <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-[260px] lg:flex-col lg:overflow-y-auto bg-card border-r border-border z-40">
         {renderSidebar(false)}
       </aside>
 
-      {/* Mobile Sidebar Overlay */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-              onClick={toggleSidebar}
-            />
-            <motion.aside
-              initial={{ x: -260 }}
-              animate={{ x: 0 }}
-              exit={{ x: -260 }}
-              transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
-              className="fixed inset-y-0 left-0 z-50 w-[260px] bg-card border-r border-border lg:hidden"
-            >
-              {renderSidebar(true)}
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+        <SheetContent side="left" className="w-[min(20rem,100%)] gap-0 overflow-y-auto p-0 pb-[env(safe-area-inset-bottom)] data-[state=open]:duration-200 data-[state=closed]:duration-150 [&>button]:size-11 [&>button]:grid [&>button]:place-items-center [&>button]:top-2 [&>button]:right-2">
+          <SheetTitle className="sr-only">Investor navigation</SheetTitle>
+          <SheetDescription className="sr-only">Navigate your account, investments, and wallet.</SheetDescription>
+          {renderSidebar(true)}
+        </SheetContent>
+      </Sheet>
 
       {/* Main Content */}
       <main className="lg:pl-[260px]">
         <div className="p-4 sm:p-6 lg:p-8">
+          <a href="/" aria-label="NEST by Nulo Africa home" className="mb-5 inline-flex min-h-11 items-center lg:hidden"><NestBrand /></a>
           {/* Top Bar */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between mb-6"
+            className="flex items-center justify-between gap-3 mb-6"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-center gap-3">
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden"
+                aria-label="Open investor navigation"
+                className="lg:hidden h-11 w-11"
                 onClick={toggleSidebar}
               >
                 <Menu className="size-5" />
@@ -276,7 +246,8 @@ export default function InvestorDashboard({ user }: InvestorDashboardProps) {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-2 h-10 px-2"
+                  aria-label="Open account menu"
+                  className="flex shrink-0 items-center gap-2 h-11 px-2"
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-nest-primary text-white text-sm">
@@ -319,6 +290,6 @@ export default function InvestorDashboard({ user }: InvestorDashboardProps) {
           {currentView === 'profile' && <ProfileView user={user} />}
         </div>
       </main>
-    </div>
+    </div></MotionConfig>
   );
 }

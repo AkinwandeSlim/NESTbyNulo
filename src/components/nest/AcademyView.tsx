@@ -264,18 +264,19 @@ export default function AcademyView() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8"
+          className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mb-8"
         >
           <div className="flex-1 w-full sm:max-w-md">
             <input
               type="text"
+              aria-label="Search academy"
               placeholder="Search articles, topics, tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full h-10 px-4 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-nest-primary/30 focus:border-nest-primary/50"
             />
           </div>
-          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+          <div className="flex max-w-full gap-2 overflow-x-auto pb-1">
             {(['all', 'articles', 'videos', 'webinars', 'reports'] as const).map((cat) => {
               const config = cat === 'all' ? { icon: <BookOpen className="size-3.5" />, label: 'All' } : categoryConfig[cat];
               return (
@@ -283,7 +284,7 @@ export default function AcademyView() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={cn(
-                    'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+                    'flex shrink-0 min-h-11 items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
                     activeCategory === cat
                       ? 'bg-nest-primary text-white shadow-sm shadow-nest-primary/25'
                       : 'bg-muted text-muted-foreground hover:text-foreground'

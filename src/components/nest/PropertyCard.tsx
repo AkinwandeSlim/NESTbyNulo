@@ -132,7 +132,7 @@ export default function PropertyCard({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1, duration: 0.4 }}
         whileHover={{ y: -8 }}
-        className={cn('min-w-[300px] max-w-[340px] flex-shrink-0', className)}
+        className={cn('w-[min(85vw,340px)] min-w-0 flex-shrink-0', className)}
       >
         <div
           onClick={handleCardClick}
