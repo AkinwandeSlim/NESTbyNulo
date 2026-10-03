@@ -56,6 +56,26 @@
   --color-nest-charcoal: var(--nest-charcoal);
   --color-nest-success: var(--nest-success);
   --color-nest-warning: var(--nest-warning);
+
+  /* ── Waitlist app (ported from waitlist-backup branch) ──
+     Nulo design tokens used by src/components/waitlist/* and font stacks
+     for font-display / font-body utilities. Fonts load at runtime via the
+     @import in src/app/waitlist/waitlist.css (no build-time font fetch). */
+  --color-nulo-primary: #ff6600;
+  --color-nulo-primary-mid: #ea580c;
+  --color-nulo-primary-dark: #c2410c;
+  --color-nulo-primary-light: #f97316;
+  --color-nulo-accent: #f59e0b;
+  --color-nulo-soft-orange: #fff7ed;
+  --color-nulo-text: #0f172a;
+  --color-nulo-text-secondary: #334155;
+  --color-nulo-text-muted: #475569;
+  --color-nulo-background: #ffffff;
+  --color-nulo-card: #ffffff;
+  --color-nulo-border: #e2e8f0;
+  --color-nulo-ivory: oklch(0.98 0.01 75);
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
 }
 
 :root {
